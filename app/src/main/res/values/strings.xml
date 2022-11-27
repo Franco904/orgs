@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Orgs</string>
+    
+    <string name="hint_titulo_produto">Título do produto</string>
+    <string name="hint_descricao_produto">Descrição do produto</string>
+    <string name="hint_valor_produto">Valor do produto</string>
+    <string name="text_btn_salvar">Salvar</string>
+</resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".ui.activity.CadastroProdutoActivity">
+
+            <EditText
+                android:id="@+id/cadastro_produto_field_titulo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_titulo_produto"
+                android:inputType="text"
+                android:layout_margin="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <EditText
+                android:id="@+id/cadastro_produto_field_descricao"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_descricao_produto"
+                android:inputType="text"
+                app:layout_constraintTop_toBottomOf="@id/cadastro_produto_field_titulo"
+                app:layout_constraintStart_toStartOf="@id/cadastro_produto_field_titulo"
+                app:layout_constraintEnd_toEndOf="@id/cadastro_produto_field_titulo"/>
+
+            <EditText
+                android:id="@+id/cadastro_produto_field_valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_valor_produto"
+                android:inputType="phone"
+                app:layout_constraintTop_toBottomOf="@id/cadastro_produto_field_descricao"
+                app:layout_constraintStart_toStartOf="@id/cadastro_produto_field_descricao"
+                app:layout_constraintEnd_toEndOf="@id/cadastro_produto_field_descricao"/>
+
+            <Button
+                android:id="@+id/cadastro_produto_btn_salvar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/text_btn_salvar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/cadastro_produto_field_valor"
+                app:layout_constraintStart_toStartOf="@id/cadastro_produto_field_valor" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
