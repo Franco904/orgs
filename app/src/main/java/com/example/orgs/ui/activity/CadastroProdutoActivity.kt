@@ -2,10 +2,7 @@ package com.example.orgs.ui.activity
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.example.orgs.R
 import com.example.orgs.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.model.Produto

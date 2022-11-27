@@ -3,11 +3,8 @@ package com.example.orgs.ui.recyclerview.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.orgs.R
 import com.example.orgs.databinding.ProdutoItemBinding
 import com.example.orgs.model.Produto
 
@@ -26,7 +23,7 @@ class ListaProdutosAdapter(
         fun bindProduto(produto: Produto) {
             titulo.text = produto.titulo
             descricao.text = produto.descricao
-            valor.text = produto.valor.toPlainString()
+            valor.text = "R$ ${produto.valor.toPlainString()}"
         }
     }
 
