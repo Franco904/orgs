@@ -1,104 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        tools:context=".ui.activity.CadastroProdutoActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/cadastro_produto_item_image"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/imagem_padrao" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cadastro_produto_field_titulo"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:context=".ui.activity.CadastroProdutoActivity">
+            android:layout_margin="16dp"
+            android:hint="@string/hint_titulo_produto"
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:helperText="Obrigatório"
+            app:helperTextEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cadastro_produto_item_image">
 
-            <ImageView
-                android:id="@+id/cadastro_produto_item_image"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/apples" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cadastro_produto_field_titulo"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:hint="@string/hint_titulo_produto"
-                android:inputType="text"
-                android:minHeight="48dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cadastro_produto_item_image"
-                app:helperTextEnabled="true"
-                app:helperText="Obrigatório"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:inputType="textCapSentences" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cadastro_produto_field_descricao"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/hint_descricao_produto"
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:helperText="Obrigatório"
+            app:helperTextEnabled="true"
+            app:layout_constraintEnd_toEndOf="@id/cadastro_produto_field_titulo"
+            app:layout_constraintStart_toStartOf="@id/cadastro_produto_field_titulo"
+            app:layout_constraintTop_toBottomOf="@id/cadastro_produto_field_titulo">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cadastro_produto_field_descricao"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="@string/hint_descricao_produto"
-                android:inputType="text"
-                android:minHeight="48dp"
-                app:layout_constraintEnd_toEndOf="@id/cadastro_produto_field_titulo"
-                app:layout_constraintStart_toStartOf="@id/cadastro_produto_field_titulo"
-                app:layout_constraintTop_toBottomOf="@id/cadastro_produto_field_titulo"
-                app:helperTextEnabled="true"
-                app:helperText="Obrigatório"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:inputType="text" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cadastro_produto_field_valor"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/hint_valor_produto"
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:helperText="Obrigatório"
+            app:helperTextEnabled="true"
+            app:layout_constraintEnd_toEndOf="@id/cadastro_produto_field_descricao"
+            app:layout_constraintStart_toStartOf="@id/cadastro_produto_field_descricao"
+            app:layout_constraintTop_toBottomOf="@id/cadastro_produto_field_descricao">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cadastro_produto_field_valor"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="@string/hint_valor_produto"
-                android:inputType="text"
-                android:minHeight="48dp"
-                app:layout_constraintEnd_toEndOf="@id/cadastro_produto_field_descricao"
-                app:layout_constraintStart_toStartOf="@id/cadastro_produto_field_descricao"
-                app:layout_constraintTop_toBottomOf="@id/cadastro_produto_field_descricao"
-                app:helperTextEnabled="true"
-                app:helperText="Obrigatório"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:inputType="numberDecimal" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/cadastro_produto_btn_salvar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/text_btn_salvar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/cadastro_produto_field_valor"
+            app:layout_constraintStart_toStartOf="@id/cadastro_produto_field_valor" />
 
-            <Button
-                android:id="@+id/cadastro_produto_btn_salvar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/text_btn_salvar"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/cadastro_produto_field_valor"
-                app:layout_constraintStart_toStartOf="@id/cadastro_produto_field_valor" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-</layout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

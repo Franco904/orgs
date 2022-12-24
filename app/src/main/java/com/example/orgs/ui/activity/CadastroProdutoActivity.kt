@@ -2,7 +2,9 @@ package com.example.orgs.ui.activity
 
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.orgs.R
 import com.example.orgs.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.model.Produto
@@ -20,8 +22,8 @@ class CadastroProdutoActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val salvarButton = binding.cadastroProdutoBtnSalvar
-        salvarButton.setOnClickListener {
+        // Configura callback de salvamento do produto
+        binding.cadastroProdutoBtnSalvar.setOnClickListener {
             val produto = createProduto()
             persistProduto(produto)
 
@@ -29,6 +31,15 @@ class CadastroProdutoActivity : AppCompatActivity() {
             Log.i("CadastroProduto", "onCreate: ${dao.findAll()}")
 
             finish()
+        }
+
+        // Configura callback para mostrar dialog de alteração de imagem
+        binding.cadastroProdutoItemImage.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setView(R.layout.produto_form_dialog)
+                .setPositiveButton("Confirmar") { _, _ -> }
+                .setNegativeButton("Cancelar") { _, _ -> }
+                .show()
         }
     }
 

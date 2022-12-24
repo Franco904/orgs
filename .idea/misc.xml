@@ -4,8 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Projetos/app-repositories/android-projects/orgs/app/src/main/res/font/lato.xml" value="0.23489583333333333" />
-        <entry key="..\:/Projetos/app-repositories/android-projects/orgs/app/src/main/res/layout/activity_cadastro_produto.xml" value="0.2710843373493976" />
+        <entry key="..\:/Projetos/app-repositories/android-projects/orgs/app/src/main/res/layout/activity_cadastro_produto.xml" value="0.18" />
         <entry key="..\:/Projetos/app-repositories/android-projects/orgs/app/src/main/res/layout/activity_lista_produtos.xml" value="0.25" />
+        <entry key="..\:/Projetos/app-repositories/android-projects/orgs/app/src/main/res/layout/produto_form_dialog.xml" value="0.1" />
         <entry key="..\:/Projetos/app-repositories/android-projects/orgs/app/src/main/res/layout/produto_item.xml" value="0.33" />
         <entry key="..\:/Users/55489/AndroidStudioProjects/Orgs/app/src/main/res/layout/activity_cadastro_produto.xml" value="0.25" />
         <entry key="..\:/Users/55489/AndroidStudioProjects/Orgs/app/src/main/res/layout/activity_lista_produtos.xml" value="0.11096014492753623" />

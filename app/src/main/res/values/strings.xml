@@ -6,5 +6,7 @@
     <string name="hint_valor_produto">Valor</string>
     <string name="text_btn_salvar">Salvar</string>
 
+    <string name="hint_img_url">URL da imagem</string>
+
     <string name="text_fab_novo_produto">Novo produto</string>
 </resources>
