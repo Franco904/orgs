@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    android:elevation="64dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -14,10 +25,12 @@
         android:textStyle="bold"
         android:ellipsize="end"
         android:maxLines="1"
+        android:paddingStart="12dp"
         app:fontFamily="@font/lato"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/produto_item_image"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.7"
         tools:text="@tools:sample/lorem/random" />
 
     <TextView
@@ -28,6 +41,7 @@
         android:textSize="14sp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:paddingStart="12dp"
         app:fontFamily="@font/lato"
         app:layout_constraintEnd_toEndOf="@+id/produto_item_titulo"
         app:layout_constraintHorizontal_bias="0.0"
@@ -44,6 +58,7 @@
         android:textColor="@android:color/holo_green_dark"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:paddingStart="12dp"
         app:fontFamily="@font/lato"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/produto_item_titulo"
@@ -55,13 +70,15 @@
         android:id="@+id/produto_item_image"
         android:layout_width="110dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="16dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/produto_item_titulo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.3"
         app:srcCompat="@drawable/apples"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

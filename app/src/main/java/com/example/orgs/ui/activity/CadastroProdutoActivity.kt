@@ -34,13 +34,13 @@ class CadastroProdutoActivity : AppCompatActivity() {
 
     private fun createProduto(): Produto {
         val tituloField = binding.cadastroProdutoFieldTitulo
-        val titulo = tituloField.text.toString()
+        val titulo = tituloField.editText?.text.toString()
 
         val descricaoField = binding.cadastroProdutoFieldDescricao
-        val descricao = descricaoField.text.toString()
+        val descricao = descricaoField.editText?.text.toString()
 
         val valorField = binding.cadastroProdutoFieldValor
-        val valor = valorField.text.toString().trim()
+        val valor = valorField.editText?.text.toString().trim()
 
         val valorCasted = if (valor.isEmpty()) BigDecimal.ZERO else BigDecimal(valor)
 

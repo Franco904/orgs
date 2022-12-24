@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Orgs</string>
     
-    <string name="hint_titulo_produto">Título do produto</string>
-    <string name="hint_descricao_produto">Descrição do produto</string>
-    <string name="hint_valor_produto">Valor do produto</string>
+    <string name="hint_titulo_produto">Título</string>
+    <string name="hint_descricao_produto">Descrição</string>
+    <string name="hint_valor_produto">Valor</string>
     <string name="text_btn_salvar">Salvar</string>
+
+    <string name="text_fab_novo_produto">Novo produto</string>
 </resources>
