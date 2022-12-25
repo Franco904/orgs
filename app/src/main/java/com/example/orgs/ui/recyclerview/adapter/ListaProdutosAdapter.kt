@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.orgs.databinding.ProdutoItemBinding
 import com.example.orgs.model.Produto
 import java.text.NumberFormat
@@ -22,11 +23,16 @@ class ListaProdutosAdapter(
         val descricao = binding.produtoItemDescricao
         val valor = binding.produtoItemValor
 
+        val imagem = binding.produtoItemImage
+
         fun bindProduto(produto: Produto) {
             titulo.text = produto.titulo
             descricao.text = produto.descricao
+
             val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
             valor.text = currencyFormatter.format(produto.valor)
+
+            imagem.load(produto.imagemUrl)
         }
     }
 

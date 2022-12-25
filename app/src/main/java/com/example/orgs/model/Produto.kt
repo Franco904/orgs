@@ -6,4 +6,5 @@ data class Produto(
     val titulo: String,
     val descricao: String,
     val valor: BigDecimal,
+    val imagemUrl: String? = null,
 )

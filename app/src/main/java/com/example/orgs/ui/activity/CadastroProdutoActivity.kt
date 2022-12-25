@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.orgs.R
+import coil.load
 import com.example.orgs.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
+import com.example.orgs.databinding.ProdutoFormDialogBinding
 import com.example.orgs.model.Produto
 import java.math.BigDecimal
 
@@ -16,6 +17,8 @@ class CadastroProdutoActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityCadastroProdutoBinding.inflate(layoutInflater)
     }
+
+    private var imageUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +38,28 @@ class CadastroProdutoActivity : AppCompatActivity() {
 
         // Configura callback para mostrar dialog de alteração de imagem
         binding.cadastroProdutoItemImage.setOnClickListener {
+            val bindingProdutoImage = ProdutoFormDialogBinding.inflate(layoutInflater)
+
+            // Carrega imagem atual ao abrir dialog
+            if (imageUrl != null && imageUrl != "") {
+                bindingProdutoImage.updateImageItemImage.load(imageUrl)
+            }
+
+            bindingProdutoImage.updateImageBtnCarregar.setOnClickListener {
+                val url = bindingProdutoImage.updateImageFieldUrl.editText?.text.toString()
+                // Carrega imagem da URL dentro da dialog
+                bindingProdutoImage.updateImageItemImage.load(url)
+            }
+
             AlertDialog.Builder(this)
-                .setView(R.layout.produto_form_dialog)
-                .setPositiveButton("Confirmar") { _, _ -> }
+                .setView(bindingProdutoImage.root)
+                .setPositiveButton("Confirmar") { _, _ ->
+                    if (imageUrl != null && imageUrl != "") {
+                        imageUrl = bindingProdutoImage.updateImageFieldUrl.editText?.text.toString()
+                        // Carrega imagem da URL no topo da página
+                        binding.cadastroProdutoItemImage.load(imageUrl)
+                    }
+                }
                 .setNegativeButton("Cancelar") { _, _ -> }
                 .show()
         }
@@ -55,7 +77,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
 
         val valorCasted = if (valor.isEmpty()) BigDecimal.ZERO else BigDecimal(valor)
 
-        return Produto(titulo, descricao, valorCasted)
+        return Produto(titulo, descricao, valorCasted, imageUrl)
     }
 
     private fun persistProduto(produto: Produto) {
