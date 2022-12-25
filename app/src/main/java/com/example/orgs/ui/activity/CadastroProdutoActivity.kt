@@ -1,14 +1,13 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import coil.load
+import com.example.orgs.R
 import com.example.orgs.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
-import com.example.orgs.databinding.ProdutoFormDialogBinding
+import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
+import com.example.orgs.ui.dialog.CadastroProdutoImageDialog
 import java.math.BigDecimal
 
 class CadastroProdutoActivity : AppCompatActivity() {
@@ -24,45 +23,10 @@ class CadastroProdutoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
+        title = getString(R.string.cadastrar_produto_title)
 
-        // Configura callback de salvamento do produto
-        binding.cadastroProdutoBtnSalvar.setOnClickListener {
-            val produto = createProduto()
-            persistProduto(produto)
-
-            Log.i("CadastroProduto", "onCreate: $produto")
-            Log.i("CadastroProduto", "onCreate: ${dao.findAll()}")
-
-            finish()
-        }
-
-        // Configura callback para mostrar dialog de alteração de imagem
-        binding.cadastroProdutoItemImage.setOnClickListener {
-            val bindingProdutoImage = ProdutoFormDialogBinding.inflate(layoutInflater)
-
-            // Carrega imagem atual ao abrir dialog
-            if (imageUrl != null && imageUrl != "") {
-                bindingProdutoImage.updateImageItemImage.load(imageUrl)
-            }
-
-            bindingProdutoImage.updateImageBtnCarregar.setOnClickListener {
-                val url = bindingProdutoImage.updateImageFieldUrl.editText?.text.toString()
-                // Carrega imagem da URL dentro da dialog
-                bindingProdutoImage.updateImageItemImage.load(url)
-            }
-
-            AlertDialog.Builder(this)
-                .setView(bindingProdutoImage.root)
-                .setPositiveButton("Confirmar") { _, _ ->
-                    if (imageUrl != null && imageUrl != "") {
-                        imageUrl = bindingProdutoImage.updateImageFieldUrl.editText?.text.toString()
-                        // Carrega imagem da URL no topo da página
-                        binding.cadastroProdutoItemImage.load(imageUrl)
-                    }
-                }
-                .setNegativeButton("Cancelar") { _, _ -> }
-                .show()
-        }
+        setUpOnSave()
+        setUpOnImageTapped()
     }
 
     private fun createProduto(): Produto {
@@ -80,7 +44,30 @@ class CadastroProdutoActivity : AppCompatActivity() {
         return Produto(titulo, descricao, valorCasted, imageUrl)
     }
 
+    private fun setUpOnSave() {
+        // Configura callback de salvamento do produto
+        binding.cadastroProdutoBtnSalvar.setOnClickListener {
+            val produto = createProduto()
+            persistProduto(produto)
+
+            finish()
+        }
+    }
+
     private fun persistProduto(produto: Produto) {
         dao.create(produto)
+    }
+
+    private fun setUpOnImageTapped() {
+        // Configura callback para mostrar dialog de alteração de imagem
+        binding.cadastroProdutoItemImage.setOnClickListener {
+            val cadastroProdutoImageDialog = CadastroProdutoImageDialog(this)
+            cadastroProdutoImageDialog.show(imageUrl) { newUrl ->
+                imageUrl = newUrl
+
+                // Carrega imagem da URL no topo da página
+                binding.cadastroProdutoItemImage.tryLoadImage(newUrl)
+            }
+        }
     }
 }

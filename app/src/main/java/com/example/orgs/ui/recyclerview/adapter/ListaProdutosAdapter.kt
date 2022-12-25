@@ -5,8 +5,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.example.orgs.databinding.ProdutoItemBinding
+import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
 import java.text.NumberFormat
 import java.util.*
@@ -26,13 +26,14 @@ class ListaProdutosAdapter(
         val imagem = binding.produtoItemImage
 
         fun bindProduto(produto: Produto) {
-            titulo.text = produto.titulo
-            descricao.text = produto.descricao
+            titulo.text = if (produto.titulo == "") "Sem nome definido" else produto.titulo
+            descricao.text = if (produto.descricao == "") "Sem descrição" else produto.descricao
 
-            val currencyFormatter: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
+            val currencyFormatter: NumberFormat =
+                NumberFormat.getCurrencyInstance(Locale("pt", "br"))
             valor.text = currencyFormatter.format(produto.valor)
 
-            imagem.load(produto.imagemUrl)
+            imagem.tryLoadImage(produto.imagemUrl)
         }
     }
 

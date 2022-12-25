@@ -2,8 +2,6 @@ package com.example.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
@@ -24,6 +22,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         super.onCreate(savedInstance)
 
         setContentView(binding.root)
+        title = getString(R.string.lista_produtos_title)
 
         // Configura componentes da tela
         setUpRecyclerView()
@@ -39,8 +38,6 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     private fun setUpRecyclerView() {
         val recyclerView = binding.listaProdutosRecyclerView
-
-        Log.i("ListaProdutos", "onCreate: ${dao.findAll()}")
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager

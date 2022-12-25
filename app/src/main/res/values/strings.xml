@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Orgs</string>
-    
+
+    <string name="lista_produtos_title">Lista de produtos</string>
+    <string name="cadastrar_produto_title">Novo produto</string>
+
     <string name="hint_titulo_produto">Título</string>
     <string name="hint_descricao_produto">Descrição</string>
     <string name="hint_valor_produto">Valor</string>
