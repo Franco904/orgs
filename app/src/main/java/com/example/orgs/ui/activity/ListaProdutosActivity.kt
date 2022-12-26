@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
 import com.example.orgs.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityListaProdutosBinding
+import com.example.orgs.model.Produto
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 
 class ListaProdutosActivity : AppCompatActivity() {
@@ -26,7 +27,8 @@ class ListaProdutosActivity : AppCompatActivity() {
 
         // Configura componentes da tela
         setUpRecyclerView()
-        setUpFloatingActionButton()
+        setUpFloatingActionButtonListener()
+        setUpProdutoCardListener()
     }
 
     override fun onResume() {
@@ -43,7 +45,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
     }
 
-    private fun setUpFloatingActionButton() {
+    private fun setUpFloatingActionButtonListener() {
         val fab = binding.listaProdutosFab
 
         // Ao clicar no botão FAB, navegar para a tela de cadastro de produto
@@ -54,6 +56,19 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     private fun navigateToCadastroProduto() {
         val intent = Intent(this, CadastroProdutoActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun setUpProdutoCardListener() {
+        adapter.onProdutoItemSelected = { produto: Produto ->
+            navigateToDetalhesProduto(produto)
+        }
+    }
+
+    private fun navigateToDetalhesProduto(produto: Produto) {
+        val intent = Intent(this, DetalhesProdutoActivity::class.java)
+
+        intent.putExtra("produto", produto)
         startActivity(intent)
     }
 }

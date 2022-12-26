@@ -2,6 +2,7 @@ package com.example.orgs.ui.recyclerview.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,16 +15,18 @@ import java.util.*
 class ListaProdutosAdapter(
     private val context: Context,
     produtos: List<Produto>,
+    var onProdutoItemSelected: (produto: Produto) -> Unit = {},
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
 
-    class ViewHolder(binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val titulo = binding.produtoItemTitulo
         val descricao = binding.produtoItemDescricao
         val valor = binding.produtoItemValor
-
         val imagem = binding.produtoItemImage
+
+        val card = binding.produtoCard
 
         fun bindProduto(produto: Produto) {
             titulo.text = if (produto.titulo == "") "Sem nome definido" else produto.titulo
@@ -35,6 +38,12 @@ class ListaProdutosAdapter(
 
             imagem.tryLoadImage(produto.imagemUrl)
         }
+
+        fun setUpProdutoSelection(produto: Produto) {
+            card.setOnClickListener {
+                onProdutoItemSelected(produto)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,13 +52,16 @@ class ListaProdutosAdapter(
             LayoutInflater.from(context), parent, false
         )
 
+        // Cria ViewHolder para o item de produto
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val produto = produtos[position]
 
+        // Com o layout ViewHolder criado, configuramos as ações de cada item de produto
         holder.bindProduto(produto)
+        holder.setUpProdutoSelection(produto)
     }
 
     override fun getItemCount(): Int = produtos.size

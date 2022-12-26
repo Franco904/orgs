@@ -11,29 +11,32 @@ class CadastroProdutoImageDialog(val context: Context) {
         currentImageUrl: String?,
         imageLoadedDelegate: (String?) -> Unit
     ) {
-        ProdutoFormDialogBinding.inflate(
+        val binding = ProdutoFormDialogBinding.inflate(
             LayoutInflater.from(context)
-        ).apply {
-            // Carrega imagem atual ao abrir dialog
-            currentImageUrl?.let {
-                updateImageItemImage.tryLoadImage(it)
-                updateImageFieldUrl.editText?.setText(it)
-            }
+        )
 
-            updateImageBtnCarregar.setOnClickListener {
-                val url = updateImageFieldUrl.editText?.text.toString()
-                // Carrega imagem da URL dentro da dialog
-                updateImageItemImage.tryLoadImage(url)
-            }
-
-            AlertDialog.Builder(context)
-                .setView(root)
-                .setPositiveButton("Confirmar") { _, _ ->
-                    val newUrl = updateImageFieldUrl.editText?.text.toString()
-                    imageLoadedDelegate(newUrl)
+        binding
+            .apply {
+                // Carrega imagem atual ao abrir dialog
+                currentImageUrl?.let {
+                    updateImageItemImage.tryLoadImage(it)
+                    updateImageFieldUrl.editText?.setText(it)
                 }
-                .setNegativeButton("Cancelar") { _, _ -> }
-                .show()
-        }
+
+                updateImageBtnCarregar.setOnClickListener {
+                    val url = updateImageFieldUrl.editText?.text.toString()
+                    // Carrega imagem da URL dentro da dialog
+                    updateImageItemImage.tryLoadImage(url)
+                }
+
+                AlertDialog.Builder(context)
+                    .setView(root)
+                    .setPositiveButton("Confirmar") { _, _ ->
+                        val newUrl = updateImageFieldUrl.editText?.text.toString()
+                        imageLoadedDelegate(newUrl)
+                    }
+                    .setNegativeButton("Cancelar") { _, _ -> }
+                    .show()
+            }
     }
 }
