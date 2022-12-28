@@ -1,9 +1,7 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
-import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto

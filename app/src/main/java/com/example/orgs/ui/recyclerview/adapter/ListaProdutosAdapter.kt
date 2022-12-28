@@ -2,7 +2,6 @@ package com.example.orgs.ui.recyclerview.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,8 +9,6 @@ import com.example.orgs.databinding.ProdutoItemBinding
 import com.example.orgs.extensions.formatToRealCurrency
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
-import java.text.NumberFormat
-import java.util.*
 
 class ListaProdutosAdapter(
     private val context: Context,
