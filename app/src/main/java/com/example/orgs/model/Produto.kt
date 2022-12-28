@@ -2,9 +2,14 @@ package com.example.orgs.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.math.BigDecimal
 
+@Entity
 data class Produto(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
     val titulo: String,
     val descricao: String,
     val valor: BigDecimal,

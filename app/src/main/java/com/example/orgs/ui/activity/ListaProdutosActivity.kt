@@ -5,14 +5,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
-import com.example.orgs.dao.ProdutosDao
+import com.example.orgs.database.AppDatabase
+import com.example.orgs.database.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityListaProdutosBinding
 import com.example.orgs.model.Produto
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 
 class ListaProdutosActivity : AppCompatActivity() {
-    private val dao = ProdutosDao()
-    private val adapter by lazy { ListaProdutosAdapter(context = this, produtos = dao.findAll()) }
+    private lateinit var dao: ProdutosDao
+    private val adapter by lazy { ListaProdutosAdapter(context = this) }
     private val layoutManager by lazy { LinearLayoutManager(this) }
 
     private val binding: ActivityListaProdutosBinding by lazy {
@@ -21,6 +22,8 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstance: Bundle?) {
         super.onCreate(savedInstance)
+
+        dao = AppDatabase.getInstance(this).produtosDao()
 
         setContentView(binding.root)
         title = getString(R.string.lista_produtos_title)

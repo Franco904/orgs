@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orgs.databinding.ProdutoItemBinding
+import com.example.orgs.extensions.formatToRealCurrency
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
 import java.text.NumberFormat
@@ -14,11 +15,11 @@ import java.util.*
 
 class ListaProdutosAdapter(
     private val context: Context,
-    produtos: List<Produto>,
-    var onProdutoItemSelected: (produto: Produto) -> Unit = {},
+    produtos: List<Produto> = emptyList(),
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
+    var onProdutoItemSelected: (produto: Produto) -> Unit = {}
 
     inner class ViewHolder(binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val titulo = binding.produtoItemTitulo
@@ -31,10 +32,7 @@ class ListaProdutosAdapter(
         fun bindProduto(produto: Produto) {
             titulo.text = if (produto.titulo == "") "Sem nome definido" else produto.titulo
             descricao.text = if (produto.descricao == "") "Sem descrição" else produto.descricao
-
-            val currencyFormatter: NumberFormat =
-                NumberFormat.getCurrencyInstance(Locale("pt", "br"))
-            valor.text = currencyFormatter.format(produto.valor)
+            valor.text = produto.valor.formatToRealCurrency()
 
             imagem.tryLoadImage(produto.imagemUrl)
         }

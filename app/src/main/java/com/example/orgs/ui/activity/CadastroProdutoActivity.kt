@@ -3,7 +3,8 @@ package com.example.orgs.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orgs.R
-import com.example.orgs.dao.ProdutosDao
+import com.example.orgs.database.AppDatabase
+import com.example.orgs.database.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
@@ -11,7 +12,7 @@ import com.example.orgs.ui.dialog.CadastroProdutoImageDialog
 import java.math.BigDecimal
 
 class CadastroProdutoActivity : AppCompatActivity() {
-    private val dao get() = ProdutosDao()
+    private lateinit var dao: ProdutosDao
 
     private val binding by lazy {
         ActivityCadastroProdutoBinding.inflate(layoutInflater)
@@ -22,11 +23,13 @@ class CadastroProdutoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        dao = AppDatabase.getInstance(this).produtosDao()
+
         setContentView(binding.root)
         title = getString(R.string.cadastrar_produto_title)
 
-        setUpOnSave()
-        setUpOnImageTapped()
+        setUpOnSaveListener()
+        setUpOnImageTappedListener()
     }
 
     private fun createProduto(): Produto {
@@ -41,24 +44,25 @@ class CadastroProdutoActivity : AppCompatActivity() {
 
         val valorCasted = if (valor.isEmpty()) BigDecimal.ZERO else BigDecimal(valor)
 
-        return Produto(titulo, descricao, valorCasted, imageUrl)
+        return Produto(
+            titulo = titulo,
+            descricao = descricao,
+            valor = valorCasted,
+            imagemUrl = imageUrl,
+        )
     }
 
-    private fun setUpOnSave() {
+    private fun setUpOnSaveListener() {
         // Configura callback de salvamento do produto
         binding.cadastroProdutoBtnSalvar.setOnClickListener {
             val produto = createProduto()
-            persistProduto(produto)
+            dao.create(produto)
 
             finish()
         }
     }
 
-    private fun persistProduto(produto: Produto) {
-        dao.create(produto)
-    }
-
-    private fun setUpOnImageTapped() {
+    private fun setUpOnImageTappedListener() {
         // Configura callback para mostrar dialog de alteração de imagem
         binding.cadastroProdutoItemImage.setOnClickListener {
             val cadastroProdutoImageDialog = CadastroProdutoImageDialog(this)
