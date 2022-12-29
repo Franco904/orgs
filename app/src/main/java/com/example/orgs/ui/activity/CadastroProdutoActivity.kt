@@ -3,61 +3,80 @@ package com.example.orgs.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orgs.R
+import com.example.orgs.constants.PRODUTO_ID_DEFAULT
+import com.example.orgs.constants.PRODUTO_ID_KEY
 import com.example.orgs.database.AppDatabase
 import com.example.orgs.database.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
-import com.example.orgs.ui.dialog.CadastroProdutoImageDialog
+import com.example.orgs.ui.widget.CadastroProdutoImageDialog
 import java.math.BigDecimal
 
 class CadastroProdutoActivity : AppCompatActivity() {
-    private lateinit var dao: ProdutosDao
+    private var produtoToEditId: Long = PRODUTO_ID_DEFAULT
+    private var produtoToEdit: Produto? = null
+    private var imageUrl: String? = null
+
+    private val dao: ProdutosDao by lazy {
+        AppDatabase.getInstance(this).produtosDao()
+    }
 
     private val binding by lazy {
         ActivityCadastroProdutoBinding.inflate(layoutInflater)
     }
 
-    private var imageUrl: String? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        dao = AppDatabase.getInstance(this).produtosDao()
-
         setContentView(binding.root)
         title = getString(R.string.cadastrar_produto_title)
+
+        getIntentData()
+        tryFindProdutoInDatabase()
+
+        if (produtoToEdit != null) {
+            title = getString(R.string.editar_produto_title)
+            bindProdutoData()
+        }
 
         setUpOnSaveListener()
         setUpOnImageTappedListener()
     }
 
-    private fun createProduto(): Produto {
-        val tituloField = binding.cadastroProdutoFieldTitulo
-        val titulo = tituloField.editText?.text.toString()
+    override fun onResume() {
+        super.onResume()
 
-        val descricaoField = binding.cadastroProdutoFieldDescricao
-        val descricao = descricaoField.editText?.text.toString()
+        tryFindProdutoInDatabase()
+    }
 
-        val valorField = binding.cadastroProdutoFieldValor
-        val valor = valorField.editText?.text.toString().trim()
+    private fun getIntentData() {
+        produtoToEditId = intent.getLongExtra(PRODUTO_ID_KEY, PRODUTO_ID_DEFAULT)
+    }
 
-        val valorCasted = if (valor.isEmpty()) BigDecimal.ZERO else BigDecimal(valor)
+    private fun tryFindProdutoInDatabase() {
+        produtoToEdit = dao.findById(produtoToEditId)
+        produtoToEdit?.let {
+            // Se estiver editando, popula os campos com as informações do produto atuais
+            bindProdutoData()
+        }
+    }
 
-        return Produto(
-            titulo = titulo,
-            descricao = descricao,
-            valor = valorCasted,
-            imagemUrl = imageUrl,
-        )
+    private fun bindProdutoData() {
+        binding.apply {
+            imageUrl = produtoToEdit?.imagemUrl
+            cadastroProdutoItemImage.tryLoadImage(produtoToEdit?.imagemUrl)
+
+            cadastroProdutoFieldTitulo.setText(produtoToEdit?.titulo)
+            cadastroProdutoFieldDescricao.setText(produtoToEdit?.descricao)
+            cadastroProdutoFieldValor.setText(produtoToEdit?.valor.toString())
+        }
     }
 
     private fun setUpOnSaveListener() {
         // Configura callback de salvamento do produto
         binding.cadastroProdutoBtnSalvar.setOnClickListener {
-            val produto = createProduto()
-            dao.create(produto)
-
+            dao.create(createProduto())
             finish()
         }
     }
@@ -73,5 +92,26 @@ class CadastroProdutoActivity : AppCompatActivity() {
                 binding.cadastroProdutoItemImage.tryLoadImage(newUrl)
             }
         }
+    }
+
+    private fun createProduto(): Produto {
+        val tituloField = binding.cadastroProdutoFieldTitulo
+        val titulo = tituloField.text.toString()
+
+        val descricaoField = binding.cadastroProdutoFieldDescricao
+        val descricao = descricaoField.text.toString()
+
+        val valorField = binding.cadastroProdutoFieldValor
+        val valor = valorField.text.toString().trim()
+
+        val valorCasted = if (valor.isEmpty()) BigDecimal.ZERO else BigDecimal(valor)
+
+        return Produto(
+            id = produtoToEdit?.id,
+            titulo = titulo,
+            descricao = descricao,
+            valor = valorCasted,
+            imagemUrl = imageUrl,
+        )
     }
 }

@@ -3,6 +3,7 @@
 
     <string name="lista_produtos_title">Lista de produtos</string>
     <string name="cadastrar_produto_title">Novo produto</string>
+    <string name="editar_produto_title">Editar produto</string>
     <string name="detalhes_produto_title">Detalhes do produto</string>
 
     <string name="hint_titulo_produto">Título</string>
@@ -13,4 +14,7 @@
     <string name="hint_img_url">URL da imagem</string>
 
     <string name="text_fab_novo_produto">Novo produto</string>
+
+    <string name="option_editar_title">Editar</string>
+    <string name="option_excluir_title">Excluir</string>
 </resources>

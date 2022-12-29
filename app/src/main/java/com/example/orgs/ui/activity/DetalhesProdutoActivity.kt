@@ -1,19 +1,30 @@
 package com.example.orgs.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.orgs.constants.PRODUTO_ID_DEFAULT
+import com.example.orgs.constants.PRODUTO_ID_KEY
+import com.example.orgs.database.AppDatabase
+import com.example.orgs.database.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
+import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import java.text.NumberFormat
 import java.util.*
 
 class DetalhesProdutoActivity : AppCompatActivity() {
+    private var produtoId: Long = PRODUTO_ID_DEFAULT
+    private var produto: Produto? = null
+
+    private val dao: ProdutosDao by lazy {
+        AppDatabase.getInstance(this).produtosDao()
+    }
+
     private val binding: ActivityDetalhesProdutoBinding by lazy {
         ActivityDetalhesProdutoBinding.inflate(layoutInflater)
     }
-
-    private lateinit var produto: Produto
 
     override fun onCreate(savedInstance: Bundle?) {
         super.onCreate(savedInstance)
@@ -22,31 +33,63 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getIntentData()
-        bindProdutoData()
+        findProdutoInDatabase()
+
+        if (produto != null) {
+            bindProdutoData()
+
+            setUpEditButtonListener()
+            setUpDeleteButtonListener(produto!!)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        findProdutoInDatabase()
     }
 
     private fun getIntentData() {
-        intent?.let {
-            val produtoRetrieved = it.getParcelableExtra<Produto>("produto")
-            if (produtoRetrieved == null) {
-                finish()
-            }
+        produtoId = intent.getLongExtra(PRODUTO_ID_KEY, PRODUTO_ID_DEFAULT)
+    }
 
-            produto = produtoRetrieved!!
-        }
+    private fun findProdutoInDatabase() {
+        produto = dao.findById(produtoId)
+        produto?.let {
+            bindProdutoData()
+        } ?: finish()
     }
 
     private fun bindProdutoData() {
         binding.apply {
-            produtoImage.tryLoadImage(produto.imagemUrl)
+            produtoImage.tryLoadImage(produto?.imagemUrl)
 
             val currencyFormatter: NumberFormat =
                 NumberFormat.getCurrencyInstance(Locale("pt", "br"))
-            produtoValor.text = currencyFormatter.format(produto.valor)
+            produtoValor.text = currencyFormatter.format(produto?.valor)
 
-            produtoTitulo.text = if (produto.titulo == "") "Sem nome definido" else produto.titulo
+            produtoTitulo.text =
+                if (produto?.titulo == null || produto?.titulo == "") "Sem nome definido" else produto?.titulo
             produtoDescricao.text =
-                if (produto.descricao == "") "Sem descrição" else produto.descricao
+                if (produto?.titulo == null || produto?.descricao == "") "Sem descrição" else produto?.descricao
+        }
+    }
+
+    private fun setUpEditButtonListener() {
+        binding.editActionCard.setOnClickListener {
+            Intent(this, CadastroProdutoActivity::class.java).apply {
+                putExtra(PRODUTO_ID_KEY, produto?.id)
+                startActivity(this)
+            }
+        }
+    }
+
+    private fun setUpDeleteButtonListener(produto: Produto) {
+        binding.excludeActionCard.setOnClickListener {
+            ExcluirProdutoConfirmacaoDialog(this).show {
+                dao.delete(produto)
+                finish()
+            }
         }
     }
 }

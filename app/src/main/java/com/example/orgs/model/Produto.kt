@@ -4,12 +4,13 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.orgs.constants.PRODUTO_ID_DEFAULT
 import java.math.BigDecimal
 
 @Entity
 data class Produto(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
+    val id: Long? = PRODUTO_ID_DEFAULT,
     val titulo: String,
     val descricao: String,
     val valor: BigDecimal,
@@ -17,6 +18,7 @@ data class Produto(
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
+        id = parcel.readLong(),
         titulo = parcel.readString() ?: "",
         descricao = parcel.readString() ?: "",
         valor = (parcel.readFloat()).toBigDecimal(),
@@ -24,6 +26,7 @@ data class Produto(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id!!)
         parcel.writeString(titulo)
         parcel.writeString(descricao)
         parcel.writeFloat(valor.toFloat())

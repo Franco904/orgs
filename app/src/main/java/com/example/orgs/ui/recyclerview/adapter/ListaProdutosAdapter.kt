@@ -3,6 +3,7 @@ package com.example.orgs.ui.recyclerview.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orgs.databinding.ProdutoItemBinding
@@ -16,15 +17,16 @@ class ListaProdutosAdapter(
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
-    var onProdutoItemSelected: (produto: Produto) -> Unit = {}
+    var onProdutoItemClick: (produto: Produto) -> Unit = {}
+    var onProdutoItemLongClick: (view: View, produto: Produto) -> Unit = { _: View, _: Produto -> }
 
     inner class ViewHolder(binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val titulo = binding.produtoItemTitulo
-        val descricao = binding.produtoItemDescricao
-        val valor = binding.produtoItemValor
-        val imagem = binding.produtoItemImage
+        private val titulo = binding.produtoItemTitulo
+        private val descricao = binding.produtoItemDescricao
+        private val valor = binding.produtoItemValor
+        private val imagem = binding.produtoItemImage
 
-        val card = binding.produtoCard
+        private val card = binding.produtoCard
 
         fun bindProduto(produto: Produto) {
             titulo.text = if (produto.titulo == "") "Sem nome definido" else produto.titulo
@@ -34,9 +36,18 @@ class ListaProdutosAdapter(
             imagem.tryLoadImage(produto.imagemUrl)
         }
 
-        fun setUpProdutoSelection(produto: Produto) {
+        fun setUpProdutoOnClick(produto: Produto) {
             card.setOnClickListener {
-                onProdutoItemSelected(produto)
+                onProdutoItemClick(produto)
+            }
+        }
+
+        fun setUpProdutoOnLongClick(produto: Produto) {
+            card.setOnLongClickListener {
+                onProdutoItemLongClick(card, produto)
+
+                // return true: Consome evento e não aciona onClick/outros listeners
+                true
             }
         }
     }
@@ -56,7 +67,9 @@ class ListaProdutosAdapter(
 
         // Com o layout ViewHolder criado, configuramos as ações de cada item de produto
         holder.bindProduto(produto)
-        holder.setUpProdutoSelection(produto)
+
+        holder.setUpProdutoOnClick(produto)
+        holder.setUpProdutoOnLongClick(produto)
     }
 
     override fun getItemCount(): Int = produtos.size

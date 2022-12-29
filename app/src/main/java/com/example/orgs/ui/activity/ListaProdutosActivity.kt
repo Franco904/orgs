@@ -2,17 +2,22 @@ package com.example.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
+import com.example.orgs.constants.PRODUTO_ID_DEFAULT
+import com.example.orgs.constants.PRODUTO_ID_KEY
 import com.example.orgs.database.AppDatabase
 import com.example.orgs.database.dao.ProdutosDao
 import com.example.orgs.databinding.ActivityListaProdutosBinding
 import com.example.orgs.model.Produto
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
+import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
+import com.example.orgs.ui.widget.ProdutoCardPopupMenu
 
 class ListaProdutosActivity : AppCompatActivity() {
-    private lateinit var dao: ProdutosDao
+    private val dao: ProdutosDao by lazy { AppDatabase.getInstance(this).produtosDao() }
     private val adapter by lazy { ListaProdutosAdapter(context = this) }
     private val layoutManager by lazy { LinearLayoutManager(this) }
 
@@ -23,15 +28,13 @@ class ListaProdutosActivity : AppCompatActivity() {
     override fun onCreate(savedInstance: Bundle?) {
         super.onCreate(savedInstance)
 
-        dao = AppDatabase.getInstance(this).produtosDao()
-
         setContentView(binding.root)
         title = getString(R.string.lista_produtos_title)
 
         // Configura componentes da tela
         setUpRecyclerView()
         setUpFloatingActionButtonListener()
-        setUpProdutoCardListener()
+        setUpProdutoCardListeners()
     }
 
     override fun onResume() {
@@ -57,21 +60,39 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToCadastroProduto() {
-        val intent = Intent(this, CadastroProdutoActivity::class.java)
-        startActivity(intent)
-    }
+    private fun setUpProdutoCardListeners() {
+        adapter.onProdutoItemClick = { produto: Produto ->
+            navigateToDetalhesProduto(produto.id)
+        }
 
-    private fun setUpProdutoCardListener() {
-        adapter.onProdutoItemSelected = { produto: Produto ->
-            navigateToDetalhesProduto(produto)
+        adapter.onProdutoItemLongClick = { cardView: View, produto: Produto ->
+            val popupMenu = ProdutoCardPopupMenu(this, cardView)
+
+            popupMenu.show(
+                onEditDelegate = {
+                    navigateToCadastroProduto(produto.id)
+                },
+                onExcludeDelegate = {
+                    ExcluirProdutoConfirmacaoDialog(this).show {
+                        dao.delete(produto)
+                        adapter.updateAdapterState(dao.findAll())
+                    }
+                }
+            )
         }
     }
 
-    private fun navigateToDetalhesProduto(produto: Produto) {
-        val intent = Intent(this, DetalhesProdutoActivity::class.java)
+    private fun navigateToCadastroProduto(produtoId: Long? = PRODUTO_ID_DEFAULT) {
+        Intent(this, CadastroProdutoActivity::class.java).apply {
+            putExtra(PRODUTO_ID_KEY, produtoId)
+            startActivity(this)
+        }
+    }
 
-        intent.putExtra("produto", produto)
-        startActivity(intent)
+    private fun navigateToDetalhesProduto(produtoId: Long? = null) {
+        Intent(this, DetalhesProdutoActivity::class.java).apply {
+            putExtra(PRODUTO_ID_KEY, produtoId)
+            startActivity(this)
+        }
     }
 }
