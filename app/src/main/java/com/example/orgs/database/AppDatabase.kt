@@ -18,14 +18,22 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         const val SCHEMA_VERSION = 1
 
+        // Mudanças ficam visíveis para todas as threads, evitando inconsistências
+        @Volatile
+        private lateinit var database: AppDatabase
+
         fun getInstance(context: Context): AppDatabase {
+            if (::database.isInitialized) return database
+
             return Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,
                 "orgs.db",
             )
                 .allowMainThreadQueries()
-                .build()
+                .build().also {
+                    database = it
+                }
         }
     }
 
