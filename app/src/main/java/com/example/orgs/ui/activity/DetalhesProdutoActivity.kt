@@ -17,7 +17,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     private var produtoId: Long = PRODUTO_ID_DEFAULT
     private var produto: Produto? = null
 
-    private val repository by lazy { ProdutosRepository(this) }
+    private val repository by lazy { ProdutosRepository(context = this) }
 
     private val binding: ActivityDetalhesProdutoBinding by lazy {
         ActivityDetalhesProdutoBinding.inflate(layoutInflater)

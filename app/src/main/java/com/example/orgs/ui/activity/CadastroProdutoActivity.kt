@@ -17,7 +17,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
     private var produtoToEdit: Produto? = null
     private var imageUrl: String? = null
 
-    private val repository by lazy { ProdutosRepository(this) }
+    private val repository by lazy { ProdutosRepository(context = this) }
 
     private val binding by lazy {
         ActivityCadastroProdutoBinding.inflate(layoutInflater)
