@@ -33,7 +33,7 @@ class ListaProdutosAdapter(
             descricao.text = if (produto.descricao == "") "Sem descrição" else produto.descricao
             valor.text = produto.valor.formatToRealCurrency()
 
-            imagem.tryLoadImage(produto.imagemUrl)
+            imagem.tryLoadImage(url = produto.imagemUrl)
         }
 
         fun setUpProdutoOnClick(produto: Produto) {

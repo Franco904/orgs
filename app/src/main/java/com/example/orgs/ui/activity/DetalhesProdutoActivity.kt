@@ -5,8 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orgs.constants.PRODUTO_ID_DEFAULT
 import com.example.orgs.constants.PRODUTO_ID_KEY
-import com.example.orgs.database.AppDatabase
-import com.example.orgs.database.dao.ProdutosDao
+import com.example.orgs.database.repositories.ProdutosRepository
 import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
@@ -18,9 +17,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     private var produtoId: Long = PRODUTO_ID_DEFAULT
     private var produto: Produto? = null
 
-    private val dao: ProdutosDao by lazy {
-        AppDatabase.getInstance(this).produtosDao()
-    }
+    private val repository by lazy { ProdutosRepository(this) }
 
     private val binding: ActivityDetalhesProdutoBinding by lazy {
         ActivityDetalhesProdutoBinding.inflate(layoutInflater)
@@ -39,7 +36,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
             bindProdutoData()
 
             setUpEditButtonListener()
-            setUpDeleteButtonListener(produto!!)
+            setUpDeleteButtonListener(produtoToDelete = produto!!)
         }
     }
 
@@ -54,7 +51,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     }
 
     private fun findProdutoInDatabase() {
-        produto = dao.findById(produtoId)
+        produto = repository.findById(produtoId)
         produto?.let {
             bindProdutoData()
         } ?: finish()
@@ -62,7 +59,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
 
     private fun bindProdutoData() {
         binding.apply {
-            produtoImage.tryLoadImage(produto?.imagemUrl)
+            produtoImage.tryLoadImage(url = produto?.imagemUrl)
 
             val currencyFormatter: NumberFormat =
                 NumberFormat.getCurrencyInstance(Locale("pt", "br"))
@@ -84,10 +81,10 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpDeleteButtonListener(produto: Produto) {
+    private fun setUpDeleteButtonListener(produtoToDelete: Produto) {
         binding.excludeActionCard.setOnClickListener {
-            ExcluirProdutoConfirmacaoDialog(this).show {
-                dao.delete(produto)
+            ExcluirProdutoConfirmacaoDialog(context = this).show {
+                repository.delete(produtoToDelete)
                 finish()
             }
         }

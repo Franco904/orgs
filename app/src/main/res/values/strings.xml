@@ -17,4 +17,16 @@
 
     <string name="option_editar_title">Editar</string>
     <string name="option_excluir_title">Excluir</string>
+
+    <string-array name="property_filter_options">
+        <item>Título</item>
+        <item>Descrição</item>
+        <item>Valor</item>
+        <item>Nenhum</item>
+    </string-array>
+
+    <string-array name="ordering_filter_options">
+        <item>Crescente</item>
+        <item>Decrescente</item>
+    </string-array>
 </resources>

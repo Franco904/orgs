@@ -14,7 +14,7 @@ class CadastroProdutoImageDialog(private val context: Context) {
         ProdutoFormDialogBinding.inflate(LayoutInflater.from(context)).apply {
             // Carrega imagem atual ao abrir dialog
             currentImageUrl?.let {
-                updateImageItemImage.tryLoadImage(it)
+                updateImageItemImage.tryLoadImage(url = it)
                 updateImageFieldUrl.editText?.setText(it)
             }
 

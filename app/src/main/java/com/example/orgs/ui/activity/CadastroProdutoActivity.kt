@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.orgs.R
 import com.example.orgs.constants.PRODUTO_ID_DEFAULT
 import com.example.orgs.constants.PRODUTO_ID_KEY
-import com.example.orgs.database.AppDatabase
-import com.example.orgs.database.dao.ProdutosDao
+import com.example.orgs.database.repositories.ProdutosRepository
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
@@ -18,9 +17,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
     private var produtoToEdit: Produto? = null
     private var imageUrl: String? = null
 
-    private val dao: ProdutosDao by lazy {
-        AppDatabase.getInstance(this).produtosDao()
-    }
+    private val repository by lazy { ProdutosRepository(this) }
 
     private val binding by lazy {
         ActivityCadastroProdutoBinding.inflate(layoutInflater)
@@ -55,7 +52,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
     }
 
     private fun tryFindProdutoInDatabase() {
-        produtoToEdit = dao.findById(produtoToEditId)
+        produtoToEdit = repository.findById(produtoToEditId)
         produtoToEdit?.let {
             // Se estiver editando, popula os campos com as informações do produto atuais
             bindProdutoData()
@@ -65,7 +62,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
     private fun bindProdutoData() {
         binding.apply {
             imageUrl = produtoToEdit?.imagemUrl
-            cadastroProdutoItemImage.tryLoadImage(produtoToEdit?.imagemUrl)
+            cadastroProdutoItemImage.tryLoadImage(url = produtoToEdit?.imagemUrl)
 
             cadastroProdutoFieldTitulo.setText(produtoToEdit?.titulo)
             cadastroProdutoFieldDescricao.setText(produtoToEdit?.descricao)
@@ -76,7 +73,9 @@ class CadastroProdutoActivity : AppCompatActivity() {
     private fun setUpOnSaveListener() {
         // Configura callback de salvamento do produto
         binding.cadastroProdutoBtnSalvar.setOnClickListener {
-            dao.create(createProduto())
+            repository.create(produto = createProduto())
+
+            binding.cadastroProdutoBtnSalvar.isEnabled = false
             finish()
         }
     }
@@ -84,12 +83,12 @@ class CadastroProdutoActivity : AppCompatActivity() {
     private fun setUpOnImageTappedListener() {
         // Configura callback para mostrar dialog de alteração de imagem
         binding.cadastroProdutoItemImage.setOnClickListener {
-            val cadastroProdutoImageDialog = CadastroProdutoImageDialog(this)
-            cadastroProdutoImageDialog.show(imageUrl) { newUrl ->
+            val cadastroProdutoImageDialog = CadastroProdutoImageDialog(context = this)
+            cadastroProdutoImageDialog.show(currentImageUrl = imageUrl) { newUrl ->
                 imageUrl = newUrl
 
                 // Carrega imagem da URL no topo da página
-                binding.cadastroProdutoItemImage.tryLoadImage(newUrl)
+                binding.cadastroProdutoItemImage.tryLoadImage(url = newUrl)
             }
         }
     }
