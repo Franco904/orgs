@@ -1,6 +1,8 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orgs.R
 import com.example.orgs.constants.PRODUTO_ID_DEFAULT
@@ -10,12 +12,15 @@ import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
 import com.example.orgs.ui.widget.CadastroProdutoImageDialog
+import kotlinx.coroutines.*
 import java.math.BigDecimal
 
 class CadastroProdutoActivity : AppCompatActivity() {
     private var produtoToEditId: Long = PRODUTO_ID_DEFAULT
     private var produtoToEdit: Produto? = null
     private var imageUrl: String? = null
+
+    private val coroutineScope by lazy { MainScope() }
 
     private val repository by lazy { ProdutosRepository(context = this) }
 
@@ -30,21 +35,15 @@ class CadastroProdutoActivity : AppCompatActivity() {
         title = getString(R.string.cadastrar_produto_title)
 
         getIntentData()
-        tryFindProdutoInDatabase()
-
-        if (produtoToEdit != null) {
-            title = getString(R.string.editar_produto_title)
-            bindProdutoData()
-        }
-
-        setUpOnSaveListener()
-        setUpOnImageTappedListener()
     }
 
     override fun onResume() {
         super.onResume()
 
         tryFindProdutoInDatabase()
+
+        setUpOnSaveListener()
+        setUpOnImageTappedListener()
     }
 
     private fun getIntentData() {
@@ -52,31 +51,50 @@ class CadastroProdutoActivity : AppCompatActivity() {
     }
 
     private fun tryFindProdutoInDatabase() {
-        produtoToEdit = repository.findById(produtoToEditId)
-        produtoToEdit?.let {
-            // Se estiver editando, popula os campos com as informações do produto atuais
-            bindProdutoData()
+        val handlerProdutoFind = setCoroutineExceptionHandler(
+            errorMessage = "Erro ao excluir produto."
+        )
+
+        coroutineScope.launch(handlerProdutoFind) {
+            val produtoStored = withContext(Dispatchers.IO) {
+                repository.findById(produtoToEditId)
+            }
+
+            produtoToEdit = produtoStored
+            bindEditProdutoDataIfNeeded()
         }
     }
 
-    private fun bindProdutoData() {
-        binding.apply {
-            imageUrl = produtoToEdit?.imagemUrl
-            cadastroProdutoItemImage.tryLoadImage(url = produtoToEdit?.imagemUrl)
+    private fun bindEditProdutoDataIfNeeded() {
+        produtoToEdit?.let {
+            title = getString(R.string.editar_produto_title)
 
-            cadastroProdutoFieldTitulo.setText(produtoToEdit?.titulo)
-            cadastroProdutoFieldDescricao.setText(produtoToEdit?.descricao)
-            cadastroProdutoFieldValor.setText(produtoToEdit?.valor.toString())
+            binding.apply {
+                imageUrl = produtoToEdit?.imagemUrl
+                cadastroProdutoItemImage.tryLoadImage(url = produtoToEdit?.imagemUrl)
+
+                cadastroProdutoFieldTitulo.setText(produtoToEdit?.titulo)
+                cadastroProdutoFieldDescricao.setText(produtoToEdit?.descricao)
+                cadastroProdutoFieldValor.setText(produtoToEdit?.valor.toString())
+            }
         }
     }
 
     private fun setUpOnSaveListener() {
         // Configura callback de salvamento do produto
         binding.cadastroProdutoBtnSalvar.setOnClickListener {
-            repository.create(produto = createProduto())
+            val handlerProdutoSave = setCoroutineExceptionHandler(
+                errorMessage = "Erro ao salvar produto no banco de dados."
+            )
 
-            binding.cadastroProdutoBtnSalvar.isEnabled = false
-            finish()
+            coroutineScope.launch(handlerProdutoSave) {
+                withContext(Dispatchers.IO) {
+                    repository.create(produto = createProduto())
+                }
+
+                binding.cadastroProdutoBtnSalvar.isEnabled = false
+                finish()
+            }
         }
     }
 
@@ -112,5 +130,16 @@ class CadastroProdutoActivity : AppCompatActivity() {
             valor = valorCasted,
             imagemUrl = imageUrl,
         )
+    }
+
+    private fun setCoroutineExceptionHandler(errorMessage: String? = null): CoroutineExceptionHandler {
+        return CoroutineExceptionHandler { _, throwable ->
+            Log.i("CadastroProdutoActivity", "throwable: $throwable")
+            Toast.makeText(
+                this,
+                errorMessage ?: "Ocorreu um erro durante a execução da coroutine",
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
     }
 }

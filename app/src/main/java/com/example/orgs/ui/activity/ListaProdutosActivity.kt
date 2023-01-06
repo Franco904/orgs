@@ -2,8 +2,10 @@ package com.example.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
@@ -17,10 +19,13 @@ import com.example.orgs.model.Produto
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu
+import kotlinx.coroutines.*
 
 class ListaProdutosActivity : AppCompatActivity() {
     private val adapter by lazy { ListaProdutosAdapter(context = this) }
     private val layoutManager by lazy { LinearLayoutManager(this) }
+
+    private val coroutineScope by lazy { MainScope() }
 
     private val repository by lazy { ProdutosRepository(context = this) }
 
@@ -32,20 +37,33 @@ class ListaProdutosActivity : AppCompatActivity() {
         super.onCreate(savedInstance)
 
         setContentView(binding.root)
-        title = getString(R.string.lista_produtos_title)
 
         // Configura componentes da tela
+        title = getString(R.string.lista_produtos_title)
+
         setUpFilterDropdowns()
         setUpRecyclerView()
         setUpFloatingActionButtonListener()
-        setUpProdutoCardListeners()
     }
 
     override fun onResume() {
         super.onResume()
 
-        // Cada vez que a activity assumir o primeiro plano novamente, atualizar a lista de produtos no adapter
-        updateProdutosList(produtos = repository.findAll())
+        val handler = setCoroutineExceptionHandler(
+            errorMessage = "Erro ao buscar produtos no banco de dados para listagem.",
+        )
+
+        coroutineScope.launch(handler) {
+            // Tudo dentro desse escopo é executado de maneira paralela
+            // e não trava a thread principal
+            val produtos = withContext(Dispatchers.IO) {
+                // Executado em uma thread separada e criada para isso
+                repository.findAll()
+            }
+
+            updateProdutosList(produtos)
+            setUpProdutoCardListeners()
+        }
     }
 
     private fun setUpFilterDropdowns() {
@@ -66,14 +84,34 @@ class ListaProdutosActivity : AppCompatActivity() {
             val orderingPattern =
                 getOrderingPatternEnumByName(name = orderingFilterItem.text.toString())
 
-            updateProdutosList(produtos = repository.findAllOrderedByField(field, orderingPattern))
+            val handlerProperty = setCoroutineExceptionHandler(
+                errorMessage = "Erro ao alterar filtragem por atributo de produto."
+            )
+
+            coroutineScope.launch(handlerProperty) {
+                val produtos = withContext(Dispatchers.IO) {
+                    repository.findAllOrderedByField(field, orderingPattern)
+                }
+
+                updateProdutosList(produtos)
+            }
         }
 
         orderingFilterItem.setOnItemClickListener { _, _, position, _ ->
             val field = getProdutoFieldEnumByName(name = propertyFilterItem.text.toString())
             val orderingPattern = getOrderingPatternEnumByName(name = orderingValues[position])
 
-            updateProdutosList(produtos = repository.findAllOrderedByField(field, orderingPattern))
+            val handlerOrderingPattern = setCoroutineExceptionHandler(
+                errorMessage = "Erro ao alterar filtragem por padrão de ordenação."
+            )
+
+            coroutineScope.launch(handlerOrderingPattern) {
+                val produtos = withContext(Dispatchers.IO) {
+                    repository.findAllOrderedByField(field, orderingPattern)
+                }
+
+                updateProdutosList(produtos)
+            }
         }
     }
 
@@ -109,8 +147,20 @@ class ListaProdutosActivity : AppCompatActivity() {
                 },
                 onExcludeDelegate = {
                     ExcluirProdutoConfirmacaoDialog(context = this).show {
-                        repository.delete(produto)
-                        adapter.updateAdapterState(produtos = repository.findAll())
+                        val handlerExcluirProduto = setCoroutineExceptionHandler(
+                            errorMessage = "Erro ao excluir produto."
+                        )
+
+                        coroutineScope.launch(handlerExcluirProduto) {
+                            val produtos = withContext(Dispatchers.IO) {
+                                repository.delete(produto)
+                                repository.findAll() // Returned
+                            }
+
+                            updateProdutosList(produtos)
+                        }
+
+                        null
                     }
                 }
             )
@@ -128,6 +178,17 @@ class ListaProdutosActivity : AppCompatActivity() {
         Intent(this, DetalhesProdutoActivity::class.java).apply {
             putExtra(PRODUTO_ID_KEY, produtoId)
             startActivity(this)
+        }
+    }
+
+    private fun setCoroutineExceptionHandler(errorMessage: String? = null): CoroutineExceptionHandler {
+        return CoroutineExceptionHandler { _, throwable ->
+            Log.i("ListaProdutosActivity", "throwable: $throwable")
+            Toast.makeText(
+                this,
+                errorMessage ?: "Ocorreu um erro durante a execução da coroutine",
+                Toast.LENGTH_SHORT,
+            ).show()
         }
     }
 }
