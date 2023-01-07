@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.orgs.constants.PRODUTO_ID_DEFAULT
 import com.example.orgs.constants.PRODUTO_ID_KEY
 import com.example.orgs.database.repositories.ProdutosRepository
@@ -12,15 +13,14 @@ import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
 
 class DetalhesProdutoActivity : AppCompatActivity() {
     private var produtoId: Long = PRODUTO_ID_DEFAULT
     private var produto: Produto? = null
-
-    private val coroutineScope by lazy { MainScope() }
 
     private val repository by lazy { ProdutosRepository(context = this) }
 
@@ -52,14 +52,10 @@ class DetalhesProdutoActivity : AppCompatActivity() {
             errorMessage = "Erro ao encontrar produto no banco de dados."
         )
 
-        coroutineScope.launch(handlerProdutoFind) {
-            val produtoStored = withContext(Dispatchers.IO) {
-                repository.findById(produtoId)
-            }
-            produto = produtoStored
+        lifecycleScope.launch(handlerProdutoFind) {
+            produto = repository.findById(produtoId)
 
             bindProdutoDataIfExist()
-
             setUpEditButtonListener()
             setUpDeleteButtonListener(produtoToDelete = produto!!)
         }
@@ -98,12 +94,8 @@ class DetalhesProdutoActivity : AppCompatActivity() {
                     errorMessage = "Erro ao excluir produto."
                 )
 
-                coroutineScope.launch(handlerExcluirProduto) {
-                    withContext(Dispatchers.IO) {
-                        repository.delete(produtoToDelete)
-                        repository.findAll()
-                    }
-
+                lifecycleScope.launch(handlerExcluirProduto) {
+                    repository.delete(produtoToDelete)
                     finish()
                 }
 

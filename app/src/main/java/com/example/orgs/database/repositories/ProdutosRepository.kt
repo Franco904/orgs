@@ -10,15 +10,15 @@ import com.example.orgs.model.Produto
 class ProdutosRepository(context: Context) {
     private val dao: ProdutosDao = AppDatabase.getInstance(context).produtosDao()
 
-    fun create(produto: Produto) = dao.create(produto)
+    suspend fun create(produto: Produto) = dao.create(produto)
 
-    fun delete(produto: Produto) = dao.delete(produto)
+    suspend fun delete(produto: Produto) = dao.delete(produto)
 
-    fun findById(id: Long): Produto = dao.findById(id)
+    suspend fun findById(id: Long): Produto = dao.findById(id)
 
-    fun findAll(): List<Produto> = dao.findAll()
+    suspend fun findAll(): List<Produto> = dao.findAll()
 
-    fun findAllOrderedByField(
+    suspend fun findAllOrderedByField(
         field: ProdutoField,
         orderingPattern: OrderingPattern,
     ): List<Produto> {

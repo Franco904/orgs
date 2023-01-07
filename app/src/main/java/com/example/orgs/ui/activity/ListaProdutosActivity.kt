@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
 import com.example.orgs.constants.PRODUTO_ID_DEFAULT
@@ -19,13 +20,12 @@ import com.example.orgs.model.Produto
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
 
 class ListaProdutosActivity : AppCompatActivity() {
     private val adapter by lazy { ListaProdutosAdapter(context = this) }
     private val layoutManager by lazy { LinearLayoutManager(this) }
-
-    private val coroutineScope by lazy { MainScope() }
 
     private val repository by lazy { ProdutosRepository(context = this) }
 
@@ -49,17 +49,12 @@ class ListaProdutosActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        val handler = setCoroutineExceptionHandler(
+        val handlerFindProdutos = setCoroutineExceptionHandler(
             errorMessage = "Erro ao buscar produtos no banco de dados para listagem.",
         )
 
-        coroutineScope.launch(handler) {
-            // Tudo dentro desse escopo é executado de maneira paralela
-            // e não trava a thread principal
-            val produtos = withContext(Dispatchers.IO) {
-                // Executado em uma thread separada e criada para isso
-                repository.findAll()
-            }
+        lifecycleScope.launch(handlerFindProdutos) {
+            val produtos = repository.findAll()
 
             updateProdutosList(produtos)
             setUpProdutoCardListeners()
@@ -88,10 +83,8 @@ class ListaProdutosActivity : AppCompatActivity() {
                 errorMessage = "Erro ao alterar filtragem por atributo de produto."
             )
 
-            coroutineScope.launch(handlerProperty) {
-                val produtos = withContext(Dispatchers.IO) {
-                    repository.findAllOrderedByField(field, orderingPattern)
-                }
+            lifecycleScope.launch(handlerProperty) {
+                val produtos = repository.findAllOrderedByField(field, orderingPattern)
 
                 updateProdutosList(produtos)
             }
@@ -105,10 +98,8 @@ class ListaProdutosActivity : AppCompatActivity() {
                 errorMessage = "Erro ao alterar filtragem por padrão de ordenação."
             )
 
-            coroutineScope.launch(handlerOrderingPattern) {
-                val produtos = withContext(Dispatchers.IO) {
-                    repository.findAllOrderedByField(field, orderingPattern)
-                }
+            lifecycleScope.launch(handlerOrderingPattern) {
+                val produtos = repository.findAllOrderedByField(field, orderingPattern)
 
                 updateProdutosList(produtos)
             }
@@ -151,12 +142,10 @@ class ListaProdutosActivity : AppCompatActivity() {
                             errorMessage = "Erro ao excluir produto."
                         )
 
-                        coroutineScope.launch(handlerExcluirProduto) {
-                            val produtos = withContext(Dispatchers.IO) {
-                                repository.delete(produto)
-                                repository.findAll() // Returned
-                            }
+                        lifecycleScope.launch(handlerExcluirProduto) {
+                            repository.delete(produto)
 
+                            val produtos = repository.findAll()
                             updateProdutosList(produtos)
                         }
 

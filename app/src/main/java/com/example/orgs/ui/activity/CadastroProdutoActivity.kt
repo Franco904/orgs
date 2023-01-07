@@ -12,7 +12,9 @@ import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
 import com.example.orgs.ui.widget.CadastroProdutoImageDialog
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class CadastroProdutoActivity : AppCompatActivity() {
@@ -56,11 +58,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
         )
 
         coroutineScope.launch(handlerProdutoFind) {
-            val produtoStored = withContext(Dispatchers.IO) {
-                repository.findById(produtoToEditId)
-            }
-
-            produtoToEdit = produtoStored
+            produtoToEdit = repository.findById(produtoToEditId)
             bindEditProdutoDataIfNeeded()
         }
     }
@@ -88,9 +86,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
             )
 
             coroutineScope.launch(handlerProdutoSave) {
-                withContext(Dispatchers.IO) {
-                    repository.create(produto = createProduto())
-                }
+                repository.create(produto = createProduto())
 
                 binding.cadastroProdutoBtnSalvar.isEnabled = false
                 finish()
