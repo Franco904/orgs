@@ -44,20 +44,16 @@ class ListaProdutosActivity : AppCompatActivity() {
         setUpFilterDropdowns()
         setUpRecyclerView()
         setUpFloatingActionButtonListener()
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         val handlerFindProdutos = setCoroutineExceptionHandler(
             errorMessage = "Erro ao buscar produtos no banco de dados para listagem.",
         )
 
         lifecycleScope.launch(handlerFindProdutos) {
-            val produtos = repository.findAll()
-
-            updateProdutosList(produtos)
-            setUpProdutoCardListeners()
+            repository.findAll().collect {
+                updateProdutosList(produtos = it)
+                setUpProdutoCardListeners()
+            }
         }
     }
 
@@ -144,9 +140,6 @@ class ListaProdutosActivity : AppCompatActivity() {
 
                         lifecycleScope.launch(handlerExcluirProduto) {
                             repository.delete(produto)
-
-                            val produtos = repository.findAll()
-                            updateProdutosList(produtos)
                         }
 
                         null

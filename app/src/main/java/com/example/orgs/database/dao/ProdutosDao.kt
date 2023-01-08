@@ -2,6 +2,7 @@ package com.example.orgs.database.dao
 
 import androidx.room.*
 import com.example.orgs.model.Produto
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProdutosDao {
@@ -15,7 +16,7 @@ interface ProdutosDao {
     suspend fun findById(id: Long): Produto
 
     @Query("SELECT * FROM Produto")
-    suspend fun findAll(): List<Produto>
+    fun findAll(): Flow<List<Produto>>
 
     @Query("SELECT * FROM Produto ORDER BY titulo")
     suspend fun findAllOrderedByTituloAsc(): List<Produto>
