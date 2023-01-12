@@ -35,23 +35,27 @@ class LoginActivity : AppCompatActivity() {
             val usuarioName = binding.loginFieldUsuario.text.toString()
             val senha = binding.loginFieldSenha.text.toString().toHash()
 
-            val exceptionHandler = setCoroutineExceptionHandler(
-                errorMessage = "Erro ao efetuar autenticação do usuário",
-            )
-
-            lifecycleScope.launch(exceptionHandler) {
-                repository.findByUserAndPassword(usuarioName, senha)?.let { usuario ->
-                    preferences.writeUsuarioName(usuarioName = usuario.usuario)
-
-                    navigateTo(ListaProdutosActivity::class.java)
-                } ?: showToast("Usuário não encontrado")
-            }
+            login(usuarioName, senha)
         }
     }
 
     private fun setUpSignUpButtonListener() {
         binding.loginBtnCadastrar.setOnClickListener {
             navigateTo(CadastroUsuarioActivity::class.java)
+        }
+    }
+
+    private fun login(usuarioName: String, senha: String) {
+        val exceptionHandler = setCoroutineExceptionHandler(
+            errorMessage = "Erro ao efetuar autenticação do usuário",
+        )
+
+        lifecycleScope.launch(exceptionHandler) {
+            repository.findByUserAndPassword(usuarioName, senha)?.let { usuario ->
+                preferences.writeUsuarioName(usuarioName = usuario.usuario)
+
+                navigateTo(ListaProdutosActivity::class.java)
+            } ?: showToast("Usuário não encontrado")
         }
     }
 

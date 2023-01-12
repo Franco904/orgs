@@ -27,6 +27,7 @@ import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class ListaProdutosActivity : AppCompatActivity() {
@@ -49,7 +50,6 @@ class ListaProdutosActivity : AppCompatActivity() {
         super.onCreate(savedInstance)
 
         setContentView(binding.root)
-        watchUsuarioData()
 
         // Configura componentes da tela
         title = getString(R.string.lista_produtos_title)
@@ -58,47 +58,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         setUpRecyclerView()
         setUpFloatingActionButtonListener()
 
-        getProdutosAndNotifyListeners()
-    }
-
-    private fun getProdutosAndNotifyListeners() {
-        val handlerFindProdutos = setCoroutineExceptionHandler(
-            errorMessage = "Erro ao buscar produtos no banco de dados para listagem.",
-        )
-
-        lifecycleScope.launch(handlerFindProdutos) {
-            repository.findAll().collect {
-                updateProdutosList(produtos = it)
-                setUpProdutoCardListeners()
-            }
-        }
-    }
-
-    private fun watchUsuarioData() {
-        lifecycleScope.launch {
-            try {
-                usuariosPreferences.watchUsuarioName().collect { usuarioNameSaved ->
-                    usuarioNameSaved?.let { usuarioName ->
-                        launch {
-                            usuariosRepository.findByNameId(usuarioName)
-                                .collect { usuarioStored ->
-                                    usuario = usuarioStored
-                                    Log.i(TAG, "getUsuarioData USUARIO: $usuario")
-                                }
-                        }
-                    } ?: throw IllegalArgumentException(
-                        "Usuário não foi devidamente autenticado.",
-                    )
-                }
-            } catch (e: Exception) {
-                Log.i(TAG, "getUsuarioData exception: $e")
-
-                navigateTo(LoginActivity::class.java) {
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                }
-                finish()
-            }
-        }
+        watchUsuarioData()
     }
 
     private fun setUpFilterDropdowns() {
@@ -164,22 +124,51 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_lista_produtos_actions, menu)
+    private fun watchUsuarioData() {
+        lifecycleScope.launch {
+            try {
+                verifyUsuarioLogged()
+            } catch (e: Exception) {
+                Log.i(TAG, "getUsuarioData exception: $e")
 
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_sair -> {
-                lifecycleScope.launch {
-                    usuariosPreferences.removeUsuarioName()
+                navigateTo(LoginActivity::class.java) {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
+                finish()
             }
         }
+    }
 
-        return super.onOptionsItemSelected(item)
+    private suspend fun verifyUsuarioLogged() {
+        usuariosPreferences.watchUsuarioName().collect { usuarioNameStored ->
+            usuarioNameStored?.let { usuarioName ->
+                tryFindUsuarioInDatabase(usuarioName)
+            } ?: throw IllegalArgumentException(
+                "Usuário não está autenticado.",
+            )
+        }
+    }
+
+    private fun tryFindUsuarioInDatabase(usuarioName: String) {
+        lifecycleScope.launch {
+            usuariosRepository.findByNameId(usuarioName).firstOrNull()?.let { usuarioStored ->
+                usuario = usuarioStored
+                getProdutosAndNotifyListeners()
+            }
+        }
+    }
+
+    private fun getProdutosAndNotifyListeners() {
+        val handlerFindProdutos = setCoroutineExceptionHandler(
+            errorMessage = "Erro ao buscar produtos no banco de dados para listagem.",
+        )
+
+        lifecycleScope.launch(handlerFindProdutos) {
+            repository.findAll().collect {
+                updateProdutosList(produtos = it)
+                setUpProdutoCardListeners()
+            }
+        }
     }
 
     private fun setUpProdutoCardListeners() {
@@ -196,14 +185,7 @@ class ListaProdutosActivity : AppCompatActivity() {
                 },
                 onExcludeDelegate = {
                     ExcluirProdutoConfirmacaoDialog(context = this).show {
-                        val handlerExcluirProduto = setCoroutineExceptionHandler(
-                            errorMessage = "Erro ao excluir produto.",
-                        )
-
-                        lifecycleScope.launch(handlerExcluirProduto) {
-                            repository.delete(produto)
-                        }
-
+                        deleteProduto(produto)
                         null
                     }
                 }
@@ -211,17 +193,47 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_lista_produtos_actions, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_sair -> {
+                lifecycleScope.launch {
+                    logout()
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private suspend fun logout() {
+        usuariosPreferences.removeUsuarioName()
+    }
+
+    private fun deleteProduto(produto: Produto) {
+        val handlerExcluirProduto = setCoroutineExceptionHandler(
+            errorMessage = "Erro ao excluir produto.",
+        )
+
+        lifecycleScope.launch(handlerExcluirProduto) {
+            repository.delete(produto)
+        }
+    }
+
     private fun navigateToCadastroProduto(produtoId: Long? = ID_DEFAULT) {
-        Intent(this, CadastroProdutoActivity::class.java).apply {
+        navigateTo(CadastroProdutoActivity::class.java) {
             putExtra(PRODUTO_ID_EXTRA, produtoId)
-            startActivity(this)
         }
     }
 
     private fun navigateToDetalhesProduto(produtoId: Long? = null) {
-        Intent(this, DetalhesProdutoActivity::class.java).apply {
+        navigateTo(DetalhesProdutoActivity::class.java) {
             putExtra(PRODUTO_ID_EXTRA, produtoId)
-            startActivity(this)
         }
     }
 
@@ -232,3 +244,5 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 }
+
+
