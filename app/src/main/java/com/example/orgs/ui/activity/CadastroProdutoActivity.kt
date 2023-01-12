@@ -4,25 +4,23 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
-import com.example.orgs.constants.PRODUTO_ID_DEFAULT
-import com.example.orgs.constants.PRODUTO_ID_KEY
+import com.example.orgs.constants.ID_DEFAULT
+import com.example.orgs.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.database.repositories.ProdutosRepository
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
 import com.example.orgs.ui.widget.CadastroProdutoImageDialog
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class CadastroProdutoActivity : AppCompatActivity() {
-    private var produtoToEditId: Long = PRODUTO_ID_DEFAULT
+    private var produtoToEditId: Long = ID_DEFAULT
     private var produtoToEdit: Produto? = null
     private var imageUrl: String? = null
-
-    private val coroutineScope by lazy { MainScope() }
 
     private val repository by lazy { ProdutosRepository(context = this) }
 
@@ -49,15 +47,15 @@ class CadastroProdutoActivity : AppCompatActivity() {
     }
 
     private fun getIntentData() {
-        produtoToEditId = intent.getLongExtra(PRODUTO_ID_KEY, PRODUTO_ID_DEFAULT)
+        produtoToEditId = intent.getLongExtra(PRODUTO_ID_EXTRA, ID_DEFAULT)
     }
 
     private fun tryFindProdutoInDatabase() {
         val handlerProdutoFind = setCoroutineExceptionHandler(
-            errorMessage = "Erro ao excluir produto."
+            errorMessage = "Erro ao tentar encontrar produto no banco de dados."
         )
 
-        coroutineScope.launch(handlerProdutoFind) {
+        lifecycleScope.launch(handlerProdutoFind) {
             produtoToEdit = repository.findById(produtoToEditId)
             bindEditProdutoDataIfNeeded()
         }
@@ -85,7 +83,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
                 errorMessage = "Erro ao salvar produto no banco de dados."
             )
 
-            coroutineScope.launch(handlerProdutoSave) {
+            lifecycleScope.launch(handlerProdutoSave) {
                 repository.create(produto = createProduto())
 
                 binding.cadastroProdutoBtnSalvar.isEnabled = false

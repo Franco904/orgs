@@ -6,9 +6,17 @@
     <string name="editar_produto_title">Editar produto</string>
     <string name="detalhes_produto_title">Detalhes do produto</string>
 
+    <string name="hint_usuario_usuario">Usuário</string>
+    <string name="hint_nome_usuario">Nome</string>
+    <string name="hint_senha_usuario">Senha</string>
+
     <string name="hint_titulo_produto">Título</string>
     <string name="hint_descricao_produto">Descrição</string>
     <string name="hint_valor_produto">Valor</string>
+
+    <string name="text_btn_entrar">Entrar</string>
+    <string name="text_btn_cadastrar_usuario">Cadastrar usuário</string>
+    <string name="text_btn_cadastrar">Cadastrar</string>
     <string name="text_btn_salvar">Salvar</string>
 
     <string name="hint_img_url">URL da imagem</string>

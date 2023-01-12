@@ -1,15 +1,15 @@
 package com.example.orgs.enums
 
-enum class ProdutoField { TITULO, DESCRICAO, VALOR, NENHUM }
+enum class ProdutoField { TITULO, DESCRICAO, VALOR }
 
 enum class OrderingPattern { ASC, DESC }
 
 fun getProdutoFieldEnumByName(name: String): ProdutoField {
     return when (name) {
-        "Título" -> ProdutoField.TITULO
+        "Título", "Nenhum" -> ProdutoField.TITULO
         "Descrição" -> ProdutoField.DESCRICAO
         "Valor" -> ProdutoField.VALOR
-        else -> ProdutoField.NENHUM
+        else -> throw NotImplementedError()
     }
 }
 

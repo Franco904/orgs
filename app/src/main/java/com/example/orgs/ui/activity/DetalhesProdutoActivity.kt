@@ -6,8 +6,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.orgs.constants.PRODUTO_ID_DEFAULT
-import com.example.orgs.constants.PRODUTO_ID_KEY
+import com.example.orgs.constants.ID_DEFAULT
+import com.example.orgs.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.database.repositories.ProdutosRepository
 import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
 import com.example.orgs.extensions.tryLoadImage
@@ -19,7 +19,7 @@ import java.text.NumberFormat
 import java.util.*
 
 class DetalhesProdutoActivity : AppCompatActivity() {
-    private var produtoId: Long = PRODUTO_ID_DEFAULT
+    private var produtoId: Long = ID_DEFAULT
     private var produto: Produto? = null
 
     private val repository by lazy { ProdutosRepository(context = this) }
@@ -44,7 +44,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     }
 
     private fun getIntentData() {
-        produtoId = intent.getLongExtra(PRODUTO_ID_KEY, PRODUTO_ID_DEFAULT)
+        produtoId = intent.getLongExtra(PRODUTO_ID_EXTRA, ID_DEFAULT)
     }
 
     private fun tryFindProdutoInDatabase() {
@@ -81,7 +81,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     private fun setUpEditButtonListener() {
         binding.editActionCard.setOnClickListener {
             Intent(this, CadastroProdutoActivity::class.java).apply {
-                putExtra(PRODUTO_ID_KEY, produto?.id)
+                putExtra(PRODUTO_ID_EXTRA, produto?.id)
                 startActivity(this)
             }
         }

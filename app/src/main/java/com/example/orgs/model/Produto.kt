@@ -4,13 +4,13 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.orgs.constants.PRODUTO_ID_DEFAULT
+import com.example.orgs.constants.ID_DEFAULT
 import java.math.BigDecimal
 
 @Entity
 data class Produto(
     @PrimaryKey(autoGenerate = true)
-    val id: Long? = PRODUTO_ID_DEFAULT,
+    val id: Long? = ID_DEFAULT,
     val titulo: String,
     val descricao: String,
     val valor: BigDecimal,
