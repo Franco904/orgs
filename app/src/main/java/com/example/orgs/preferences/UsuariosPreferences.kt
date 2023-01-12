@@ -25,5 +25,11 @@ data class UsuariosPreferences(val context: Context) {
             preferences[USUARIO_NAME_KEY]
         }
     }
+
+    suspend fun removeUsuarioName() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(USUARIO_NAME_KEY)
+        }
+    }
 }
 

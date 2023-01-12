@@ -3,6 +3,8 @@ package com.example.orgs.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -16,17 +18,16 @@ import com.example.orgs.database.repositories.UsuariosRepository
 import com.example.orgs.databinding.ActivityListaProdutosBinding
 import com.example.orgs.enums.getOrderingPatternEnumByName
 import com.example.orgs.enums.getProdutoFieldEnumByName
+import com.example.orgs.extensions.navigateTo
 import com.example.orgs.extensions.showToast
 import com.example.orgs.model.Produto
 import com.example.orgs.model.Usuario
-import com.example.orgs.preferences.USUARIO_NAME_KEY
 import com.example.orgs.preferences.UsuariosPreferences
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 
 class ListaProdutosActivity : AppCompatActivity() {
     private val TAG = "ListaProdutosActivity"
@@ -78,16 +79,24 @@ class ListaProdutosActivity : AppCompatActivity() {
             try {
                 usuariosPreferences.watchUsuarioName().collect { usuarioNameSaved ->
                     usuarioNameSaved?.let { usuarioName ->
-                        usuariosRepository.findByNameId(usuarioName).collect { usuarioStored ->
-                            usuario = usuarioStored
-                            Log.i(TAG, "getUsuarioData USUARIO: $usuario")
+                        launch {
+                            usuariosRepository.findByNameId(usuarioName)
+                                .collect { usuarioStored ->
+                                    usuario = usuarioStored
+                                    Log.i(TAG, "getUsuarioData USUARIO: $usuario")
+                                }
                         }
                     } ?: throw IllegalArgumentException(
-                        "Usuário não encontrado na chave especificada",
+                        "Usuário não foi devidamente autenticado.",
                     )
                 }
             } catch (e: Exception) {
                 Log.i(TAG, "getUsuarioData exception: $e")
+
+                navigateTo(LoginActivity::class.java) {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }
+                finish()
             }
         }
     }
@@ -153,6 +162,24 @@ class ListaProdutosActivity : AppCompatActivity() {
         fab.setOnClickListener {
             navigateToCadastroProduto()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_lista_produtos_actions, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_sair -> {
+                lifecycleScope.launch {
+                    usuariosPreferences.removeUsuarioName()
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setUpProdutoCardListeners() {

@@ -23,6 +23,7 @@
 
     <string name="text_fab_novo_produto">Novo produto</string>
 
+    <string name="option_sair_title">Sair</string>
     <string name="option_editar_title">Editar</string>
     <string name="option_excluir_title">Excluir</string>
 
