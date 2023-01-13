@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/perfil_usuario_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_person" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/perfil_usuario_image" />
+
+    <TextView
+        android:id="@+id/perfil_usuario_usuario_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Usuário:"
+        app:fontFamily="@font/montserrat_medium"
+        app:layout_constraintEnd_toStartOf="@+id/perfil_usuario_usuario_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
+
+    <TextView
+        android:id="@+id/perfil_usuario_usuario_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/perfil_usuario_usuario_label"
+        app:layout_constraintTop_toBottomOf="@+id/materialDivider"
+        tools:text="franco.tavares" />
+
+    <TextView
+        android:id="@+id/perfil_usuario_nome_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Nome:"
+        app:fontFamily="@font/montserrat_medium"
+        app:layout_constraintEnd_toStartOf="@+id/perfil_usuario_nome_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/perfil_usuario_usuario_label" />
+
+    <TextView
+        android:id="@+id/perfil_usuario_nome_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/perfil_usuario_nome_label"
+        app:layout_constraintTop_toBottomOf="@+id/perfil_usuario_usuario_label"
+        tools:text="Franco Tavares" />
+
+    <Button
+        android:id="@+id/perfil_usuario_btn_sair"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/text_btn_sair"
+        app:layout_constraintTop_toBottomOf="@+id/perfil_usuario_nome_label"
+        tools:layout_editor_absoluteX="73dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

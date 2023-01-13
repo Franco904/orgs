@@ -14,6 +14,26 @@
         android:focusableInTouchMode="true"
         tools:context=".ui.activity.LoginActivity">
 
+        <ImageView
+            android:id="@+id/login_app_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/orgs_logo"
+            tools:srcCompat="@drawable/imagem_padrao" />
+
+        <TextView
+            android:id="@+id/login_app_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textSize="24sp"
+            app:layout_constraintTop_toBottomOf="@+id/login_app_logo" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_layout_usuario"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -23,11 +43,12 @@
             android:hint="@string/hint_usuario_usuario"
             android:inputType="text"
             android:minHeight="48dp"
+            android:layout_marginTop="16dp"
             app:helperText="Obrigatório"
             app:helperTextEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/login_app_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_field_usuario"
@@ -69,7 +90,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/login_layout_senha"
             app:layout_constraintStart_toStartOf="@id/login_layout_senha"
-            app:layout_constraintTop_toBottomOf="@id/login_layout_senha" />
+            app:layout_constraintTop_toBottomOf="@id/login_layout_senha"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/login_btn_cadastrar"

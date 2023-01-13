@@ -5,6 +5,7 @@
     <string name="cadastrar_produto_title">Novo produto</string>
     <string name="editar_produto_title">Editar produto</string>
     <string name="detalhes_produto_title">Detalhes do produto</string>
+    <string name="perfil_usuario_title">Perfil do usuário</string>
 
     <string name="hint_usuario_usuario">Usuário</string>
     <string name="hint_nome_usuario">Nome</string>
@@ -18,12 +19,13 @@
     <string name="text_btn_cadastrar_usuario">Cadastrar usuário</string>
     <string name="text_btn_cadastrar">Cadastrar</string>
     <string name="text_btn_salvar">Salvar</string>
+    <string name="text_btn_sair">Sair</string>
 
     <string name="hint_img_url">URL da imagem</string>
 
     <string name="text_fab_novo_produto">Novo produto</string>
 
-    <string name="option_sair_title">Sair</string>
+    <string name="option_perfil_title">Perfil</string>
     <string name="option_editar_title">Editar</string>
     <string name="option_excluir_title">Excluir</string>
 

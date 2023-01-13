@@ -1,46 +1,35 @@
 package com.example.orgs.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
 import com.example.orgs.constants.ID_DEFAULT
 import com.example.orgs.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.database.repositories.ProdutosRepository
-import com.example.orgs.database.repositories.UsuariosRepository
 import com.example.orgs.databinding.ActivityListaProdutosBinding
 import com.example.orgs.enums.getOrderingPatternEnumByName
 import com.example.orgs.enums.getProdutoFieldEnumByName
 import com.example.orgs.extensions.navigateTo
-import com.example.orgs.extensions.showToast
+import com.example.orgs.extensions.setCoroutineExceptionHandler
 import com.example.orgs.model.Produto
-import com.example.orgs.model.Usuario
-import com.example.orgs.preferences.UsuariosPreferences
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
-class ListaProdutosActivity : AppCompatActivity() {
+class ListaProdutosActivity : UsuariosBaseActivity() {
     private val TAG = "ListaProdutosActivity"
-
-    private var usuario: Usuario? = null
 
     private val adapter by lazy { ListaProdutosAdapter(context = this) }
     private val layoutManager by lazy { LinearLayoutManager(this) }
 
     private val repository by lazy { ProdutosRepository(context = this) }
-    private val usuariosRepository by lazy { UsuariosRepository(context = this) }
-    private val usuariosPreferences by lazy { UsuariosPreferences(context = this) }
 
     private val binding: ActivityListaProdutosBinding by lazy {
         ActivityListaProdutosBinding.inflate(layoutInflater)
@@ -51,6 +40,9 @@ class ListaProdutosActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        // Busca dados do usuário
+        getUsuarioData()
+
         // Configura componentes da tela
         title = getString(R.string.lista_produtos_title)
 
@@ -58,7 +50,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         setUpRecyclerView()
         setUpFloatingActionButtonListener()
 
-        watchUsuarioData()
+        setUpUsuarioStateListener()
     }
 
     private fun setUpFilterDropdowns() {
@@ -81,6 +73,7 @@ class ListaProdutosActivity : AppCompatActivity() {
 
             val handlerProperty = setCoroutineExceptionHandler(
                 errorMessage = "Erro ao alterar filtragem por atributo de produto.",
+                from = TAG,
             )
 
             lifecycleScope.launch(handlerProperty) {
@@ -96,6 +89,7 @@ class ListaProdutosActivity : AppCompatActivity() {
 
             val handlerOrderingPattern = setCoroutineExceptionHandler(
                 errorMessage = "Erro ao alterar filtragem por padrão de ordenação.",
+                from = TAG,
             )
 
             lifecycleScope.launch(handlerOrderingPattern) {
@@ -124,43 +118,26 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 
-    private fun watchUsuarioData() {
-        lifecycleScope.launch {
-            try {
-                verifyUsuarioLogged()
-            } catch (e: Exception) {
-                Log.i(TAG, "getUsuarioData exception: $e")
+    private fun setUpUsuarioStateListener() {
+        val handler = setCoroutineExceptionHandler(
+            errorMessage = "Erro ao escutar estado do usuário",
+            from = TAG,
+        )
 
-                navigateTo(LoginActivity::class.java) {
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        lifecycleScope.launch(handler) {
+            // Escuta mudanças de estado na variável reativa (Flow)
+            usuario
+                .filterNotNull()
+                .collect {
+                    getProdutosAndNotifyListeners()
                 }
-                finish()
-            }
-        }
-    }
-
-    private suspend fun verifyUsuarioLogged() {
-        usuariosPreferences.watchUsuarioName().collect { usuarioNameStored ->
-            usuarioNameStored?.let { usuarioName ->
-                tryFindUsuarioInDatabase(usuarioName)
-            } ?: throw IllegalArgumentException(
-                "Usuário não está autenticado.",
-            )
-        }
-    }
-
-    private fun tryFindUsuarioInDatabase(usuarioName: String) {
-        lifecycleScope.launch {
-            usuariosRepository.findByNameId(usuarioName).firstOrNull()?.let { usuarioStored ->
-                usuario = usuarioStored
-                getProdutosAndNotifyListeners()
-            }
         }
     }
 
     private fun getProdutosAndNotifyListeners() {
         val handlerFindProdutos = setCoroutineExceptionHandler(
             errorMessage = "Erro ao buscar produtos no banco de dados para listagem.",
+            from = TAG,
         )
 
         lifecycleScope.launch(handlerFindProdutos) {
@@ -201,23 +178,18 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_sair -> {
-                lifecycleScope.launch {
-                    logout()
-                }
+            R.id.action_perfil -> {
+                navigateTo(PerfilUsuarioActivity::class.java)
             }
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-    private suspend fun logout() {
-        usuariosPreferences.removeUsuarioName()
-    }
-
     private fun deleteProduto(produto: Produto) {
         val handlerExcluirProduto = setCoroutineExceptionHandler(
             errorMessage = "Erro ao excluir produto.",
+            from = TAG,
         )
 
         lifecycleScope.launch(handlerExcluirProduto) {
@@ -234,13 +206,6 @@ class ListaProdutosActivity : AppCompatActivity() {
     private fun navigateToDetalhesProduto(produtoId: Long? = null) {
         navigateTo(DetalhesProdutoActivity::class.java) {
             putExtra(PRODUTO_ID_EXTRA, produtoId)
-        }
-    }
-
-    private fun setCoroutineExceptionHandler(errorMessage: String): CoroutineExceptionHandler {
-        return CoroutineExceptionHandler { _, throwable ->
-            Log.i(TAG, "throwable: $throwable")
-            showToast(errorMessage)
         }
     }
 }

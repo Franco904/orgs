@@ -2,23 +2,23 @@ package com.example.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.constants.ID_DEFAULT
 import com.example.orgs.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.database.repositories.ProdutosRepository
 import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
+import com.example.orgs.extensions.setCoroutineExceptionHandler
 import com.example.orgs.extensions.tryLoadImage
 import com.example.orgs.model.Produto
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
 
 class DetalhesProdutoActivity : AppCompatActivity() {
+    private val TAG = "DetalhesProdutoActivity"
+
     private var produtoId: Long = ID_DEFAULT
     private var produto: Produto? = null
 
@@ -49,7 +49,8 @@ class DetalhesProdutoActivity : AppCompatActivity() {
 
     private fun tryFindProdutoInDatabase() {
         val handlerProdutoFind = setCoroutineExceptionHandler(
-            errorMessage = "Erro ao encontrar produto no banco de dados."
+            errorMessage = "Erro ao encontrar produto no banco de dados.",
+            from = TAG,
         )
 
         lifecycleScope.launch(handlerProdutoFind) {
@@ -91,7 +92,8 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         binding.excludeActionCard.setOnClickListener {
             ExcluirProdutoConfirmacaoDialog(context = this).show {
                 val handlerExcluirProduto = setCoroutineExceptionHandler(
-                    errorMessage = "Erro ao excluir produto."
+                    errorMessage = "Erro ao excluir produto.",
+                    from = TAG,
                 )
 
                 lifecycleScope.launch(handlerExcluirProduto) {
@@ -101,17 +103,6 @@ class DetalhesProdutoActivity : AppCompatActivity() {
 
                 null
             }
-        }
-    }
-
-    private fun setCoroutineExceptionHandler(errorMessage: String? = null): CoroutineExceptionHandler {
-        return CoroutineExceptionHandler { _, throwable ->
-            Log.i("DetalhesProdutoActivity", "throwable: $throwable")
-            Toast.makeText(
-                this,
-                errorMessage ?: "Ocorreu um erro durante a execução da coroutine",
-                Toast.LENGTH_SHORT,
-            ).show()
         }
     }
 }

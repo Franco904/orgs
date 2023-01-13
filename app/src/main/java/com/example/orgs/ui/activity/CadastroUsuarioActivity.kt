@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.database.repositories.UsuariosRepository
 import com.example.orgs.databinding.ActivityCadastroUsuarioBinding
+import com.example.orgs.extensions.setCoroutineExceptionHandler
 import com.example.orgs.extensions.showToast
 import com.example.orgs.extensions.toHash
 import com.example.orgs.model.Usuario
@@ -37,8 +38,9 @@ class CadastroUsuarioActivity : AppCompatActivity() {
 
     private fun signUp() {
         val usuario = createUsuario()
-        val handler: CoroutineExceptionHandler = setCoroutineHandlerException(
-            errorMessage = "Erro ao cadastrar usuário"
+        val handler: CoroutineExceptionHandler = setCoroutineExceptionHandler(
+            errorMessage = "Erro ao cadastrar usuário",
+            from = TAG,
         )
 
         lifecycleScope.launch(handler) {
@@ -58,13 +60,5 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             nome = nome,
             senha = senha,
         )
-    }
-
-
-    private fun setCoroutineHandlerException(errorMessage: String): CoroutineExceptionHandler {
-        return CoroutineExceptionHandler { _, throwable ->
-            Log.i(TAG, "throwable: $throwable")
-            showToast(errorMessage)
-        }
     }
 }
