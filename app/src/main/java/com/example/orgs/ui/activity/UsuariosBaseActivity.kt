@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 abstract class UsuariosBaseActivity : AppCompatActivity() {
-    private var _usuario = MutableStateFlow<Usuario?>(null)   // Estado mutável
-    protected var usuario: StateFlow<Usuario?> = _usuario          // Observable
+    private val _usuario = MutableStateFlow<Usuario?>(null)   // Estado mutável
+    protected val usuario: StateFlow<Usuario?> = _usuario          // Observable
 
     private val usuariosRepository by lazy { UsuariosRepository(context = this) }
     private val usuariosPreferences by lazy { UsuariosPreferences(context = this) }
@@ -33,10 +33,12 @@ abstract class UsuariosBaseActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun tryFindUsuarioInDatabase(usuarioName: String) {
-        _usuario.value = usuariosRepository
+    private suspend fun tryFindUsuarioInDatabase(usuarioName: String): Usuario? {
+        return usuariosRepository
             .findByNameId(usuarioName)
-            .firstOrNull()
+            .firstOrNull().also {
+                _usuario.value = it
+            }
     }
 
     protected suspend fun logout() {
