@@ -40,20 +40,17 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
 
         setContentView(binding.root)
 
-        // Busca dados do usuário
-        getUsuarioData()
-
         // Configura componentes da tela
         title = getString(R.string.lista_produtos_title)
 
-        setUpFilterDropdowns()
+        setUpOrderingDropdowns()
         setUpRecyclerView()
         setUpFloatingActionButtonListener()
 
         setUpUsuarioStateListener()
     }
 
-    private fun setUpFilterDropdowns() {
+    private fun setUpOrderingDropdowns() {
         val propertyValues = resources.getStringArray(R.array.property_filter_options)
         val orderingValues = resources.getStringArray(R.array.ordering_filter_options)
 
@@ -128,20 +125,20 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
             // Escuta mudanças de estado na variável reativa (Flow)
             usuario
                 .filterNotNull()
-                .collect {
-                    getProdutosAndNotifyListeners()
+                .collect { usuario ->
+                    getProdutosAndNotifyListeners(usuarioId = usuario.id!!)
                 }
         }
     }
 
-    private fun getProdutosAndNotifyListeners() {
+    private fun getProdutosAndNotifyListeners(usuarioId: Long) {
         val handlerFindProdutos = setCoroutineExceptionHandler(
             errorMessage = "Erro ao buscar produtos no banco de dados para listagem.",
             from = TAG,
         )
 
         lifecycleScope.launch(handlerFindProdutos) {
-            repository.findAll().collect {
+            repository.findAllByUsuarioId(usuarioId).collect {
                 updateProdutosList(produtos = it)
                 setUpProdutoCardListeners()
             }

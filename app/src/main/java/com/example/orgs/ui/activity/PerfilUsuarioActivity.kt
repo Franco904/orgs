@@ -17,9 +17,6 @@ class PerfilUsuarioActivity : UsuariosBaseActivity() {
 
         setContentView(binding.root)
 
-        // Busca dados do usuário
-        getUsuarioData()
-
         // Configura componentes da tela
         title = getString(R.string.perfil_usuario_title)
 

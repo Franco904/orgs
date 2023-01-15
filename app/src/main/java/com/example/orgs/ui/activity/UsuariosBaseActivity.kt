@@ -1,6 +1,7 @@
 package com.example.orgs.ui.activity
 
 import android.content.Intent
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.database.repositories.UsuariosRepository
@@ -19,7 +20,9 @@ abstract class UsuariosBaseActivity : AppCompatActivity() {
     private val usuariosRepository by lazy { UsuariosRepository(context = this) }
     private val usuariosPreferences by lazy { UsuariosPreferences(context = this) }
 
-    protected fun getUsuarioData() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
         lifecycleScope.launch {
             verifyUsuarioLogged()
         }

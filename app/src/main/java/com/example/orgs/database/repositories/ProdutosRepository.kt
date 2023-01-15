@@ -1,6 +1,7 @@
 package com.example.orgs.database.repositories
 
 import android.content.Context
+import androidx.room.Query
 import com.example.orgs.database.AppDatabase
 import com.example.orgs.database.dao.ProdutosDao
 import com.example.orgs.enums.OrderingPattern
@@ -19,6 +20,10 @@ class ProdutosRepository(context: Context) {
 
     fun findAll(): Flow<List<Produto>> = dao.findAll()
 
+    fun findAllByUsuarioId(usuarioId: Long): Flow<List<Produto>> {
+        return dao.findAllByUsuarioId(usuarioId)
+    }
+
     suspend fun findAllOrderedByField(
         field: ProdutoField,
         orderingPattern: OrderingPattern,
@@ -28,14 +33,12 @@ class ProdutosRepository(context: Context) {
                 ProdutoField.TITULO -> dao.findAllOrderedByTituloAsc()
                 ProdutoField.DESCRICAO -> dao.findAllOrderedByDescricaoAsc()
                 ProdutoField.VALOR -> dao.findAllOrderedByValorAsc()
-                else -> throw NotImplementedError()
             }
         } else {
             when (field) {
                 ProdutoField.TITULO -> dao.findAllOrderedByTituloDesc()
                 ProdutoField.DESCRICAO -> dao.findAllOrderedByDescricaoDesc()
                 ProdutoField.VALOR -> dao.findAllOrderedByValorDesc()
-                else -> throw NotImplementedError()
             }
         }
     }

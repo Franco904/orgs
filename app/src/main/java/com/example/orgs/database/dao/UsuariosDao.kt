@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UsuariosDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun create(vararg usuario: Usuario)
 
     @Query("SELECT * FROM Usuario WHERE usuario = :usuario AND senha = :senha")

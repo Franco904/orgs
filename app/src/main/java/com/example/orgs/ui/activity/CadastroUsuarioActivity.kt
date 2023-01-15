@@ -1,13 +1,11 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.database.repositories.UsuariosRepository
 import com.example.orgs.databinding.ActivityCadastroUsuarioBinding
 import com.example.orgs.extensions.setCoroutineExceptionHandler
-import com.example.orgs.extensions.showToast
 import com.example.orgs.extensions.toHash
 import com.example.orgs.model.Usuario
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -56,6 +54,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
         val senha = binding.cadastroUsuarioFieldSenha.text.toString().toHash()
 
         return Usuario(
+            id = null,
             usuario = usuario,
             nome = nome,
             senha = senha,

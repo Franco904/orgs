@@ -1,7 +1,6 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
 import com.example.orgs.constants.ID_DEFAULT
@@ -15,7 +14,7 @@ import com.example.orgs.ui.widget.CadastroProdutoImageDialog
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class CadastroProdutoActivity : AppCompatActivity() {
+class CadastroProdutoActivity : UsuariosBaseActivity() {
     private val TAG = "CadastroProdutoActivity"
 
     private var produtoToEditId: Long = ID_DEFAULT
@@ -86,10 +85,12 @@ class CadastroProdutoActivity : AppCompatActivity() {
             )
 
             lifecycleScope.launch(handlerProdutoSave) {
-                repository.create(produto = createProduto())
+                usuario.value?.let { usuario ->
+                    repository.create(produto = createProduto(usuario.id))
 
-                binding.cadastroProdutoBtnSalvar.isEnabled = false
-                finish()
+                    binding.cadastroProdutoBtnSalvar.isEnabled = false
+                    finish()
+                }
             }
         }
     }
@@ -98,6 +99,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
         // Configura callback para mostrar dialog de alteração de imagem
         binding.cadastroProdutoItemImage.setOnClickListener {
             val cadastroProdutoImageDialog = CadastroProdutoImageDialog(context = this)
+
             cadastroProdutoImageDialog.show(currentImageUrl = imageUrl) { newUrl ->
                 imageUrl = newUrl
 
@@ -107,7 +109,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
         }
     }
 
-    private fun createProduto(): Produto {
+    private fun createProduto(usuarioId: Long?): Produto {
         val tituloField = binding.cadastroProdutoFieldTitulo
         val titulo = tituloField.text.toString()
 
@@ -125,6 +127,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
             descricao = descricao,
             valor = valorCasted,
             imagemUrl = imageUrl,
+            usuarioId = usuarioId,
         )
     }
 }

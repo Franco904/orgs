@@ -18,6 +18,9 @@ interface ProdutosDao {
     @Query("SELECT * FROM Produto")
     fun findAll(): Flow<List<Produto>>
 
+    @Query("SELECT * FROM Produto WHERE usuarioId = :usuarioId")
+    fun findAllByUsuarioId(usuarioId: Long): Flow<List<Produto>>
+
     @Query("SELECT * FROM Produto ORDER BY titulo")
     suspend fun findAllOrderedByTituloAsc(): List<Produto>
 
