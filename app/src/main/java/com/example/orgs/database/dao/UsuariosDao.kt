@@ -1,10 +1,8 @@
 package com.example.orgs.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.orgs.model.Usuario
+import com.example.orgs.model.UsuarioWithProdutos
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,4 +15,8 @@ interface UsuariosDao {
 
     @Query("SELECT * FROM Usuario WHERE usuario = :nameId")
     fun findByNameId(nameId: String): Flow<Usuario>
+
+    @Transaction
+    @Query("SELECT * FROM Usuario")
+    fun findWithProdutos(): Flow<List<UsuarioWithProdutos>>
 }

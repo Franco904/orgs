@@ -175,6 +175,9 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_produtos_usuarios -> {
+                navigateTo(ProdutosUsuariosActivity::class.java)
+            }
             R.id.action_perfil -> {
                 navigateTo(PerfilUsuarioActivity::class.java)
             }

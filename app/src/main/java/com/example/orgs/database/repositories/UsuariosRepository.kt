@@ -3,6 +3,7 @@ package com.example.orgs.database.repositories
 import android.content.Context
 import com.example.orgs.database.AppDatabase
 import com.example.orgs.model.Usuario
+import com.example.orgs.model.UsuarioWithProdutos
 import kotlinx.coroutines.flow.Flow
 
 class UsuariosRepository(context: Context) {
@@ -16,5 +17,9 @@ class UsuariosRepository(context: Context) {
 
     fun findByNameId(nameId: String): Flow<Usuario> {
         return dao.findByNameId(nameId)
+    }
+
+    fun findWithProdutos(): Flow<List<UsuarioWithProdutos>> {
+        return dao.findWithProdutos()
     }
 }

@@ -7,10 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.orgs.database.repositories.UsuariosRepository
 import com.example.orgs.extensions.navigateTo
 import com.example.orgs.model.Usuario
+import com.example.orgs.model.UsuarioWithProdutos
 import com.example.orgs.preferences.UsuariosPreferences
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 abstract class UsuariosBaseActivity : AppCompatActivity() {
@@ -42,6 +41,10 @@ abstract class UsuariosBaseActivity : AppCompatActivity() {
             .firstOrNull().also {
                 _usuario.value = it
             }
+    }
+
+    protected suspend fun findUsuariosWithProdutos(): Flow<List<UsuarioWithProdutos>> {
+        return usuariosRepository.findWithProdutos()
     }
 
     protected suspend fun logout() {
