@@ -91,10 +91,14 @@ class CadastroProdutoActivity : UsuariosBaseActivity() {
 
             lifecycleScope.launch(handlerProdutoSave) {
                 usuario.value?.let { usuario ->
-                    repository.create(produto = createProduto(usuario.id))
+                    val produto = createProduto(usuario.id)
 
-                    binding.cadastroProdutoBtnSalvar.isEnabled = false
-                    finish()
+                    if (produto.isValid) {
+                        repository.create(produto)
+
+                        binding.cadastroProdutoBtnSalvar.isEnabled = false
+                        finish()
+                    }
                 }
             }
         }

@@ -46,11 +46,13 @@ class CadastroUsuarioActivity : AppCompatActivity() {
             from = TAG,
         )
 
-        lifecycleScope.launch(handler) {
-            repository.create(usuario)
-        }
+        if (usuario.isValid) {
+            lifecycleScope.launch(handler) {
+                repository.create(usuario)
+            }
 
-        finish()
+            finish()
+        }
     }
 
     private fun createUsuario(): Usuario {

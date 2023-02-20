@@ -15,11 +15,12 @@ data class Usuario(
     val nome: String,
     val senha: String,
 ) {
-    fun isValid() = isValidEmail && isValidSenha
-
     @Ignore
     private val isValidEmail = usuario.matches(Regex(EMAIL_REGEX))
 
     @Ignore
     private val isValidSenha = senha.count() >= 6
+
+    @Ignore
+    val isValid = isValidEmail && isValidSenha
 }
