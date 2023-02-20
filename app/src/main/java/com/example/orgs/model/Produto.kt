@@ -24,4 +24,14 @@ data class Produto(
     val valor: BigDecimal,
     val imagemUrl: String? = null,
     val usuarioId: Long? = ID_DEFAULT,
-)
+) {
+    fun isValid() = valorGreaterThanZero() && valorLessThanOrEqualToOneHundred()
+
+    private fun valorGreaterThanZero(): Boolean {
+        return valor > BigDecimal.ZERO
+    }
+
+    private fun valorLessThanOrEqualToOneHundred(): Boolean {
+        return valor <= BigDecimal(100)
+    }
+}

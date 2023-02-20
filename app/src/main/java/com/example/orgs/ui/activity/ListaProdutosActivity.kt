@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
 import com.example.orgs.constants.ID_DEFAULT
 import com.example.orgs.constants.PRODUTO_ID_EXTRA
+import com.example.orgs.database.AppDatabase
 import com.example.orgs.database.repositories.ProdutosRepository
 import com.example.orgs.databinding.ActivityListaProdutosBinding
 import com.example.orgs.enums.getOrderingPatternEnumByName
@@ -29,7 +30,11 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
     private val adapter by lazy { ListaProdutosAdapter(context = this) }
     private val layoutManager by lazy { LinearLayoutManager(this) }
 
-    private val repository by lazy { ProdutosRepository(context = this) }
+    private val repository by lazy {
+        ProdutosRepository(
+            dao = AppDatabase.getInstance(this).produtosDao(),
+        )
+    }
 
     private val binding: ActivityListaProdutosBinding by lazy {
         ActivityListaProdutosBinding.inflate(layoutInflater)

@@ -9,9 +9,9 @@ import com.example.orgs.enums.ProdutoField
 import com.example.orgs.model.Produto
 import kotlinx.coroutines.flow.Flow
 
-class ProdutosRepository(context: Context) {
-    private val dao: ProdutosDao = AppDatabase.getInstance(context).produtosDao()
-
+class ProdutosRepository(
+    private val dao: ProdutosDao,
+) {
     suspend fun create(produto: Produto) = dao.create(produto)
 
     suspend fun delete(produto: Produto) = dao.delete(produto)

@@ -1,8 +1,11 @@
 package com.example.orgs.model
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.orgs.constants.ID_DEFAULT
+
+private const val EMAIL_REGEX = "^[A-Za-z](.*)([@])(.+)(\\.)(.{1,})"
 
 @Entity
 data class Usuario(
@@ -11,4 +14,12 @@ data class Usuario(
     val usuario: String,
     val nome: String,
     val senha: String,
-)
+) {
+    fun isValid() = isValidEmail && isValidSenha
+
+    @Ignore
+    private val isValidEmail = usuario.matches(Regex(EMAIL_REGEX))
+
+    @Ignore
+    private val isValidSenha = senha.count() >= 6
+}

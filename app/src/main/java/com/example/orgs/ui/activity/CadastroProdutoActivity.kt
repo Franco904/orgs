@@ -5,6 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
 import com.example.orgs.constants.ID_DEFAULT
 import com.example.orgs.constants.PRODUTO_ID_EXTRA
+import com.example.orgs.database.AppDatabase
 import com.example.orgs.database.repositories.ProdutosRepository
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.extensions.setCoroutineExceptionHandler
@@ -21,7 +22,11 @@ class CadastroProdutoActivity : UsuariosBaseActivity() {
     private var produtoToEdit: Produto? = null
     private var imageUrl: String? = null
 
-    private val repository by lazy { ProdutosRepository(context = this) }
+    private val repository by lazy {
+        ProdutosRepository(
+            dao = AppDatabase.getInstance(this).produtosDao(),
+        )
+    }
 
     private val binding by lazy {
         ActivityCadastroProdutoBinding.inflate(layoutInflater)

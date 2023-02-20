@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.constants.ID_DEFAULT
 import com.example.orgs.constants.PRODUTO_ID_EXTRA
+import com.example.orgs.database.AppDatabase
 import com.example.orgs.database.repositories.ProdutosRepository
 import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
 import com.example.orgs.extensions.setCoroutineExceptionHandler
@@ -22,7 +23,11 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     private var produtoId: Long = ID_DEFAULT
     private var produto: Produto? = null
 
-    private val repository by lazy { ProdutosRepository(context = this) }
+    private val repository by lazy {
+        ProdutosRepository(
+            dao = AppDatabase.getInstance(this).produtosDao(),
+        )
+    }
 
     private val binding: ActivityDetalhesProdutoBinding by lazy {
         ActivityDetalhesProdutoBinding.inflate(layoutInflater)

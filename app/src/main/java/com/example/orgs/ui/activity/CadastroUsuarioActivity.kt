@@ -3,6 +3,7 @@ package com.example.orgs.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.orgs.database.AppDatabase
 import com.example.orgs.database.repositories.UsuariosRepository
 import com.example.orgs.databinding.ActivityCadastroUsuarioBinding
 import com.example.orgs.extensions.setCoroutineExceptionHandler
@@ -14,7 +15,11 @@ import kotlinx.coroutines.launch
 class CadastroUsuarioActivity : AppCompatActivity() {
     private val TAG = "CadastroUsuarioActivity"
 
-    private val repository by lazy { UsuariosRepository(context = this) }
+    private val repository by lazy {
+        UsuariosRepository(
+            dao = AppDatabase.getInstance(this).usuariosDao(),
+        )
+    }
 
     private val binding by lazy {
         ActivityCadastroUsuarioBinding.inflate(layoutInflater)

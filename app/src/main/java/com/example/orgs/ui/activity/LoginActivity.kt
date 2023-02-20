@@ -1,8 +1,14 @@
 package com.example.orgs.ui.activity
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
+import com.example.orgs.database.AppDatabase
 import com.example.orgs.database.repositories.UsuariosRepository
 import com.example.orgs.databinding.ActivityLoginBinding
 import com.example.orgs.extensions.navigateTo
@@ -15,8 +21,16 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
     private val TAG = "LoginActivity"
 
-    private val repository by lazy { UsuariosRepository(context = this) }
-    private val preferences by lazy { UsuariosPreferences(context = this) }
+    private val repository by lazy {
+        UsuariosRepository(
+            dao = AppDatabase.getInstance(this).usuariosDao(),
+        )
+    }
+    private val preferences by lazy {
+        UsuariosPreferences(
+            context = this,
+        )
+    }
 
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)

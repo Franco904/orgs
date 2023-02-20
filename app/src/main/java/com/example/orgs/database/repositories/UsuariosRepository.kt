@@ -1,14 +1,13 @@
 package com.example.orgs.database.repositories
 
-import android.content.Context
-import com.example.orgs.database.AppDatabase
+import com.example.orgs.database.dao.UsuariosDao
 import com.example.orgs.model.Usuario
 import com.example.orgs.model.UsuarioWithProdutos
 import kotlinx.coroutines.flow.Flow
 
-class UsuariosRepository(context: Context) {
-    private val dao = AppDatabase.getInstance(context).usuariosDao()
-
+class UsuariosRepository(
+    private val dao: UsuariosDao,
+) {
     suspend fun create(usuario: Usuario) = dao.create(usuario)
 
     suspend fun findByUserAndPassword(usuario: String, senha: String): Usuario? {
