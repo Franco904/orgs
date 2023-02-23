@@ -18,7 +18,7 @@ class UsuariosRepository(
         return dao.findByNameId(nameId)
     }
 
-    fun findWithProdutos(): Flow<List<UsuarioWithProdutos>> {
-        return dao.findWithProdutos()
+    fun findAllWithProdutos(): Flow<List<UsuarioWithProdutos>> {
+        return dao.findAllWithProdutos()
     }
 }

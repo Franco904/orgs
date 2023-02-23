@@ -49,7 +49,7 @@ abstract class UsuariosBaseActivity : AppCompatActivity() {
     }
 
     protected suspend fun findUsuariosWithProdutos(): Flow<List<UsuarioWithProdutos>> {
-        return usuariosRepository.findWithProdutos()
+        return usuariosRepository.findAllWithProdutos()
     }
 
     protected suspend fun logout() {

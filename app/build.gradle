@@ -51,6 +51,16 @@ android {
             useJUnitPlatform()
         }
     }
+
+    sourceSets {
+        String sharedTestDir = 'src/sharedTest/java'
+        test {
+            java.srcDir sharedTestDir
+        }
+        androidTest {
+            java.srcDir sharedTestDir
+        }
+    }
 }
 
 dependencies {

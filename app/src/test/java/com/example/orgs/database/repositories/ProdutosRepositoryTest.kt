@@ -1,5 +1,6 @@
 package com.example.orgs.database.repositories
 
+import ModelTestUtils.createProdutoEntity
 import com.example.orgs.database.dao.ProdutosDao
 import com.example.orgs.enums.OrderingPattern
 import com.example.orgs.enums.ProdutoField
@@ -9,35 +10,16 @@ import io.mockk.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeInstanceOf
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
-import java.math.BigDecimal
+import org.junit.jupiter.api.Test
 
 class ProdutosRepositoryTest {
     private val produtosDao = mockk<ProdutosDao>()
     private val sut = ProdutosRepository(dao = produtosDao)
 
     private val faker by lazy { Faker() }
-
-    private fun createProdutoEntity(
-        id: Long? = null,
-        titulo: String? = null,
-        descricao: String? = null,
-        valor: BigDecimal? = null,
-        imagemUrl: String? = null,
-        usuarioId: Long? = null,
-    ): Produto {
-        return Produto(
-            id = id,
-            titulo = titulo ?: faker.random.randomString(10),
-            descricao = descricao ?: faker.random.randomString(10),
-            valor = valor ?: BigDecimal(faker.random.nextDouble()),
-            imagemUrl = imagemUrl,
-            usuarioId = usuarioId,
-        )
-    }
 
     private fun mockCreate(produto: Produto) {
         coEvery {
