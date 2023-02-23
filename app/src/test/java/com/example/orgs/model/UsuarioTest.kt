@@ -4,7 +4,7 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldBeTrue
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class UsuarioTest {
     private lateinit var sut: Usuario
