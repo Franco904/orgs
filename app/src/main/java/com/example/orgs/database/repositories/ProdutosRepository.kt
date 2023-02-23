@@ -1,8 +1,5 @@
 package com.example.orgs.database.repositories
 
-import android.content.Context
-import androidx.room.Query
-import com.example.orgs.database.AppDatabase
 import com.example.orgs.database.dao.ProdutosDao
 import com.example.orgs.enums.OrderingPattern
 import com.example.orgs.enums.ProdutoField
@@ -17,8 +14,6 @@ class ProdutosRepository(
     suspend fun delete(produto: Produto) = dao.delete(produto)
 
     suspend fun findById(id: Long): Produto = dao.findById(id)
-
-    fun findAll(): Flow<List<Produto>> = dao.findAll()
 
     fun findAllByUsuarioId(usuarioId: Long): Flow<List<Produto>> {
         return dao.findAllByUsuarioId(usuarioId)
