@@ -48,9 +48,9 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
         // Configura componentes da tela
         title = getString(R.string.lista_produtos_title)
 
-        setUpOrderingDropdowns()
         setUpRecyclerView()
         setUpFloatingActionButtonListener()
+        setUpOrderingDropdowns()
 
         setUpUsuarioStateListener()
     }
