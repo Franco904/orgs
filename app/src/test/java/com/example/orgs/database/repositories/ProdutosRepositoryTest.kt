@@ -102,7 +102,7 @@ class ProdutosRepositoryTest {
     }
 
     @Nested
-    @DisplayName("create |")
+    @DisplayName("create")
     inner class CreateTest {
         @Test
         fun `Deve chamar o metodo create() do DAO quando executado`() = runTest {
@@ -118,7 +118,7 @@ class ProdutosRepositoryTest {
     }
 
     @Nested
-    @DisplayName("delete |")
+    @DisplayName("delete")
     inner class DeleteTest {
         @Test
         fun `Deve chamar o metodo delete() do DAO quando executado`() = runTest {
@@ -134,7 +134,7 @@ class ProdutosRepositoryTest {
     }
 
     @Nested
-    @DisplayName("findById |")
+    @DisplayName("findById")
     inner class FindByIdTest {
         @Test
         fun `Deve chamar o metodo findById() do DAO quando executado`() = runTest {
@@ -150,7 +150,7 @@ class ProdutosRepositoryTest {
     }
 
     @Nested
-    @DisplayName("findAllByUsuarioId |")
+    @DisplayName("findAllByUsuarioId")
     inner class FindAllByUsuarioId {
         @Test
         fun `Deve chamar o metodo findAllByUsuarioId() do DAO quando executado`() {
@@ -166,7 +166,7 @@ class ProdutosRepositoryTest {
     }
 
     @Nested
-    @DisplayName("findAllOrderedByField |")
+    @DisplayName("findAllOrderedByField")
     inner class FindAllOrderedByField {
         @Test
         fun `Deve chamar o metodo findAllOrderedByTituloAsc() do DAO quando o campo filtrado for titulo e a ordenacao for crescente`() =
