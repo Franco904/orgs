@@ -7,6 +7,7 @@ import com.example.orgs.enums.ProdutoField
 import com.example.orgs.model.Produto
 import io.github.serpro69.kfaker.Faker
 import io.mockk.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeInstanceOf
@@ -104,6 +105,7 @@ class ProdutosRepositoryTest {
     @Nested
     @DisplayName("create")
     inner class CreateTest {
+        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo create() do DAO quando executado`() = runTest {
             val produto = createProdutoEntity()
@@ -120,6 +122,7 @@ class ProdutosRepositoryTest {
     @Nested
     @DisplayName("delete")
     inner class DeleteTest {
+        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo delete() do DAO quando executado`() = runTest {
             val produto = createProdutoEntity()
@@ -136,6 +139,7 @@ class ProdutosRepositoryTest {
     @Nested
     @DisplayName("findById")
     inner class FindByIdTest {
+        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo findById() do DAO quando executado`() = runTest {
             val id = faker.random.nextLong(10L)
@@ -168,6 +172,7 @@ class ProdutosRepositoryTest {
     @Nested
     @DisplayName("findAllOrderedByField")
     inner class FindAllOrderedByField {
+        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo findAllOrderedByTituloAsc() do DAO quando o campo filtrado for titulo e a ordenacao for crescente`() =
             runTest {
@@ -183,6 +188,7 @@ class ProdutosRepositoryTest {
                 }
             }
 
+        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo findAllOrderedByTituloDesc() do DAO quando o campo filtrado for titulo e a ordenacao for decrescente`() =
             runTest {
@@ -198,6 +204,7 @@ class ProdutosRepositoryTest {
                 }
             }
 
+        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo findAllOrderedByDescricaoAsc() do DAO quando o campo filtrado for descricao e a ordenacao for crescente`() =
             runTest {
@@ -213,6 +220,7 @@ class ProdutosRepositoryTest {
                 }
             }
 
+        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo findAllOrderedByDescricaoDesc() do DAO quando campo filtrado for descricao e a ordenacao for decrescente`() =
             runTest {
@@ -228,6 +236,7 @@ class ProdutosRepositoryTest {
                 }
             }
 
+        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo findAllOrderedByValorAsc() do DAO quando o campo filtrado for valor e a ordenacao for crescente`() =
             runTest {
@@ -243,6 +252,7 @@ class ProdutosRepositoryTest {
                 }
             }
 
+        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo findAllOrderedByValorDesc() do DAO quando o campo filtrado for valor e a ordenacao for decrescente`() =
             runTest {
