@@ -22,7 +22,7 @@ import com.example.orgs.model.Usuario
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
-        const val SCHEMA_VERSION = 3
+        const val SCHEMA_VERSION = 4
 
         // Mudanças ficam visíveis para todas as threads, evitando inconsistências
         @Volatile
@@ -31,6 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
         private val MIGRATIONS = arrayOf(
             MIGRATION_1_2,
             MIGRATION_2_3,
+            MIGRATION_3_4,
         )
 
         fun getInstance(context: Context): AppDatabase {
