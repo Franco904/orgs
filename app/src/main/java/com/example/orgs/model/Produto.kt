@@ -13,6 +13,9 @@ import java.math.BigDecimal
             onDelete = ForeignKey.CASCADE,
         )
     ],
+    indices = [
+        Index(value = ["usuarioId"])
+    ],
 )
 data class Produto(
     @PrimaryKey(autoGenerate = true)

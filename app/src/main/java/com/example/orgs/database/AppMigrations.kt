@@ -3,6 +3,7 @@ package com.example.orgs.database
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
+// Cria tabela Usuario
 val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL(
@@ -18,6 +19,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
+// Adiciona foreign key para tabela Produto
 val MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL(
@@ -58,8 +60,13 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
     }
 }
 
+// Adiciona índice para campo usuarioId na tabela Produto
 val MIGRATION_3_4 = object : Migration(3, 4) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        TODO("Not yet implemented")
+        database.execSQL(
+            """
+                CREATE INDEX index_Produto_usuarioId ON Produto(usuarioId)
+            """
+        )
     }
 }
