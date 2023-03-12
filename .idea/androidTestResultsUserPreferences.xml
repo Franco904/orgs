@@ -9,9 +9,38 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="98" />
+                  <entry key="Pixel_4_API_30" value="120" />
                   <entry key="R9XR304DNXZ" value="120" />
                   <entry key="Tests" value="368" />
-                  <entry key="samsung&#10; SM-T500" value="128" />
+                  <entry key="samsung&#10; SM-T500" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="28629151">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="R9XR304DNXZ" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-T500" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1402718347">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="R9XR304DNXZ" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-T500" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

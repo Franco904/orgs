@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+//    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -15,10 +16,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        // Runner for JUnit 4
+        // Runner for instrumented tests (JUnit 4)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        // Runner for JUnit 5
-        testInstrumentationRunner "org.junit.platform.runner.JUnitPlatformRunner"
 
         kapt {
             arguments {
@@ -41,12 +40,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '19'
+        jvmTarget = '11'
     }
 
     packagingOptions {
