@@ -40,8 +40,8 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
         ActivityListaProdutosBinding.inflate(layoutInflater)
     }
 
-    override fun onCreate(savedInstance: Bundle?) {
-        super.onCreate(savedInstance)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
 
