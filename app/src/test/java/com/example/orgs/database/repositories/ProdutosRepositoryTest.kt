@@ -122,7 +122,6 @@ class ProdutosRepositoryTest {
     @Nested
     @DisplayName("delete")
     inner class DeleteTest {
-        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo delete() do DAO quando executado`() = runTest {
             val produto = createProdutoEntity()
@@ -139,7 +138,6 @@ class ProdutosRepositoryTest {
     @Nested
     @DisplayName("findById")
     inner class FindByIdTest {
-        @OptIn(ExperimentalCoroutinesApi::class)
         @Test
         fun `Deve chamar o metodo findById() do DAO quando executado`() = runTest {
             val id = faker.random.nextLong(10L)
