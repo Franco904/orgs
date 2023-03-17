@@ -1,30 +1,53 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
 import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
+import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
+import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
+import com.example.orgs.ui.activity.helper.UsuarioBaseHelper
 import com.example.orgs.ui.widget.CadastroProdutoImageDialog
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class CadastroProdutoActivity : UsuariosBaseActivity() {
+class CadastroProdutoActivity : AppCompatActivity() {
     private val TAG = "CadastroProdutoActivity"
 
     private var produtoToEditId: Long = ID_DEFAULT
     private var produtoToEdit: Produto? = null
     private var imageUrl: String? = null
 
-    private val repository by lazy {
+    private val produtosRepository by lazy {
         ProdutosRepositoryImpl(
-            dao = AppDatabase.getInstance(this).produtosDao(),
+            dao = AppDatabase.getInstance(context = this).produtosDao(),
+        )
+    }
+
+    private val usuariosRepository by lazy {
+        UsuariosRepositoryImpl(
+            dao = AppDatabase.getInstance(context = this).usuariosDao(),
+        )
+    }
+
+    private val usuariosPreferences by lazy {
+        UsuariosPreferencesImpl(context = this)
+    }
+
+    private val usuarioHelper by lazy {
+        UsuarioBaseHelper(
+            context = this,
+            repository = usuariosRepository,
+            preferences = usuariosPreferences,
         )
     }
 
@@ -37,6 +60,10 @@ class CadastroProdutoActivity : UsuariosBaseActivity() {
 
         setContentView(binding.root)
         title = getString(R.string.cadastrar_produto_title)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            usuarioHelper.verifyUsuarioLogged()
+        }
 
         getIntentData()
     }
@@ -61,7 +88,7 @@ class CadastroProdutoActivity : UsuariosBaseActivity() {
         )
 
         lifecycleScope.launch(handlerProdutoFind) {
-            produtoToEdit = repository.findById(produtoToEditId)
+            produtoToEdit = produtosRepository.findById(produtoToEditId)
             bindEditProdutoDataIfNeeded()
         }
     }
@@ -90,11 +117,11 @@ class CadastroProdutoActivity : UsuariosBaseActivity() {
             )
 
             lifecycleScope.launch(handlerProdutoSave) {
-                usuario.value?.let { usuario ->
+                usuarioHelper.usuario.value?.let { usuario ->
                     val produto = createProduto(usuario.id)
 
                     if (produto.isValid) {
-                        repository.create(produto)
+                        produtosRepository.create(produto)
 
                         binding.cadastroProdutoBtnSalvar.isEnabled = false
                         finish()

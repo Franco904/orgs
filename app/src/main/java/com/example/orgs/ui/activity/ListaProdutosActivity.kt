@@ -5,34 +5,59 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
 import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
+import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityListaProdutosBinding
 import com.example.orgs.data.enums.getOrderingPatternEnumByName
 import com.example.orgs.data.enums.getProdutoFieldEnumByName
 import com.example.orgs.util.extensions.navigateTo
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.data.model.Produto
+import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
+import com.example.orgs.ui.activity.helper.UsuarioBaseHelper
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
-class ListaProdutosActivity : UsuariosBaseActivity() {
+class ListaProdutosActivity : AppCompatActivity() {
     private val TAG = "ListaProdutosActivity"
 
     private val adapter by lazy { ListaProdutosAdapter(context = this) }
     private val layoutManager by lazy { LinearLayoutManager(this) }
 
-    private val repository by lazy {
+    private val produtosRepository by lazy {
         ProdutosRepositoryImpl(
-            dao = AppDatabase.getInstance(this).produtosDao(),
+            dao = AppDatabase.getInstance(context = this).produtosDao(),
+        )
+    }
+
+    private val usuariosRepository by lazy {
+        UsuariosRepositoryImpl(
+            dao = AppDatabase.getInstance(context = this).usuariosDao(),
+        )
+    }
+
+    private val usuariosPreferences by lazy {
+        UsuariosPreferencesImpl(context = this)
+    }
+
+    private val usuarioHelper by lazy {
+        UsuarioBaseHelper(
+            context = this,
+            repository = usuariosRepository,
+            preferences = usuariosPreferences,
         )
     }
 
@@ -47,6 +72,12 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
 
         // Configura componentes da tela
         title = getString(R.string.lista_produtos_title)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                usuarioHelper.verifyUsuarioLogged()
+            }
+        }
 
         setUpRecyclerView()
         setUpFloatingActionButtonListener()
@@ -79,7 +110,7 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
             )
 
             lifecycleScope.launch(handlerProperty) {
-                val produtos = repository.findAllOrderedByField(field, orderingPattern)
+                val produtos = produtosRepository.findAllOrderedByField(field, orderingPattern)
 
                 updateProdutosList(produtos)
             }
@@ -95,7 +126,7 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
             )
 
             lifecycleScope.launch(handlerOrderingPattern) {
-                val produtos = repository.findAllOrderedByField(field, orderingPattern)
+                val produtos = produtosRepository.findAllOrderedByField(field, orderingPattern)
 
                 updateProdutosList(produtos)
             }
@@ -128,7 +159,7 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
 
         lifecycleScope.launch(handler) {
             // Escuta mudanças de estado na variável reativa (Flow)
-            usuario
+            usuarioHelper.usuario
                 .filterNotNull()
                 .collect { usuario ->
                     getProdutosAndNotifyListeners(usuarioId = usuario.id!!)
@@ -143,7 +174,7 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
         )
 
         lifecycleScope.launch(handlerFindProdutos) {
-            repository.findAllByUsuarioId(usuarioId).collect {
+            produtosRepository.findAllByUsuarioId(usuarioId).collect {
                 updateProdutosList(produtos = it)
                 setUpProdutoCardListeners()
             }
@@ -198,7 +229,7 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
         )
 
         lifecycleScope.launch(handlerExcluirProduto) {
-            repository.delete(produto)
+            produtosRepository.delete(produto)
         }
     }
 
