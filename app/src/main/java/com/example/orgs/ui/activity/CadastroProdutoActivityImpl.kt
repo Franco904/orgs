@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
+import com.example.orgs.contracts.ui.CadastroProdutoActivity
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
@@ -14,13 +15,13 @@ import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
 import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
-import com.example.orgs.ui.activity.helper.UsuarioBaseHelper
+import com.example.orgs.ui.activity.helper.UsuarioBaseHelperImpl
 import com.example.orgs.ui.widget.CadastroProdutoImageDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class CadastroProdutoActivity : AppCompatActivity() {
+class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity {
     private val TAG = "CadastroProdutoActivity"
 
     private var produtoToEditId: Long = ID_DEFAULT
@@ -44,7 +45,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
     }
 
     private val usuarioHelper by lazy {
-        UsuarioBaseHelper(
+        UsuarioBaseHelperImpl(
             context = this,
             repository = usuariosRepository,
             preferences = usuariosPreferences,
@@ -77,11 +78,11 @@ class CadastroProdutoActivity : AppCompatActivity() {
         setUpOnImageTappedListener()
     }
 
-    private fun getIntentData() {
+    override fun getIntentData() {
         produtoToEditId = intent.getLongExtra(PRODUTO_ID_EXTRA, ID_DEFAULT)
     }
 
-    private fun tryFindProdutoInDatabase() {
+    override fun tryFindProdutoInDatabase() {
         val handlerProdutoFind = setCoroutineExceptionHandler(
             errorMessage = "Erro ao tentar encontrar produto no banco de dados.",
             from = TAG,
@@ -93,7 +94,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
         }
     }
 
-    private fun bindEditProdutoDataIfNeeded() {
+    override fun bindEditProdutoDataIfNeeded() {
         produtoToEdit?.let {
             title = getString(R.string.editar_produto_title)
 
@@ -108,7 +109,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpOnSaveListener() {
+    override fun setUpOnSaveListener() {
         // Configura callback de salvamento do produto
         binding.cadastroProdutoBtnSalvar.setOnClickListener {
             val handlerProdutoSave = setCoroutineExceptionHandler(
@@ -131,7 +132,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpOnImageTappedListener() {
+    override fun setUpOnImageTappedListener() {
         // Configura callback para mostrar dialog de alteração de imagem
         binding.cadastroProdutoItemImage.setOnClickListener {
             val cadastroProdutoImageDialog = CadastroProdutoImageDialog(context = this)
@@ -145,7 +146,7 @@ class CadastroProdutoActivity : AppCompatActivity() {
         }
     }
 
-    private fun createProduto(usuarioId: Long?): Produto {
+    override fun createProduto(usuarioId: Long?): Produto {
         val tituloField = binding.cadastroProdutoFieldTitulo
         val titulo = tituloField.text.toString()
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
+import com.example.orgs.contracts.ui.ListaProdutosActivity
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
@@ -23,7 +24,7 @@ import com.example.orgs.util.extensions.navigateTo
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.data.model.Produto
 import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
-import com.example.orgs.ui.activity.helper.UsuarioBaseHelper
+import com.example.orgs.ui.activity.helper.UsuarioBaseHelperImpl
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu
@@ -31,7 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
-class ListaProdutosActivity : AppCompatActivity() {
+class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
     private val TAG = "ListaProdutosActivity"
 
     private val adapter by lazy { ListaProdutosAdapter(context = this) }
@@ -54,7 +55,7 @@ class ListaProdutosActivity : AppCompatActivity() {
     }
 
     private val usuarioHelper by lazy {
-        UsuarioBaseHelper(
+        UsuarioBaseHelperImpl(
             context = this,
             repository = usuariosRepository,
             preferences = usuariosPreferences,
@@ -86,7 +87,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         setUpUsuarioStateListener()
     }
 
-    private fun setUpOrderingDropdowns() {
+    override fun setUpOrderingDropdowns() {
         val propertyValues = resources.getStringArray(R.array.property_filter_options)
         val orderingValues = resources.getStringArray(R.array.ordering_filter_options)
 
@@ -133,16 +134,16 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateProdutosList(produtos: List<Produto>) = adapter.updateAdapterState(produtos)
+    override fun updateProdutosList(produtos: List<Produto>) = adapter.updateAdapterState(produtos)
 
-    private fun setUpRecyclerView() {
+    override fun setUpRecyclerView() {
         val recyclerView = binding.listaProdutosRecyclerView
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
     }
 
-    private fun setUpFloatingActionButtonListener() {
+    override fun setUpFloatingActionButtonListener() {
         val fab = binding.listaProdutosFab
 
         // Ao clicar no botão FAB, navegar para a tela de cadastro de produto
@@ -151,7 +152,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpUsuarioStateListener() {
+    override fun setUpUsuarioStateListener() {
         val handler = setCoroutineExceptionHandler(
             errorMessage = "Erro ao escutar estado do usuário",
             from = TAG,
@@ -167,7 +168,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 
-    private fun getProdutosAndNotifyListeners(usuarioId: Long) {
+    override fun getProdutosAndNotifyListeners(usuarioId: Long) {
         val handlerFindProdutos = setCoroutineExceptionHandler(
             errorMessage = "Erro ao buscar produtos no banco de dados para listagem.",
             from = TAG,
@@ -181,7 +182,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpProdutoCardListeners() {
+    override fun setUpProdutoCardListeners() {
         adapter.onProdutoItemClick = { produto: Produto ->
             navigateToDetalhesProduto(produtoId = produto.id)
         }
@@ -212,17 +213,17 @@ class ListaProdutosActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_produtos_usuarios -> {
-                navigateTo(ProdutosUsuariosActivity::class.java)
+                navigateTo(ProdutosUsuariosActivityImpl::class.java)
             }
             R.id.action_perfil -> {
-                navigateTo(PerfilUsuarioActivity::class.java)
+                navigateTo(PerfilUsuarioActivityImpl::class.java)
             }
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-    private fun deleteProduto(produto: Produto) {
+    override fun deleteProduto(produto: Produto) {
         val handlerExcluirProduto = setCoroutineExceptionHandler(
             errorMessage = "Erro ao excluir produto.",
             from = TAG,
@@ -234,13 +235,13 @@ class ListaProdutosActivity : AppCompatActivity() {
     }
 
     private fun navigateToCadastroProduto(produtoId: Long? = ID_DEFAULT) {
-        navigateTo(CadastroProdutoActivity::class.java) {
+        navigateTo(CadastroProdutoActivityImpl::class.java) {
             putExtra(PRODUTO_ID_EXTRA, produtoId)
         }
     }
 
     private fun navigateToDetalhesProduto(produtoId: Long? = null) {
-        navigateTo(DetalhesProdutoActivity::class.java) {
+        navigateTo(DetalhesProdutoActivityImpl::class.java) {
             putExtra(PRODUTO_ID_EXTRA, produtoId)
         }
     }

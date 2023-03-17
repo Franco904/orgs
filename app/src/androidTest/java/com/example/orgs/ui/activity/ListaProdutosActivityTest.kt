@@ -10,7 +10,7 @@ class ListaProdutosActivityTest {
     @Test
     fun mustDisplayCorrectActivityNameInAppbar() {
         // Arrange activity view
-        val scenario = ActivityScenario.launch(ListaProdutosActivity::class.java)
+        val scenario = ActivityScenario.launch(ListaProdutosActivityImpl::class.java)
 
         // Assert widget text
         val viewInteraction = Espresso.onView(ViewMatchers.withText("Lista de produtos"))

@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Orgs">
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.activity.LoginActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.CadastroUsuarioActivity"
+            android:name=".ui.activity.CadastroUsuarioActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.ListaProdutosActivity"
+            android:name=".ui.activity.ListaProdutosActivityImpl"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,16 +25,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.CadastroProdutoActivity"
+            android:name=".ui.activity.CadastroProdutoActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.DetalhesProdutoActivity"
+            android:name=".ui.activity.DetalhesProdutoActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.PerfilUsuarioActivity"
+            android:name=".ui.activity.PerfilUsuarioActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.ProdutosUsuariosActivity"
+            android:name=".ui.activity.ProdutosUsuariosActivityImpl"
             android:exported="true" />
 
         <meta-data

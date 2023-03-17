@@ -4,16 +4,17 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
+import com.example.orgs.contracts.ui.PerfilUsuarioActivity
 import com.example.orgs.data.database.AppDatabase
 import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityPerfilUsuarioBinding
 import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
-import com.example.orgs.ui.activity.helper.UsuarioBaseHelper
+import com.example.orgs.ui.activity.helper.UsuarioBaseHelperImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
-class PerfilUsuarioActivity : AppCompatActivity() {
+class PerfilUsuarioActivityImpl : AppCompatActivity(), PerfilUsuarioActivity {
     private val usuariosRepository by lazy {
         UsuariosRepositoryImpl(
             dao = AppDatabase.getInstance(context = this).usuariosDao(),
@@ -25,7 +26,7 @@ class PerfilUsuarioActivity : AppCompatActivity() {
     }
 
     private val usuarioHelper by lazy {
-        UsuarioBaseHelper(
+        UsuarioBaseHelperImpl(
             context = this,
             repository = usuariosRepository,
             preferences = usuariosPreferences,
@@ -46,24 +47,24 @@ class PerfilUsuarioActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             usuarioHelper.verifyUsuarioLogged()
+
+            bindUsuarioData()
         }
 
-        bindUsuarioData()
+
         setUpLogoutButtonListener()
     }
 
-    private fun bindUsuarioData() {
-        lifecycleScope.launch {
-            usuarioHelper.usuario
-                .filterNotNull()
-                .collect { usuarioValue ->
-                    binding.perfilUsuarioUsuarioText.text = usuarioValue.usuario
-                    binding.perfilUsuarioNomeText.text = usuarioValue.nome
-                }
-        }
+    override suspend fun bindUsuarioData() {
+        usuarioHelper.usuario
+            .filterNotNull()
+            .collect { usuarioValue ->
+                binding.perfilUsuarioUsuarioText.text = usuarioValue.usuario
+                binding.perfilUsuarioNomeText.text = usuarioValue.nome
+            }
     }
 
-    private fun setUpLogoutButtonListener() {
+    override fun setUpLogoutButtonListener() {
         binding.perfilUsuarioBtnSair.setOnClickListener {
             lifecycleScope.launch {
                 finish()

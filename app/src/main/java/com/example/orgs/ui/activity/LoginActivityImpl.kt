@@ -3,6 +3,7 @@ package com.example.orgs.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.orgs.contracts.ui.LoginActivity
 import com.example.orgs.data.database.AppDatabase
 import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityLoginBinding
@@ -13,7 +14,7 @@ import com.example.orgs.util.extensions.toHash
 import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
 import kotlinx.coroutines.launch
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivityImpl : AppCompatActivity(), LoginActivity {
     private val TAG = "LoginActivity"
 
     private val repository by lazy {
@@ -40,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
         setUpSignUpButtonListener()
     }
 
-    private fun setUpSignInButtonListener() {
+    override fun setUpSignInButtonListener() {
         binding.loginBtnEntrar.setOnClickListener {
             val usuarioName = binding.loginFieldUsuario.text.toString()
             val senha = binding.loginFieldSenha.text.toString().toHash()
@@ -49,13 +50,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpSignUpButtonListener() {
+    override fun setUpSignUpButtonListener() {
         binding.loginBtnCadastrar.setOnClickListener {
-            navigateTo(CadastroUsuarioActivity::class.java)
+            navigateTo(CadastroUsuarioActivityImpl::class.java)
         }
     }
 
-    private fun login(usuarioName: String, senha: String) {
+    override fun login(usuarioName: String, senha: String) {
         val exceptionHandler = setCoroutineExceptionHandler(
             errorMessage = "Erro ao efetuar autenticação do usuário",
             from = TAG,
@@ -65,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
             repository.findByUserAndPassword(usuarioName, senha)?.let { usuario ->
                 preferences.writeUsuarioName(usuarioName = usuario.usuario)
 
-                navigateTo(ListaProdutosActivity::class.java)
+                navigateTo(ListaProdutosActivityImpl::class.java)
             } ?: showToast("Usuário não encontrado")
         }
     }

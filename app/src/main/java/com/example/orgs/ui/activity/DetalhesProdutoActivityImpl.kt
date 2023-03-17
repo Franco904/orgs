@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.orgs.contracts.ui.DetalhesProdutoActivity
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
 
-class DetalhesProdutoActivity : AppCompatActivity() {
+class DetalhesProdutoActivityImpl : AppCompatActivity(), DetalhesProdutoActivity {
     private val TAG = "DetalhesProdutoActivity"
 
     private var produtoId: Long = ID_DEFAULT
@@ -48,11 +49,11 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         tryFindProdutoInDatabase()
     }
 
-    private fun getIntentData() {
+    override fun getIntentData() {
         produtoId = intent.getLongExtra(PRODUTO_ID_EXTRA, ID_DEFAULT)
     }
 
-    private fun tryFindProdutoInDatabase() {
+    override fun tryFindProdutoInDatabase() {
         val handlerProdutoFind = setCoroutineExceptionHandler(
             errorMessage = "Erro ao encontrar produto no banco de dados.",
             from = TAG,
@@ -67,7 +68,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         }
     }
 
-    private fun bindProdutoDataIfExist() {
+    override fun bindProdutoDataIfExist() {
         produto?.let {
             binding.apply {
                 produtoImage.tryLoadImage(url = produto?.imagemUrl)
@@ -84,16 +85,16 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         } ?: finish()
     }
 
-    private fun setUpEditButtonListener() {
+    override fun setUpEditButtonListener() {
         binding.editActionCard.setOnClickListener {
-            Intent(this, CadastroProdutoActivity::class.java).apply {
+            Intent(this, CadastroProdutoActivityImpl::class.java).apply {
                 putExtra(PRODUTO_ID_EXTRA, produto?.id)
                 startActivity(this)
             }
         }
     }
 
-    private fun setUpDeleteButtonListener(produtoToDelete: Produto) {
+    override fun setUpDeleteButtonListener(produtoToDelete: Produto) {
         binding.excludeActionCard.setOnClickListener {
             ExcluirProdutoConfirmacaoDialog(context = this).show {
                 val handlerExcluirProduto = setCoroutineExceptionHandler(
