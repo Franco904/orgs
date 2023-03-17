@@ -1,8 +1,8 @@
-package com.example.orgs.database.repositories
+package com.example.orgs.data.database.repositories
 
-import com.example.orgs.database.dao.UsuariosDao
-import com.example.orgs.model.Usuario
-import com.example.orgs.model.UsuarioWithProdutos
+import com.example.orgs.data.database.dao.UsuariosDao
+import com.example.orgs.data.model.Usuario
+import com.example.orgs.data.model.UsuarioWithProdutos
 import kotlinx.coroutines.flow.Flow
 
 class UsuariosRepository(

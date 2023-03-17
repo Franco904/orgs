@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.orgs.database.AppDatabase
-import com.example.orgs.database.repositories.UsuariosRepository
-import com.example.orgs.extensions.navigateTo
-import com.example.orgs.model.Usuario
-import com.example.orgs.model.UsuarioWithProdutos
-import com.example.orgs.preferences.UsuariosPreferences
+import com.example.orgs.data.database.AppDatabase
+import com.example.orgs.data.database.repositories.UsuariosRepository
+import com.example.orgs.util.extensions.navigateTo
+import com.example.orgs.data.model.Usuario
+import com.example.orgs.data.model.UsuarioWithProdutos
+import com.example.orgs.infra.preferences.UsuariosPreferences
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

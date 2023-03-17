@@ -1,7 +1,7 @@
-package com.example.orgs.model
+package com.example.orgs.data.model
 
 import androidx.room.*
-import com.example.orgs.constants.ID_DEFAULT
+import com.example.orgs.util.constants.ID_DEFAULT
 import java.math.BigDecimal
 
 @Entity(

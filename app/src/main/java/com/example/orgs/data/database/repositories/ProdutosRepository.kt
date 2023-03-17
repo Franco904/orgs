@@ -1,9 +1,9 @@
-package com.example.orgs.database.repositories
+package com.example.orgs.data.database.repositories
 
-import com.example.orgs.database.dao.ProdutosDao
-import com.example.orgs.enums.OrderingPattern
-import com.example.orgs.enums.ProdutoField
-import com.example.orgs.model.Produto
+import com.example.orgs.data.database.dao.ProdutosDao
+import com.example.orgs.data.enums.OrderingPattern
+import com.example.orgs.data.enums.ProdutoField
+import com.example.orgs.data.model.Produto
 import kotlinx.coroutines.flow.Flow
 
 class ProdutosRepository(

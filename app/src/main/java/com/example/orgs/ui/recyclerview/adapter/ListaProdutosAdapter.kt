@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orgs.databinding.ProdutoItemBinding
-import com.example.orgs.extensions.formatToRealCurrency
-import com.example.orgs.extensions.tryLoadImage
-import com.example.orgs.model.Produto
+import com.example.orgs.util.extensions.formatToRealCurrency
+import com.example.orgs.util.extensions.tryLoadImage
+import com.example.orgs.data.model.Produto
 
 class ListaProdutosAdapter(
     private val context: Context,

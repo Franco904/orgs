@@ -1,4 +1,4 @@
-package com.example.orgs.enums
+package com.example.orgs.data.enums
 
 enum class ProdutoField { TITULO, DESCRICAO, VALOR }
 

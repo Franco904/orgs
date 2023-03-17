@@ -8,14 +8,14 @@ import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
-import com.example.orgs.database.AppDatabase
-import com.example.orgs.database.repositories.UsuariosRepository
+import com.example.orgs.data.database.AppDatabase
+import com.example.orgs.data.database.repositories.UsuariosRepository
 import com.example.orgs.databinding.ActivityLoginBinding
-import com.example.orgs.extensions.navigateTo
-import com.example.orgs.extensions.setCoroutineExceptionHandler
-import com.example.orgs.extensions.showToast
-import com.example.orgs.extensions.toHash
-import com.example.orgs.preferences.UsuariosPreferences
+import com.example.orgs.util.extensions.navigateTo
+import com.example.orgs.util.extensions.setCoroutineExceptionHandler
+import com.example.orgs.util.extensions.showToast
+import com.example.orgs.util.extensions.toHash
+import com.example.orgs.infra.preferences.UsuariosPreferences
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {

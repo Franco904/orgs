@@ -7,7 +7,7 @@
     <string name="detalhes_produto_title">Detalhes do produto</string>
     <string name="perfil_usuario_title">Perfil do usuário</string>
 
-    <string name="hint_usuario_usuario">Usuário</string>
+    <string name="hint_usuario_usuario">Usuário (Email)</string>
     <string name="hint_nome_usuario">Nome</string>
     <string name="hint_senha_usuario">Senha</string>
 

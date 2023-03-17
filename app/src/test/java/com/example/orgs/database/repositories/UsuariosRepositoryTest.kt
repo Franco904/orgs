@@ -2,8 +2,9 @@ package com.example.orgs.database.repositories
 
 import ModelTestUtils.createUsuarioEntity
 import ModelTestUtils.createUsuarioWithProdutosEntity
-import com.example.orgs.database.dao.UsuariosDao
-import com.example.orgs.model.Usuario
+import com.example.orgs.data.database.dao.UsuariosDao
+import com.example.orgs.data.database.repositories.UsuariosRepository
+import com.example.orgs.data.model.Usuario
 import io.mockk.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest

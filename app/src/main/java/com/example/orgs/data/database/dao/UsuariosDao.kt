@@ -1,8 +1,8 @@
-package com.example.orgs.database.dao
+package com.example.orgs.data.database.dao
 
 import androidx.room.*
-import com.example.orgs.model.Usuario
-import com.example.orgs.model.UsuarioWithProdutos
+import com.example.orgs.data.model.Usuario
+import com.example.orgs.data.model.UsuarioWithProdutos
 import kotlinx.coroutines.flow.Flow
 
 @Dao

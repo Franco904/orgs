@@ -1,4 +1,4 @@
-package com.example.orgs.constants
+package com.example.orgs.util.constants
 
 const val ID_DEFAULT = 0L
 

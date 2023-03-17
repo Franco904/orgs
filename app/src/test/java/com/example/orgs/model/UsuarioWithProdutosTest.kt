@@ -2,6 +2,7 @@ package com.example.orgs.model
 
 import ModelTestUtils.createProdutoEntity
 import ModelTestUtils.createUsuarioEntity
+import com.example.orgs.data.model.UsuarioWithProdutos
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.jupiter.api.Test

@@ -1,4 +1,4 @@
-package com.example.orgs.database
+package com.example.orgs.data.database
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase

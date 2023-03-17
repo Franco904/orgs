@@ -1,15 +1,15 @@
-package com.example.orgs.database
+package com.example.orgs.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.orgs.database.converters.Converters
-import com.example.orgs.database.dao.ProdutosDao
-import com.example.orgs.database.dao.UsuariosDao
-import com.example.orgs.model.Produto
-import com.example.orgs.model.Usuario
+import com.example.orgs.data.database.converters.Converters
+import com.example.orgs.data.database.dao.ProdutosDao
+import com.example.orgs.data.database.dao.UsuariosDao
+import com.example.orgs.data.model.Produto
+import com.example.orgs.data.model.Usuario
 
 @Database(
     version = AppDatabase.SCHEMA_VERSION,
@@ -35,7 +35,7 @@ abstract class AppDatabase : RoomDatabase() {
         )
 
         fun getInstance(context: Context): AppDatabase {
-            if (::database.isInitialized) return database
+            if (Companion::database.isInitialized) return database
 
             return Room.databaseBuilder(
                 context,

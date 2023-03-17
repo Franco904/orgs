@@ -1,4 +1,4 @@
-package com.example.orgs.preferences
+package com.example.orgs.infra.preferences
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 

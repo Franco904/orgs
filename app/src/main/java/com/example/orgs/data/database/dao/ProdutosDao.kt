@@ -1,7 +1,7 @@
-package com.example.orgs.database.dao
+package com.example.orgs.data.database.dao
 
 import androidx.room.*
-import com.example.orgs.model.Produto
+import com.example.orgs.data.model.Produto
 import kotlinx.coroutines.flow.Flow
 
 @Dao

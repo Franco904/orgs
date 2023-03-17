@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import com.example.orgs.databinding.ActivityProdutosUsuariosBinding
-import com.example.orgs.model.UsuarioWithProdutos
+import com.example.orgs.data.model.UsuarioWithProdutos
 import com.example.orgs.ui.recyclerview.adapter.ProdutosConcatAdapter
 import com.example.orgs.ui.recyclerview.adapter.UsuarioConcatAdapter
 import kotlinx.coroutines.flow.map

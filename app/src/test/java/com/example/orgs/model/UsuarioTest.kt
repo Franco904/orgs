@@ -1,5 +1,6 @@
 package com.example.orgs.model
 
+import com.example.orgs.data.model.Usuario
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeInstanceOf

@@ -1,4 +1,4 @@
-package com.example.orgs.extensions
+package com.example.orgs.util.extensions
 
 import android.widget.ImageView
 import coil.load

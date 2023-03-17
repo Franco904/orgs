@@ -1,9 +1,9 @@
-package com.example.orgs.model
+package com.example.orgs.data.model
 
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.example.orgs.constants.ID_DEFAULT
+import com.example.orgs.util.constants.ID_DEFAULT
 
 private const val EMAIL_REGEX = "^[A-Za-z](.*)([@])(.+)(\\.)(.{1,})"
 

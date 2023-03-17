@@ -1,10 +1,11 @@
 package com.example.orgs.database.repositories
 
 import ModelTestUtils.createProdutoEntity
-import com.example.orgs.database.dao.ProdutosDao
-import com.example.orgs.enums.OrderingPattern
-import com.example.orgs.enums.ProdutoField
-import com.example.orgs.model.Produto
+import com.example.orgs.data.database.dao.ProdutosDao
+import com.example.orgs.data.database.repositories.ProdutosRepository
+import com.example.orgs.data.enums.OrderingPattern
+import com.example.orgs.data.enums.ProdutoField
+import com.example.orgs.data.model.Produto
 import io.github.serpro69.kfaker.Faker
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
