@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.data.database.AppDatabase
-import com.example.orgs.data.database.repositories.UsuariosRepository
+import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.util.extensions.navigateTo
 import com.example.orgs.data.model.Usuario
 import com.example.orgs.data.model.UsuarioWithProdutos
@@ -18,7 +18,7 @@ abstract class UsuariosBaseActivity : AppCompatActivity() {
     protected val usuario: StateFlow<Usuario?> = _usuario          // Observable
 
     private val usuariosRepository by lazy {
-        UsuariosRepository(
+        UsuariosRepositoryImpl(
             dao = AppDatabase.getInstance(this).usuariosDao(),
         )
     }
@@ -48,7 +48,7 @@ abstract class UsuariosBaseActivity : AppCompatActivity() {
             }
     }
 
-    protected suspend fun findUsuariosWithProdutos(): Flow<List<UsuarioWithProdutos>> {
+    protected fun findUsuariosWithProdutos(): Flow<List<UsuarioWithProdutos>> {
         return usuariosRepository.findAllWithProdutos()
     }
 

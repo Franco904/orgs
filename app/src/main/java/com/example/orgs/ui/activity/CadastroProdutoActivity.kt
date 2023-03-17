@@ -6,7 +6,7 @@ import com.example.orgs.R
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
-import com.example.orgs.data.database.repositories.ProdutosRepository
+import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.tryLoadImage
@@ -23,7 +23,7 @@ class CadastroProdutoActivity : UsuariosBaseActivity() {
     private var imageUrl: String? = null
 
     private val repository by lazy {
-        ProdutosRepository(
+        ProdutosRepositoryImpl(
             dao = AppDatabase.getInstance(this).produtosDao(),
         )
     }

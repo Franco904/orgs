@@ -2,8 +2,9 @@ package com.example.orgs.database.repositories
 
 import ModelTestUtils.createUsuarioEntity
 import ModelTestUtils.createUsuarioWithProdutosEntity
+import com.example.orgs.contracts.data.database.repositories.UsuariosRepository
 import com.example.orgs.data.database.dao.UsuariosDao
-import com.example.orgs.data.database.repositories.UsuariosRepository
+import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.data.model.Usuario
 import io.mockk.*
 import kotlinx.coroutines.flow.flow
@@ -14,9 +15,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
-class UsuariosRepositoryTest {
+class UsuariosRepositoryImplTest {
     private val usuariosDao = mockk<UsuariosDao>()
-    private val sut = UsuariosRepository(dao = usuariosDao)
+    private val sut = UsuariosRepositoryImpl(dao = usuariosDao)
 
     private fun mockCreate(usuario: Usuario) {
         coEvery {

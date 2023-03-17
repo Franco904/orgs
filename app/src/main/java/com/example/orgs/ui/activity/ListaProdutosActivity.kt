@@ -11,7 +11,7 @@ import com.example.orgs.R
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
-import com.example.orgs.data.database.repositories.ProdutosRepository
+import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
 import com.example.orgs.databinding.ActivityListaProdutosBinding
 import com.example.orgs.data.enums.getOrderingPatternEnumByName
 import com.example.orgs.data.enums.getProdutoFieldEnumByName
@@ -31,7 +31,7 @@ class ListaProdutosActivity : UsuariosBaseActivity() {
     private val layoutManager by lazy { LinearLayoutManager(this) }
 
     private val repository by lazy {
-        ProdutosRepository(
+        ProdutosRepositoryImpl(
             dao = AppDatabase.getInstance(this).produtosDao(),
         )
     }

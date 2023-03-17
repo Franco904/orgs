@@ -1,8 +1,9 @@
 package com.example.orgs.database.repositories
 
 import ModelTestUtils.createProdutoEntity
+import com.example.orgs.contracts.data.database.repositories.ProdutosRepository
 import com.example.orgs.data.database.dao.ProdutosDao
-import com.example.orgs.data.database.repositories.ProdutosRepository
+import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
 import com.example.orgs.data.enums.OrderingPattern
 import com.example.orgs.data.enums.ProdutoField
 import com.example.orgs.data.model.Produto
@@ -18,9 +19,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ProdutosRepositoryTest {
+class ProdutosRepositoryImplTest {
     private val produtosDao = mockk<ProdutosDao>()
-    private val sut = ProdutosRepository(dao = produtosDao)
+    private val sut = ProdutosRepositoryImpl(dao = produtosDao)
 
     private val faker by lazy { Faker() }
 

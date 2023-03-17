@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
-import com.example.orgs.data.database.repositories.ProdutosRepository
+import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
 import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.tryLoadImage
@@ -24,7 +24,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     private var produto: Produto? = null
 
     private val repository by lazy {
-        ProdutosRepository(
+        ProdutosRepositoryImpl(
             dao = AppDatabase.getInstance(this).produtosDao(),
         )
     }

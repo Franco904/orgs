@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.data.database.AppDatabase
-import com.example.orgs.data.database.repositories.UsuariosRepository
+import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityCadastroUsuarioBinding
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.toHash
@@ -16,7 +16,7 @@ class CadastroUsuarioActivity : AppCompatActivity() {
     private val TAG = "CadastroUsuarioActivity"
 
     private val repository by lazy {
-        UsuariosRepository(
+        UsuariosRepositoryImpl(
             dao = AppDatabase.getInstance(this).usuariosDao(),
         )
     }
