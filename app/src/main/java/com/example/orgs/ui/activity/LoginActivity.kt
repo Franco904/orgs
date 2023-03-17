@@ -10,7 +10,7 @@ import com.example.orgs.util.extensions.navigateTo
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.showToast
 import com.example.orgs.util.extensions.toHash
-import com.example.orgs.infra.preferences.UsuariosPreferences
+import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
         )
     }
     private val preferences by lazy {
-        UsuariosPreferences(
+        UsuariosPreferencesImpl(
             context = this,
         )
     }

@@ -9,7 +9,7 @@ import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.util.extensions.navigateTo
 import com.example.orgs.data.model.Usuario
 import com.example.orgs.data.model.UsuarioWithProdutos
-import com.example.orgs.infra.preferences.UsuariosPreferences
+import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -22,7 +22,7 @@ abstract class UsuariosBaseActivity : AppCompatActivity() {
             dao = AppDatabase.getInstance(this).usuariosDao(),
         )
     }
-    private val usuariosPreferences by lazy { UsuariosPreferences(context = this) }
+    private val usuariosPreferences by lazy { UsuariosPreferencesImpl(context = this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
