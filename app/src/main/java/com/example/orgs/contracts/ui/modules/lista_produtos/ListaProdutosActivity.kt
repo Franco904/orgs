@@ -11,10 +11,6 @@ interface ListaProdutosActivity {
 
     fun setUpFloatingActionButtonListener()
 
-    fun setUpUsuarioStateListener()
-
-    fun getProdutosAndNotifyListeners(usuarioId: Long)
-
     fun setUpProdutoCardListeners()
 
     fun deleteProduto(produto: Produto)

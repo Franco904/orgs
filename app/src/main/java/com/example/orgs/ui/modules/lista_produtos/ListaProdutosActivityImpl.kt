@@ -5,26 +5,20 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
 import com.example.orgs.contracts.ui.modules.lista_produtos.ListaProdutosActivity
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
-import com.example.orgs.data.database.AppDatabase
-import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
-import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityListaProdutosBinding
 import com.example.orgs.data.enums.getOrderingPatternEnumByName
 import com.example.orgs.data.enums.getProdutoFieldEnumByName
 import com.example.orgs.util.extensions.navigateTo
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.data.model.Produto
-import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
-import com.example.orgs.ui.helper.UsuarioBaseHelperImpl
 import com.example.orgs.ui.modules.perfil.PerfilUsuarioActivityImpl
 import com.example.orgs.ui.modules.produtos_usuarios.ProdutosUsuariosActivityImpl
 import com.example.orgs.ui.modules.cadastro_produto.CadastroProdutoActivityImpl
@@ -32,39 +26,19 @@ import com.example.orgs.ui.modules.detalhes_produto.DetalhesProdutoActivityImpl
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.filterNotNull
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
     private val TAG = "ListaProdutosActivity"
 
     private val adapter by lazy { ListaProdutosAdapter(context = this) }
     private val layoutManager by lazy { LinearLayoutManager(this) }
 
-    private val produtosRepository by lazy {
-        ProdutosRepositoryImpl(
-            dao = AppDatabase.getInstance(context = this).produtosDao(),
-        )
-    }
-
-    private val usuariosRepository by lazy {
-        UsuariosRepositoryImpl(
-            dao = AppDatabase.getInstance(context = this).usuariosDao(),
-        )
-    }
-
-    private val usuariosPreferences by lazy {
-        UsuariosPreferencesImpl(context = this)
-    }
-
-    private val usuarioHelper by lazy {
-        UsuarioBaseHelperImpl(
-            context = this,
-            repository = usuariosRepository,
-            preferences = usuariosPreferences,
-        )
-    }
+    private val viewModel: ListaProdutosViewModelImpl by viewModels()
 
     private val binding: ActivityListaProdutosBinding by lazy {
         ActivityListaProdutosBinding.inflate(layoutInflater)
@@ -78,17 +52,35 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
         // Configura componentes da tela
         title = getString(R.string.lista_produtos_title)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                usuarioHelper.verifyUsuarioLogged()
+        lifecycleScope.launch {
+            viewModel.produtos.take(1).filter { it.isNotEmpty() }.collect {
+                setUpProdutoCardListeners()
+            }
+
+            viewModel.produtos.filter { it.isNotEmpty() }.collect { produtos ->
+                updateProdutosList(produtos)
             }
         }
 
         setUpRecyclerView()
         setUpFloatingActionButtonListener()
         setUpOrderingDropdowns()
+    }
 
-        setUpUsuarioStateListener()
+    override fun setUpRecyclerView() {
+        val recyclerView = binding.listaProdutosRecyclerView
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = layoutManager
+    }
+
+    override fun setUpFloatingActionButtonListener() {
+        val fab = binding.listaProdutosFab
+
+        // Ao clicar no botão FAB, navegar para a tela de cadastro de produto
+        fab.setOnClickListener {
+            navigateToCadastroProduto()
+        }
     }
 
     override fun setUpOrderingDropdowns() {
@@ -115,9 +107,7 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
             )
 
             lifecycleScope.launch(handlerProperty) {
-                val produtos = produtosRepository.findAllOrderedByField(field, orderingPattern)
-
-                updateProdutosList(produtos)
+                viewModel.findProdutosOrderedByField(field, orderingPattern)
             }
         }
 
@@ -131,60 +121,12 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
             )
 
             lifecycleScope.launch(handlerOrderingPattern) {
-                val produtos = produtosRepository.findAllOrderedByField(field, orderingPattern)
-
-                updateProdutosList(produtos)
+                viewModel.findProdutosOrderedByField(field, orderingPattern)
             }
         }
     }
 
     override fun updateProdutosList(produtos: List<Produto>) = adapter.updateAdapterState(produtos)
-
-    override fun setUpRecyclerView() {
-        val recyclerView = binding.listaProdutosRecyclerView
-
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = layoutManager
-    }
-
-    override fun setUpFloatingActionButtonListener() {
-        val fab = binding.listaProdutosFab
-
-        // Ao clicar no botão FAB, navegar para a tela de cadastro de produto
-        fab.setOnClickListener {
-            navigateToCadastroProduto()
-        }
-    }
-
-    override fun setUpUsuarioStateListener() {
-        val handler = setCoroutineExceptionHandler(
-            errorMessage = "Erro ao escutar estado do usuário",
-            from = TAG,
-        )
-
-        lifecycleScope.launch(handler) {
-            // Escuta mudanças de estado na variável reativa (Flow)
-            usuarioHelper.usuario
-                .filterNotNull()
-                .collect { usuario ->
-                    getProdutosAndNotifyListeners(usuarioId = usuario.id!!)
-                }
-        }
-    }
-
-    override fun getProdutosAndNotifyListeners(usuarioId: Long) {
-        val handlerFindProdutos = setCoroutineExceptionHandler(
-            errorMessage = "Erro ao buscar produtos no banco de dados para listagem.",
-            from = TAG,
-        )
-
-        lifecycleScope.launch(handlerFindProdutos) {
-            produtosRepository.findAllByUsuarioId(usuarioId).collect {
-                updateProdutosList(produtos = it)
-                setUpProdutoCardListeners()
-            }
-        }
-    }
 
     override fun setUpProdutoCardListeners() {
         adapter.onProdutoItemClick = { produto: Produto ->
@@ -234,7 +176,7 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
         )
 
         lifecycleScope.launch(handlerExcluirProduto) {
-            produtosRepository.delete(produto)
+            viewModel.deleteProduto(produto)
         }
     }
 
@@ -250,5 +192,3 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
         }
     }
 }
-
-
