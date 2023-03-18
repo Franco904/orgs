@@ -1,9 +1,9 @@
-package com.example.orgs.ui.activity
+package com.example.orgs.ui.modules.login
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.orgs.contracts.ui.LoginActivity
+import com.example.orgs.contracts.ui.modules.login.LoginActivity
 import com.example.orgs.data.database.AppDatabase
 import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityLoginBinding
@@ -12,6 +12,8 @@ import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.showToast
 import com.example.orgs.util.extensions.toHash
 import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
+import com.example.orgs.ui.modules.cadastro_usuario.CadastroUsuarioActivityImpl
+import com.example.orgs.ui.modules.lista_produtos.ListaProdutosActivityImpl
 import kotlinx.coroutines.launch
 
 class LoginActivityImpl : AppCompatActivity(), LoginActivity {

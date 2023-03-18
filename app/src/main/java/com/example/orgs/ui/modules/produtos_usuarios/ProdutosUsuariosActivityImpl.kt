@@ -1,16 +1,16 @@
-package com.example.orgs.ui.activity
+package com.example.orgs.ui.modules.produtos_usuarios
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
-import com.example.orgs.contracts.ui.ProdutosUsuariosActivity
+import com.example.orgs.contracts.ui.modules.produtos_usuarios.ProdutosUsuariosActivity
 import com.example.orgs.data.database.AppDatabase
 import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityProdutosUsuariosBinding
 import com.example.orgs.data.model.UsuarioWithProdutos
 import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
-import com.example.orgs.ui.activity.helper.UsuarioBaseHelperImpl
+import com.example.orgs.ui.helper.UsuarioBaseHelperImpl
 import com.example.orgs.ui.recyclerview.adapter.ProdutosConcatAdapter
 import com.example.orgs.ui.recyclerview.adapter.UsuarioConcatAdapter
 import kotlinx.coroutines.Dispatchers

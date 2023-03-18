@@ -1,4 +1,4 @@
-package com.example.orgs.ui.activity
+package com.example.orgs.ui.modules.lista_produtos
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso

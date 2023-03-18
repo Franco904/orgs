@@ -1,10 +1,10 @@
-package com.example.orgs.ui.activity
+package com.example.orgs.ui.modules.detalhes_produto
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.orgs.contracts.ui.DetalhesProdutoActivity
+import com.example.orgs.contracts.ui.modules.detalhes_produto.DetalhesProdutoActivity
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
@@ -13,6 +13,7 @@ import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
+import com.example.orgs.ui.modules.cadastro_produto.CadastroProdutoActivityImpl
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import kotlinx.coroutines.launch
 import java.text.NumberFormat

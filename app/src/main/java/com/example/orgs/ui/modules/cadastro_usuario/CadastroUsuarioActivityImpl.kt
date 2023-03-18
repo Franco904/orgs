@@ -1,9 +1,9 @@
-package com.example.orgs.ui.activity
+package com.example.orgs.ui.modules.cadastro_usuario
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.orgs.contracts.ui.CadastroUsuarioActivity
+import com.example.orgs.contracts.ui.modules.cadastro_usuario.CadastroUsuarioActivity
 import com.example.orgs.data.database.AppDatabase
 import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityCadastroUsuarioBinding

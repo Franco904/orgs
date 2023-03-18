@@ -1,4 +1,4 @@
-package com.example.orgs.ui.activity
+package com.example.orgs.ui.modules.lista_produtos
 
 import android.os.Bundle
 import android.view.Menu
@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
-import com.example.orgs.contracts.ui.ListaProdutosActivity
+import com.example.orgs.contracts.ui.modules.lista_produtos.ListaProdutosActivity
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.data.database.AppDatabase
@@ -24,7 +24,11 @@ import com.example.orgs.util.extensions.navigateTo
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.data.model.Produto
 import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
-import com.example.orgs.ui.activity.helper.UsuarioBaseHelperImpl
+import com.example.orgs.ui.helper.UsuarioBaseHelperImpl
+import com.example.orgs.ui.modules.perfil.PerfilUsuarioActivityImpl
+import com.example.orgs.ui.modules.produtos_usuarios.ProdutosUsuariosActivityImpl
+import com.example.orgs.ui.modules.cadastro_produto.CadastroProdutoActivityImpl
+import com.example.orgs.ui.modules.detalhes_produto.DetalhesProdutoActivityImpl
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu

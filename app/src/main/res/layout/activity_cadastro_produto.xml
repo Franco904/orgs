@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        tools:context=".ui.activity.CadastroProdutoActivityImpl">
+        tools:context=".ui.modules.cadastro_produto.CadastroProdutoActivityImpl">
 
         <ImageView
             android:id="@+id/cadastro_produto_item_image"

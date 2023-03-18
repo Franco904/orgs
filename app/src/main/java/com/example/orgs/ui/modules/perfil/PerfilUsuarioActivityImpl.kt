@@ -1,15 +1,15 @@
-package com.example.orgs.ui.activity
+package com.example.orgs.ui.modules.perfil
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
-import com.example.orgs.contracts.ui.PerfilUsuarioActivity
+import com.example.orgs.contracts.ui.modules.perfil.PerfilUsuarioActivity
 import com.example.orgs.data.database.AppDatabase
 import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityPerfilUsuarioBinding
 import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
-import com.example.orgs.ui.activity.helper.UsuarioBaseHelperImpl
+import com.example.orgs.ui.helper.UsuarioBaseHelperImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch

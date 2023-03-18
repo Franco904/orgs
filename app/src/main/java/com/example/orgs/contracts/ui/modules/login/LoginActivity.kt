@@ -1,4 +1,4 @@
-package com.example.orgs.contracts.ui
+package com.example.orgs.contracts.ui.modules.login
 
 interface LoginActivity {
     fun setUpSignInButtonListener()

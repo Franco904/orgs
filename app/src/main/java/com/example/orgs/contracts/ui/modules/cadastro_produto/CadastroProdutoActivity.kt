@@ -1,4 +1,4 @@
-package com.example.orgs.contracts.ui
+package com.example.orgs.contracts.ui.modules.cadastro_produto
 
 import com.example.orgs.data.model.Produto
 
