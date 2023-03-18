@@ -6,8 +6,9 @@ import com.example.orgs.data.enums.OrderingPattern
 import com.example.orgs.data.enums.ProdutoField
 import com.example.orgs.data.model.Produto
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ProdutosRepositoryImpl(
+class ProdutosRepositoryImpl @Inject constructor(
     private val dao: ProdutosDao,
 ): ProdutosRepository {
     override suspend fun create(produto: Produto) = dao.create(produto)

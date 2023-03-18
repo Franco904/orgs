@@ -8,8 +8,9 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.orgs.contracts.infra.preferences.UsuariosPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-data class UsuariosPreferencesImpl(
+data class UsuariosPreferencesImpl @Inject constructor(
     val context: Context,
 ): UsuariosPreferences {
     companion object {

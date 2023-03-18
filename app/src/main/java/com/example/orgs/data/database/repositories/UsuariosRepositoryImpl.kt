@@ -5,8 +5,9 @@ import com.example.orgs.data.database.dao.UsuariosDao
 import com.example.orgs.data.model.Usuario
 import com.example.orgs.data.model.UsuarioWithProdutos
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class UsuariosRepositoryImpl(
+class UsuariosRepositoryImpl @Inject constructor(
     private val dao: UsuariosDao,
 ): UsuariosRepository {
     override suspend fun create(usuario: Usuario) = dao.create(usuario)

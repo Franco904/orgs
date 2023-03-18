@@ -9,18 +9,21 @@ import com.example.orgs.data.model.Usuario
 import com.example.orgs.data.model.UsuarioWithProdutos
 import com.example.orgs.ui.modules.login.LoginActivityImpl
 import com.example.orgs.util.extensions.navigateTo
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
+import javax.inject.Inject
 
-class UsuarioBaseHelperImpl(
+class UsuarioBaseHelperImpl @Inject constructor(
+    @ApplicationContext
     private val context: Context,
     private val repository: UsuariosRepository,
     private val preferences: UsuariosPreferences,
 ): UsuarioBaseHelper {
     private val _usuario = MutableStateFlow<Usuario?>(null) // Estado mutável
-    val usuario: StateFlow<Usuario?> = _usuario // Observable
+    override val usuario: StateFlow<Usuario?> = _usuario // Observable
 
     override suspend fun verifyUsuarioLogged() {
         preferences.watchUsuarioName().collect { usuarioNameStored ->
