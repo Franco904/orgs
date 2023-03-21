@@ -29,7 +29,9 @@ class ListaProdutosViewModelImpl @Inject constructor(
     init {
         viewModelScope.launch {
             usuarioHelper.verifyUsuarioLogged()
+        }
 
+        viewModelScope.launch {
             setUpUsuarioStateListener()
         }
     }

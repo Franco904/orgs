@@ -53,12 +53,14 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
         title = getString(R.string.lista_produtos_title)
 
         lifecycleScope.launch {
-            viewModel.produtos.take(1).filter { it.isNotEmpty() }.collect {
-                setUpProdutoCardListeners()
-            }
-
-            viewModel.produtos.filter { it.isNotEmpty() }.collect { produtos ->
+            viewModel.produtos.collect { produtos ->
                 updateProdutosList(produtos)
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.produtos.filter { it.isNotEmpty() }.take(1).collect {
+                setUpProdutoCardListeners()
             }
         }
 

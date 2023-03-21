@@ -13,6 +13,7 @@ import com.example.orgs.ui.helper.UsuarioBaseHelperImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PerfilUsuarioActivityImpl : AppCompatActivity(), PerfilUsuarioActivity {
     private val usuariosRepository by lazy {
@@ -47,10 +48,11 @@ class PerfilUsuarioActivityImpl : AppCompatActivity(), PerfilUsuarioActivity {
 
         lifecycleScope.launch(Dispatchers.IO) {
             usuarioHelper.verifyUsuarioLogged()
-
-            bindUsuarioData()
         }
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            bindUsuarioData()
+        }
 
         setUpLogoutButtonListener()
     }
