@@ -50,6 +50,7 @@ class UsuarioBaseHelperImpl @Inject constructor(
     private fun navigateToLogin() {
         context.navigateTo(LoginActivityImpl::class.java) {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }
 }
