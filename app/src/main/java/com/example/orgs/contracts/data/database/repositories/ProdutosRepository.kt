@@ -17,5 +17,6 @@ interface ProdutosRepository {
     suspend fun findAllOrderedByField(
         field: ProdutoField,
         orderingPattern: OrderingPattern,
+        usuarioId: Long,
     ): List<Produto>
 }

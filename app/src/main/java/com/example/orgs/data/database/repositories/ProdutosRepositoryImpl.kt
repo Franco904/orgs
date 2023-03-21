@@ -24,18 +24,19 @@ class ProdutosRepositoryImpl @Inject constructor(
     override suspend fun findAllOrderedByField(
         field: ProdutoField,
         orderingPattern: OrderingPattern,
+        usuarioId: Long,
     ): List<Produto> {
         return if (orderingPattern == OrderingPattern.ASC) {
             when (field) {
-                ProdutoField.TITULO -> dao.findAllOrderedByTituloAsc()
-                ProdutoField.DESCRICAO -> dao.findAllOrderedByDescricaoAsc()
-                ProdutoField.VALOR -> dao.findAllOrderedByValorAsc()
+                ProdutoField.TITULO -> dao.findAllOrderedByTituloAsc(usuarioId)
+                ProdutoField.DESCRICAO -> dao.findAllOrderedByDescricaoAsc(usuarioId)
+                ProdutoField.VALOR -> dao.findAllOrderedByValorAsc(usuarioId)
             }
         } else {
             when (field) {
-                ProdutoField.TITULO -> dao.findAllOrderedByTituloDesc()
-                ProdutoField.DESCRICAO -> dao.findAllOrderedByDescricaoDesc()
-                ProdutoField.VALOR -> dao.findAllOrderedByValorDesc()
+                ProdutoField.TITULO -> dao.findAllOrderedByTituloDesc(usuarioId)
+                ProdutoField.DESCRICAO -> dao.findAllOrderedByDescricaoDesc(usuarioId)
+                ProdutoField.VALOR -> dao.findAllOrderedByValorDesc(usuarioId)
             }
         }
     }

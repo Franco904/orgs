@@ -54,7 +54,13 @@ class ListaProdutosViewModelImpl @Inject constructor(
         field: ProdutoField,
         orderingPattern: OrderingPattern,
     ) {
-        _produtos.value = produtosRepository.findAllOrderedByField(field, orderingPattern)
+        usuario.value?.let { usuario ->
+            _produtos.value = produtosRepository.findAllOrderedByField(
+                field,
+                orderingPattern,
+                usuarioId = usuario.id!!,
+            )
+        }
     }
 
     override suspend fun deleteProduto(produto: Produto) {
