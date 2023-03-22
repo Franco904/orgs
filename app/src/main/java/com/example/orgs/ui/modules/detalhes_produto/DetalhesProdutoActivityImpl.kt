@@ -2,6 +2,7 @@ package com.example.orgs.ui.modules.detalhes_produto
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.contracts.ui.modules.detalhes_produto.DetalhesProdutoActivity
@@ -15,25 +16,24 @@ import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
 import com.example.orgs.ui.modules.cadastro_produto.CadastroProdutoActivityImpl
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
+import com.example.orgs.util.extensions.navigateTo
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
 
+@AndroidEntryPoint
 class DetalhesProdutoActivityImpl : AppCompatActivity(), DetalhesProdutoActivity {
     private val TAG = "DetalhesProdutoActivity"
 
-    private var produtoId: Long = ID_DEFAULT
-    private var produto: Produto? = null
-
-    private val repository by lazy {
-        ProdutosRepositoryImpl(
-            dao = AppDatabase.getInstance(this).produtosDao(),
-        )
-    }
+    val viewModel: DetalhesProdutoViewModelImpl by viewModels()
 
     private val binding: ActivityDetalhesProdutoBinding by lazy {
         ActivityDetalhesProdutoBinding.inflate(layoutInflater)
     }
+
+    private var produto: Produto? = null
 
     override fun onCreate(savedInstance: Bundle?) {
         super.onCreate(savedInstance)
@@ -41,72 +41,49 @@ class DetalhesProdutoActivityImpl : AppCompatActivity(), DetalhesProdutoActivity
         supportActionBar?.hide()
         setContentView(binding.root)
 
-        getIntentData()
+        lifecycleScope.launch {
+            viewModel.produto.filterNotNull().collect {
+                produto = it
+
+                bindProdutoDataIfExist()
+                setUpEditButtonListener()
+                setUpDeleteButtonListener()
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        tryFindProdutoInDatabase()
-    }
-
-    override fun getIntentData() {
-        produtoId = intent.getLongExtra(PRODUTO_ID_EXTRA, ID_DEFAULT)
-    }
-
-    override fun tryFindProdutoInDatabase() {
-        val handlerProdutoFind = setCoroutineExceptionHandler(
-            errorMessage = "Erro ao encontrar produto no banco de dados.",
-            from = TAG,
-        )
-
-        lifecycleScope.launch(handlerProdutoFind) {
-            produto = repository.findById(produtoId)
-
-            bindProdutoDataIfExist()
-            setUpEditButtonListener()
-            setUpDeleteButtonListener(produtoToDelete = produto!!)
-        }
+        viewModel.tryFindProdutoInDatabase()
     }
 
     override fun bindProdutoDataIfExist() {
-        produto?.let {
-            binding.apply {
-                produtoImage.tryLoadImage(url = produto?.imagemUrl)
+        binding.apply {
+            produtoImage.tryLoadImage(url = produto?.imagemUrl)
 
-                val currencyFormatter: NumberFormat =
-                    NumberFormat.getCurrencyInstance(Locale("pt", "br"))
-                produtoValor.text = currencyFormatter.format(produto?.valor)
+            val currencyFormatter: NumberFormat =
+                NumberFormat.getCurrencyInstance(Locale("pt", "br"))
+            produtoValor.text = currencyFormatter.format(produto?.valor)
 
-                produtoTitulo.text =
-                    if (produto?.titulo == null || produto?.titulo == "") "Sem nome definido" else produto?.titulo
-                produtoDescricao.text =
-                    if (produto?.titulo == null || produto?.descricao == "") "Sem descrição" else produto?.descricao
-            }
-        } ?: finish()
+            produtoTitulo.text = produto?.titulo?.ifEmpty { "Sem nome definido" }
+            produtoDescricao.text = produto?.descricao?.ifEmpty { "Sem descrição" }
+        }
     }
 
     override fun setUpEditButtonListener() {
         binding.editActionCard.setOnClickListener {
-            Intent(this, CadastroProdutoActivityImpl::class.java).apply {
+            navigateTo(CadastroProdutoActivityImpl::class.java) {
                 putExtra(PRODUTO_ID_EXTRA, produto?.id)
-                startActivity(this)
             }
         }
     }
 
-    override fun setUpDeleteButtonListener(produtoToDelete: Produto) {
+    override fun setUpDeleteButtonListener() {
         binding.excludeActionCard.setOnClickListener {
             ExcluirProdutoConfirmacaoDialog(context = this).show {
-                val handlerExcluirProduto = setCoroutineExceptionHandler(
-                    errorMessage = "Erro ao excluir produto.",
-                    from = TAG,
-                )
-
-                lifecycleScope.launch(handlerExcluirProduto) {
-                    repository.delete(produtoToDelete)
-                    finish()
-                }
+                viewModel.deleteProduto()
+                finish()
 
                 null
             }
