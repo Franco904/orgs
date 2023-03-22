@@ -11,11 +11,13 @@ import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
 import com.example.orgs.ui.widget.CadastroProdutoImageDialog
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
+@AndroidEntryPoint
 class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity {
     private val TAG = "CadastroProdutoActivity"
 
