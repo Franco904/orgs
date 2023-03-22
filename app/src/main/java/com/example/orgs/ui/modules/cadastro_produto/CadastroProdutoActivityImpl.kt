@@ -1,56 +1,27 @@
 package com.example.orgs.ui.modules.cadastro_produto
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
 import com.example.orgs.contracts.ui.modules.cadastro_produto.CadastroProdutoActivity
-import com.example.orgs.util.constants.ID_DEFAULT
-import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
-import com.example.orgs.data.database.AppDatabase
-import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
-import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
-import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
-import com.example.orgs.ui.helper.UsuarioBaseHelperImpl
 import com.example.orgs.ui.widget.CadastroProdutoImageDialog
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity {
     private val TAG = "CadastroProdutoActivity"
 
-    private var produtoToEditId: Long = ID_DEFAULT
-    private var produtoToEdit: Produto? = null
     private var imageUrl: String? = null
 
-    private val produtosRepository by lazy {
-        ProdutosRepositoryImpl(
-            dao = AppDatabase.getInstance(context = this).produtosDao(),
-        )
-    }
-
-    private val usuariosRepository by lazy {
-        UsuariosRepositoryImpl(
-            dao = AppDatabase.getInstance(context = this).usuariosDao(),
-        )
-    }
-
-    private val usuariosPreferences by lazy {
-        UsuariosPreferencesImpl(context = this)
-    }
-
-    private val usuarioHelper by lazy {
-        UsuarioBaseHelperImpl(
-            context = this,
-            repository = usuariosRepository,
-            preferences = usuariosPreferences,
-        )
-    }
+    private val viewModel: CadastroProdutoViewModelImpl by viewModels()
 
     private val binding by lazy {
         ActivityCadastroProdutoBinding.inflate(layoutInflater)
@@ -62,50 +33,34 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
         setContentView(binding.root)
         title = getString(R.string.cadastrar_produto_title)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            usuarioHelper.verifyUsuarioLogged()
+        lifecycleScope.launch {
+            viewModel.produtoToEdit.filterNotNull().take(1).collect { produto ->
+                bindEditProdutoDataIfNeeded(produto)
+            }
         }
-
-        getIntentData()
     }
 
     override fun onResume() {
         super.onResume()
 
-        tryFindProdutoInDatabase()
+        lifecycleScope.launch {
+            viewModel.tryFindProdutoInDatabase()
+        }
 
         setUpOnSaveListener()
         setUpOnImageTappedListener()
     }
 
-    override fun getIntentData() {
-        produtoToEditId = intent.getLongExtra(PRODUTO_ID_EXTRA, ID_DEFAULT)
-    }
+    override fun bindEditProdutoDataIfNeeded(produto: Produto) {
+        title = getString(R.string.editar_produto_title)
 
-    override fun tryFindProdutoInDatabase() {
-        val handlerProdutoFind = setCoroutineExceptionHandler(
-            errorMessage = "Erro ao tentar encontrar produto no banco de dados.",
-            from = TAG,
-        )
+        binding.apply {
+            imageUrl = produto.imagemUrl
+            cadastroProdutoItemImage.tryLoadImage(url = produto.imagemUrl)
 
-        lifecycleScope.launch(handlerProdutoFind) {
-            produtoToEdit = produtosRepository.findById(produtoToEditId)
-            bindEditProdutoDataIfNeeded()
-        }
-    }
-
-    override fun bindEditProdutoDataIfNeeded() {
-        produtoToEdit?.let {
-            title = getString(R.string.editar_produto_title)
-
-            binding.apply {
-                imageUrl = produtoToEdit?.imagemUrl
-                cadastroProdutoItemImage.tryLoadImage(url = produtoToEdit?.imagemUrl)
-
-                cadastroProdutoFieldTitulo.setText(produtoToEdit?.titulo)
-                cadastroProdutoFieldDescricao.setText(produtoToEdit?.descricao)
-                cadastroProdutoFieldValor.setText(produtoToEdit?.valor.toString())
-            }
+            cadastroProdutoFieldTitulo.setText(produto.titulo)
+            cadastroProdutoFieldDescricao.setText(produto.descricao)
+            cadastroProdutoFieldValor.setText(produto.valor.toDouble().toString())
         }
     }
 
@@ -118,11 +73,11 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
             )
 
             lifecycleScope.launch(handlerProdutoSave) {
-                usuarioHelper.usuario.value?.let { usuario ->
+                viewModel.usuario.value?.let { usuario ->
                     val produto = createProduto(usuario.id)
 
                     if (produto.isValid) {
-                        produtosRepository.create(produto)
+                        viewModel.createProdutoInDatabase(produto)
 
                         binding.cadastroProdutoBtnSalvar.isEnabled = false
                         finish()
@@ -159,7 +114,7 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
         val valorCasted = if (valor.isEmpty()) BigDecimal.ZERO else BigDecimal(valor)
 
         return Produto(
-            id = produtoToEdit?.id,
+            id = viewModel.produtoToEdit.value?.id,
             titulo = titulo,
             descricao = descricao,
             valor = valorCasted,
