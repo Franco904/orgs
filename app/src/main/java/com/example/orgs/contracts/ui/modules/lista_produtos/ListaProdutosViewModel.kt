@@ -10,10 +10,10 @@ interface ListaProdutosViewModel {
     val usuario: StateFlow<Usuario?>
     val produtos: StateFlow<List<Produto>>
 
-    suspend fun findProdutosOrderedByField(
+    fun findProdutosOrderedByField(
         field: ProdutoField,
         orderingPattern: OrderingPattern,
     )
 
-    suspend fun deleteProduto(produto: Produto)
+    fun deleteProduto(produto: Produto)
 }

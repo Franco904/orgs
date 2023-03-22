@@ -37,33 +37,37 @@ class ListaProdutosViewModelImpl @Inject constructor(
     }
 
     private suspend fun setUpUsuarioStateListener() {
-        usuario
-            .filterNotNull()
-            .collect { usuario ->
-                getProdutosAndNotifyListener(usuarioId = usuario.id!!)
-            }
-    }
-
-    private suspend fun getProdutosAndNotifyListener(usuarioId: Long) {
-        produtosRepository.findAllByUsuarioId(usuarioId).collect { produtos ->
-            _produtos.value = produtos
+        usuario.filterNotNull().collect { usuario ->
+            getProdutosAndNotifyListener(usuarioId = usuario.id!!)
         }
     }
 
-    override suspend fun findProdutosOrderedByField(
+    private fun getProdutosAndNotifyListener(usuarioId: Long) {
+        viewModelScope.launch {
+            produtosRepository.findAllByUsuarioId(usuarioId).collect { produtos ->
+                _produtos.value = produtos
+            }
+        }
+    }
+
+    override fun findProdutosOrderedByField(
         field: ProdutoField,
         orderingPattern: OrderingPattern,
     ) {
-        usuario.value?.let { usuario ->
-            _produtos.value = produtosRepository.findAllOrderedByField(
-                field,
-                orderingPattern,
-                usuarioId = usuario.id!!,
-            )
+        viewModelScope.launch {
+            usuario.value?.let { usuario ->
+                _produtos.value = produtosRepository.findAllOrderedByField(
+                    field,
+                    orderingPattern,
+                    usuarioId = usuario.id!!,
+                )
+            }
         }
     }
 
-    override suspend fun deleteProduto(produto: Produto) {
-        produtosRepository.delete(produto)
+    override fun deleteProduto(produto: Produto) {
+        viewModelScope.launch {
+            produtosRepository.delete(produto)
+        }
     }
 }

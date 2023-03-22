@@ -2,10 +2,8 @@ package com.example.orgs.ui.modules.detalhes_produto
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.example.orgs.contracts.data.database.repositories.ProdutosRepository
-import com.example.orgs.contracts.ui.helper.UsuarioBaseHelper
 import com.example.orgs.contracts.ui.modules.detalhes_produto.DetalhesProdutoViewModel
 import com.example.orgs.data.model.Produto
 import com.example.orgs.util.constants.ID_DEFAULT

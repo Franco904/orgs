@@ -42,11 +42,15 @@ class CadastroProdutoViewModelImpl @Inject constructor(
         produtoToEditId = state.get<Long>(PRODUTO_ID_EXTRA) ?: ID_DEFAULT
     }
 
-    override suspend fun tryFindProdutoInDatabase() {
-        _produtoToEdit.value = produtosRepository.findById(produtoToEditId)
+    override fun tryFindProdutoInDatabase() {
+        viewModelScope.launch {
+            _produtoToEdit.value = produtosRepository.findById(produtoToEditId)
+        }
     }
 
-    override suspend fun createProdutoInDatabase(produto: Produto) {
-        produtosRepository.create(produto)
+    override fun createProdutoInDatabase(produto: Produto) {
+        viewModelScope.launch {
+            produtosRepository.create(produto)
+        }
     }
 }

@@ -8,7 +8,7 @@ interface CadastroProdutoViewModel {
     val usuario: StateFlow<Usuario?>
     val produtoToEdit: StateFlow<Produto?>
 
-    suspend fun tryFindProdutoInDatabase()
+    fun tryFindProdutoInDatabase()
 
-    suspend fun createProdutoInDatabase(produto: Produto)
+    fun createProdutoInDatabase(produto: Produto)
 }

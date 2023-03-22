@@ -12,6 +12,4 @@ interface ListaProdutosActivity {
     fun setUpFloatingActionButtonListener()
 
     fun setUpProdutoCardListeners()
-
-    fun deleteProduto(produto: Produto)
 }

@@ -45,9 +45,7 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
     override fun onResume() {
         super.onResume()
 
-        lifecycleScope.launch {
-            viewModel.tryFindProdutoInDatabase()
-        }
+        viewModel.tryFindProdutoInDatabase()
 
         setUpOnSaveListener()
         setUpOnImageTappedListener()
@@ -74,16 +72,14 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
                 from = TAG,
             )
 
-            lifecycleScope.launch(handlerProdutoSave) {
-                viewModel.usuario.value?.let { usuario ->
-                    val produto = createProduto(usuario.id)
+            viewModel.usuario.value?.let { usuario ->
+                val produto = createProduto(usuario.id)
 
-                    if (produto.isValid) {
-                        viewModel.createProdutoInDatabase(produto)
+                if (produto.isValid) {
+                    viewModel.createProdutoInDatabase(produto)
 
-                        binding.cadastroProdutoBtnSalvar.isEnabled = false
-                        finish()
-                    }
+                    binding.cadastroProdutoBtnSalvar.isEnabled = false
+                    finish()
                 }
             }
         }

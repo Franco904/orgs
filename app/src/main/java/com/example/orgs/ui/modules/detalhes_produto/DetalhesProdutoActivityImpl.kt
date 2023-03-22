@@ -1,17 +1,12 @@
 package com.example.orgs.ui.modules.detalhes_produto
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.contracts.ui.modules.detalhes_produto.DetalhesProdutoActivity
-import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
-import com.example.orgs.data.database.AppDatabase
-import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
 import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
-import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
 import com.example.orgs.ui.modules.cadastro_produto.CadastroProdutoActivityImpl
@@ -27,7 +22,7 @@ import java.util.*
 class DetalhesProdutoActivityImpl : AppCompatActivity(), DetalhesProdutoActivity {
     private val TAG = "DetalhesProdutoActivity"
 
-    val viewModel: DetalhesProdutoViewModelImpl by viewModels()
+    private val viewModel: DetalhesProdutoViewModelImpl by viewModels()
 
     private val binding: ActivityDetalhesProdutoBinding by lazy {
         ActivityDetalhesProdutoBinding.inflate(layoutInflater)

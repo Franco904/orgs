@@ -17,7 +17,6 @@ import com.example.orgs.databinding.ActivityListaProdutosBinding
 import com.example.orgs.data.enums.getOrderingPatternEnumByName
 import com.example.orgs.data.enums.getProdutoFieldEnumByName
 import com.example.orgs.util.extensions.navigateTo
-import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.data.model.Produto
 import com.example.orgs.ui.modules.perfil.PerfilUsuarioActivityImpl
 import com.example.orgs.ui.modules.produtos_usuarios.ProdutosUsuariosActivityImpl
@@ -103,28 +102,14 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
             val orderingPattern =
                 getOrderingPatternEnumByName(name = orderingFilterItem.text.toString())
 
-            val handlerProperty = setCoroutineExceptionHandler(
-                errorMessage = "Erro ao alterar filtragem por atributo de produto.",
-                from = TAG,
-            )
-
-            lifecycleScope.launch(handlerProperty) {
-                viewModel.findProdutosOrderedByField(field, orderingPattern)
-            }
+            viewModel.findProdutosOrderedByField(field, orderingPattern)
         }
 
         orderingFilterItem.setOnItemClickListener { _, _, position, _ ->
             val field = getProdutoFieldEnumByName(name = propertyFilterItem.text.toString())
             val orderingPattern = getOrderingPatternEnumByName(name = orderingValues[position])
 
-            val handlerOrderingPattern = setCoroutineExceptionHandler(
-                errorMessage = "Erro ao alterar filtragem por padrão de ordenação.",
-                from = TAG,
-            )
-
-            lifecycleScope.launch(handlerOrderingPattern) {
-                viewModel.findProdutosOrderedByField(field, orderingPattern)
-            }
+            viewModel.findProdutosOrderedByField(field, orderingPattern)
         }
     }
 
@@ -144,7 +129,7 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
                 },
                 onExcludeDelegate = {
                     ExcluirProdutoConfirmacaoDialog(context = this).show {
-                        deleteProduto(produto)
+                        viewModel.deleteProduto(produto)
                         null
                     }
                 }
@@ -169,17 +154,6 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun deleteProduto(produto: Produto) {
-        val handlerExcluirProduto = setCoroutineExceptionHandler(
-            errorMessage = "Erro ao excluir produto.",
-            from = TAG,
-        )
-
-        lifecycleScope.launch(handlerExcluirProduto) {
-            viewModel.deleteProduto(produto)
-        }
     }
 
     private fun navigateToCadastroProduto(produtoId: Long? = ID_DEFAULT) {
