@@ -19,8 +19,6 @@ import java.math.BigDecimal
 
 @AndroidEntryPoint
 class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity {
-    private val TAG = "CadastroProdutoActivity"
-
     private var imageUrl: String? = null
 
     private val viewModel: CadastroProdutoViewModelImpl by viewModels()
@@ -67,11 +65,6 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
     override fun setUpOnSaveListener() {
         // Configura callback de salvamento do produto
         binding.cadastroProdutoBtnSalvar.setOnClickListener {
-            val handlerProdutoSave = setCoroutineExceptionHandler(
-                errorMessage = "Erro ao salvar produto no banco de dados.",
-                from = TAG,
-            )
-
             viewModel.usuario.value?.let { usuario ->
                 val produto = createProduto(usuario.id)
 

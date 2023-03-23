@@ -32,8 +32,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
-    private val TAG = "ListaProdutosActivity"
-
     private val adapter by lazy { ListaProdutosAdapter(context = this) }
     private val layoutManager by lazy { LinearLayoutManager(this) }
 

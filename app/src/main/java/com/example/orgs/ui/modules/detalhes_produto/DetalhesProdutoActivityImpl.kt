@@ -20,8 +20,6 @@ import java.util.*
 
 @AndroidEntryPoint
 class DetalhesProdutoActivityImpl : AppCompatActivity(), DetalhesProdutoActivity {
-    private val TAG = "DetalhesProdutoActivity"
-
     private val viewModel: DetalhesProdutoViewModelImpl by viewModels()
 
     private val binding: ActivityDetalhesProdutoBinding by lazy {

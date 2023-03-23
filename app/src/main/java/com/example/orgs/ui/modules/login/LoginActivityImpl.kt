@@ -22,8 +22,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivityImpl : AppCompatActivity(), LoginActivity {
-    private val TAG = "LoginActivity"
-
     private val viewModel: LoginViewModelImpl by viewModels()
 
     private val binding: ActivityLoginBinding by lazy {
