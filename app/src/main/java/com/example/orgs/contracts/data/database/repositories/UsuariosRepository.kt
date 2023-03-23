@@ -11,5 +11,5 @@ interface UsuariosRepository {
 
     fun findByNameId(nameId: String): Flow<Usuario>
 
-    fun findAllWithProdutos(): Flow<List<UsuarioWithProdutos>>
+    suspend fun findAllWithProdutos(): List<UsuarioWithProdutos>
 }

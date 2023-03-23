@@ -20,7 +20,7 @@ class UsuariosRepositoryImpl @Inject constructor(
         return dao.findByNameId(nameId)
     }
 
-    override fun findAllWithProdutos(): Flow<List<UsuarioWithProdutos>> {
+    override suspend fun findAllWithProdutos(): List<UsuarioWithProdutos> {
         return dao.findAllWithProdutos()
     }
 }

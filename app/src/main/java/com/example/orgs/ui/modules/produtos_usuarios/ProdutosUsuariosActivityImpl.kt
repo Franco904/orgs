@@ -1,6 +1,7 @@
 package com.example.orgs.ui.modules.produtos_usuarios
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
@@ -14,27 +15,12 @@ import com.example.orgs.ui.helper.UsuarioBaseHelperImpl
 import com.example.orgs.ui.recyclerview.adapter.ProdutosConcatAdapter
 import com.example.orgs.ui.recyclerview.adapter.UsuarioConcatAdapter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ProdutosUsuariosActivityImpl : AppCompatActivity(), ProdutosUsuariosActivity {
-    private val usuariosRepository by lazy {
-        UsuariosRepositoryImpl(
-            dao = AppDatabase.getInstance(context = this).usuariosDao(),
-        )
-    }
-
-    private val usuariosPreferences by lazy {
-        UsuariosPreferencesImpl(context = this)
-    }
-
-    private val usuarioHelper by lazy {
-        UsuarioBaseHelperImpl(
-            context = this,
-            repository = usuariosRepository,
-            preferences = usuariosPreferences,
-        )
-    }
+    private val viewModel: ProdutosUsuariosViewModelImpl by viewModels()
 
     private val binding: ActivityProdutosUsuariosBinding by lazy {
         ActivityProdutosUsuariosBinding.inflate(layoutInflater)
@@ -45,16 +31,13 @@ class ProdutosUsuariosActivityImpl : AppCompatActivity(), ProdutosUsuariosActivi
 
         setContentView(binding.root)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            usuarioHelper.verifyUsuarioLogged()
-        }
-
         setUpRecyclerView()
     }
 
     override fun setUpRecyclerView() {
         lifecycleScope.launch {
-            usuarioHelper.findUsuariosWithProdutos()
+            viewModel.usuariosWithProdutos
+                .filterNotNull()
                 .map { usuariosWithProdutos ->
                     usuariosWithProdutos
                         .map {

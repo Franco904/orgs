@@ -18,5 +18,5 @@ interface UsuariosDao {
 
     @Transaction
     @Query("SELECT * FROM Usuario")
-    fun findAllWithProdutos(): Flow<List<UsuarioWithProdutos>>
+    suspend fun findAllWithProdutos(): List<UsuarioWithProdutos>
 }

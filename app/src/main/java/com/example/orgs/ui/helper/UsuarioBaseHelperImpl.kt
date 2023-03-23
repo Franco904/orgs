@@ -25,6 +25,9 @@ class UsuarioBaseHelperImpl @Inject constructor(
     private val _usuario = MutableStateFlow<Usuario?>(null) // Estado mutável
     override val usuario: StateFlow<Usuario?> = _usuario // Observable
 
+    private val _usuariosWithProdutos = MutableStateFlow<List<UsuarioWithProdutos>?>(null)
+    override val usuariosWithProdutos: StateFlow<List<UsuarioWithProdutos>?> = _usuariosWithProdutos
+
     override suspend fun verifyUsuarioLogged() {
         preferences.watchUsuarioName().collect { usuarioNameStored ->
             usuarioNameStored?.let { usuarioName ->
@@ -41,7 +44,7 @@ class UsuarioBaseHelperImpl @Inject constructor(
             }
     }
 
-    override fun findUsuariosWithProdutos(): Flow<List<UsuarioWithProdutos>> {
+    override suspend fun findUsuariosWithProdutos(): List<UsuarioWithProdutos> {
         return repository.findAllWithProdutos()
     }
 
