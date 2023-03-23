@@ -1,13 +1,14 @@
 # orgs
- Aplicativo para o curso de Android + Kotlin
+App for Android + Kotlin Alura's course
 
-## Tópicos abordados
+## Main topics covered
 
-* Configurações da ferramenta de build Gradle
-* Configurações iniciais de projeto Android
-* Estilização, Activities, Layouts e Responsividade
-* Room e Migrations
+* Gradle dependencies and android configs
+* Android Activity's life cycle and callbacks
+* Stylization, Layouts and Responsiveness
+* Room & Migrations
 * Kotlin Coroutines
 * Retrofit (Http)
-* Testes de unidade
-* Testes instrumentados
+* Dagger + Hilt (Dependency Injection)
+* Unit tests
+* Instrumented tests
