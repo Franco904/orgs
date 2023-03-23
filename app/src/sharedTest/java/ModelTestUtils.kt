@@ -1,6 +1,6 @@
-import com.example.orgs.model.Produto
-import com.example.orgs.model.Usuario
-import com.example.orgs.model.UsuarioWithProdutos
+import com.example.orgs.data.model.Produto
+import com.example.orgs.data.model.Usuario
+import com.example.orgs.data.model.UsuarioWithProdutos
 import io.github.serpro69.kfaker.Faker
 import java.math.BigDecimal
 

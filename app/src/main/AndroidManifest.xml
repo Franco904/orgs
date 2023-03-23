@@ -4,19 +4,20 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
+        android:name=".OrgsApp"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Orgs">
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.modules.login.LoginActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.CadastroUsuarioActivity"
+            android:name=".ui.modules.cadastro_usuario.CadastroUsuarioActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.ListaProdutosActivity"
+            android:name=".ui.modules.lista_produtos.ListaProdutosActivityImpl"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,16 +26,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.CadastroProdutoActivity"
+            android:name=".ui.modules.cadastro_produto.CadastroProdutoActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.DetalhesProdutoActivity"
+            android:name=".ui.modules.detalhes_produto.DetalhesProdutoActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.PerfilUsuarioActivity"
+            android:name=".ui.modules.perfil.PerfilUsuarioActivityImpl"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.ProdutosUsuariosActivity"
+            android:name=".ui.modules.produtos_usuarios.ProdutosUsuariosActivityImpl"
             android:exported="true" />
 
         <meta-data

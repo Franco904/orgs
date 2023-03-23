@@ -3,7 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
-//    id 'org.jetbrains.kotlin.android'
+    id 'dagger.hilt.android.plugin'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -84,6 +85,8 @@ dependencies {
 
     // Annotation processor
     kapt "androidx.room:room-compiler:$room_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Core
     implementation "androidx.core:core-ktx:1.9.0"
@@ -92,11 +95,16 @@ dependencies {
 
     // UI
     implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.activity:activity-ktx:1.6.1"
     implementation "com.google.android.material:material:1.8.0"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation "com.android.databinding:viewbinding:7.4.2"
     implementation 'io.coil-kt:coil:2.2.2'
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
@@ -110,6 +118,9 @@ dependencies {
 
     // DataStore (Preferences)
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    // Dagger-Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
 
     // JUnit 4 (Only for Android Tests)
     androidTestImplementation "junit:junit:4.12"

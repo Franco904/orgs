@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import com.example.orgs.databinding.ProdutoFormDialogBinding
-import com.example.orgs.extensions.tryLoadImage
+import com.example.orgs.util.extensions.tryLoadImage
 
 class CadastroProdutoImageDialog(private val context: Context) {
     fun show(

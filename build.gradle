@@ -2,14 +2,21 @@ buildscript {
     ext {
         android_gradle_plugin_version = "7.4.1"
         kotlin_version = "1.8.0"
+        hilt_version = "2.45"
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
+        // AGP
         classpath "com.android.tools.build:gradle:$android_gradle_plugin_version"
+
+        // Kotlin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // Dagger-Hilt
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
 }
 

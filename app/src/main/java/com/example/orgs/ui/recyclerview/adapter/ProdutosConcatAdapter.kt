@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orgs.databinding.ProdutoItemBinding
-import com.example.orgs.extensions.formatToRealCurrency
-import com.example.orgs.extensions.tryLoadImage
-import com.example.orgs.model.Produto
+import com.example.orgs.util.extensions.formatToRealCurrency
+import com.example.orgs.util.extensions.tryLoadImage
+import com.example.orgs.data.model.Produto
 
 class ProdutosConcatAdapter
     : ListAdapter<Produto, ProdutosConcatAdapter.ProdutosViewHolder>(DIFF_CALLBACK) {
