@@ -59,39 +59,39 @@ class ProdutosRepositoryImplTest {
         })
     }
 
-    private fun mockFindAllOrderedByTituloAsc() {
+    private fun mockFindAllOrderedByTituloAsc(usuarioId: Long) {
         coEvery {
-            produtosDao.findAllOrderedByTituloAsc()
+            produtosDao.findAllOrderedByTituloAsc(usuarioId)
         }.returns(mutableListOf())
     }
 
-    private fun mockFindAllOrderedByTituloDesc() {
+    private fun mockFindAllOrderedByTituloDesc(usuarioId: Long) {
         coEvery {
-            produtosDao.findAllOrderedByTituloDesc()
+            produtosDao.findAllOrderedByTituloDesc(usuarioId)
         }.returns(mutableListOf())
     }
 
-    private fun mockFindAllOrderedByDescricaoAsc() {
+    private fun mockFindAllOrderedByDescricaoAsc(usuarioId: Long) {
         coEvery {
-            produtosDao.findAllOrderedByDescricaoAsc()
+            produtosDao.findAllOrderedByDescricaoAsc(usuarioId)
         }.returns(mutableListOf())
     }
 
-    private fun mockFindAllOrderedByDescricaoDesc() {
+    private fun mockFindAllOrderedByDescricaoDesc(usuarioId: Long) {
         coEvery {
-            produtosDao.findAllOrderedByDescricaoDesc()
+            produtosDao.findAllOrderedByDescricaoDesc(usuarioId)
         }.returns(mutableListOf())
     }
 
-    private fun mockFindAllOrderedByValorAsc() {
+    private fun mockFindAllOrderedByValorAsc(usuarioId: Long) {
         coEvery {
-            produtosDao.findAllOrderedByValorAsc()
+            produtosDao.findAllOrderedByValorAsc(usuarioId)
         }.returns(mutableListOf())
     }
 
-    private fun mockFindAllOrderedByValorDesc() {
+    private fun mockFindAllOrderedByValorDesc(usuarioId: Long) {
         coEvery {
-            produtosDao.findAllOrderedByValorDesc()
+            produtosDao.findAllOrderedByValorDesc(usuarioId)
         }.returns(mutableListOf())
     }
 
@@ -175,90 +175,102 @@ class ProdutosRepositoryImplTest {
         @Test
         fun `Deve chamar o metodo findAllOrderedByTituloAsc() do DAO quando o campo filtrado for titulo e a ordenacao for crescente`() =
             runTest {
-                mockFindAllOrderedByTituloAsc()
+                val usuarioId = faker.random.nextLong(10L)
+                mockFindAllOrderedByTituloAsc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.TITULO,
                     orderingPattern = OrderingPattern.ASC,
+                    usuarioId = usuarioId,
                 )
 
                 coVerify(exactly = 1) {
-                    produtosDao.findAllOrderedByTituloAsc()
+                    produtosDao.findAllOrderedByTituloAsc(usuarioId)
                 }
             }
 
         @Test
         fun `Deve chamar o metodo findAllOrderedByTituloDesc() do DAO quando o campo filtrado for titulo e a ordenacao for decrescente`() =
             runTest {
-                mockFindAllOrderedByTituloDesc()
+                val usuarioId = faker.random.nextLong(10L)
+                mockFindAllOrderedByTituloDesc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.TITULO,
                     orderingPattern = OrderingPattern.DESC,
+                    usuarioId = usuarioId,
                 )
 
                 coVerify(exactly = 1) {
-                    produtosDao.findAllOrderedByTituloDesc()
+                    produtosDao.findAllOrderedByTituloDesc(usuarioId)
                 }
             }
 
         @Test
         fun `Deve chamar o metodo findAllOrderedByDescricaoAsc() do DAO quando o campo filtrado for descricao e a ordenacao for crescente`() =
             runTest {
-                mockFindAllOrderedByDescricaoAsc()
+                val usuarioId = faker.random.nextLong(10L)
+                mockFindAllOrderedByDescricaoAsc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.DESCRICAO,
                     orderingPattern = OrderingPattern.ASC,
+                    usuarioId = usuarioId,
                 )
 
                 coVerify(exactly = 1) {
-                    produtosDao.findAllOrderedByDescricaoAsc()
+                    produtosDao.findAllOrderedByDescricaoAsc(usuarioId)
                 }
             }
 
         @Test
         fun `Deve chamar o metodo findAllOrderedByDescricaoDesc() do DAO quando campo filtrado for descricao e a ordenacao for decrescente`() =
             runTest {
-                mockFindAllOrderedByDescricaoDesc()
+                val usuarioId = faker.random.nextLong(10L)
+                mockFindAllOrderedByDescricaoDesc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.DESCRICAO,
                     orderingPattern = OrderingPattern.DESC,
+                    usuarioId = usuarioId,
                 )
 
                 coVerify(exactly = 1) {
-                    produtosDao.findAllOrderedByDescricaoDesc()
+                    produtosDao.findAllOrderedByDescricaoDesc(usuarioId)
                 }
             }
 
         @Test
         fun `Deve chamar o metodo findAllOrderedByValorAsc() do DAO quando o campo filtrado for valor e a ordenacao for crescente`() =
             runTest {
-                mockFindAllOrderedByValorAsc()
+                val usuarioId = faker.random.nextLong(10L)
+                mockFindAllOrderedByValorAsc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.VALOR,
                     orderingPattern = OrderingPattern.ASC,
+                    usuarioId = usuarioId,
                 )
 
                 coVerify(exactly = 1) {
-                    produtosDao.findAllOrderedByValorAsc()
+                    produtosDao.findAllOrderedByValorAsc(usuarioId)
                 }
             }
 
         @Test
         fun `Deve chamar o metodo findAllOrderedByValorDesc() do DAO quando o campo filtrado for valor e a ordenacao for decrescente`() =
             runTest {
-                mockFindAllOrderedByValorDesc()
+                val usuarioId = faker.random.nextLong(10L)
+                mockFindAllOrderedByValorDesc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.VALOR,
                     orderingPattern = OrderingPattern.DESC,
+                    usuarioId = usuarioId,
                 )
 
                 coVerify(exactly = 1) {
-                    produtosDao.findAllOrderedByValorDesc()
+                    produtosDao.findAllOrderedByValorDesc(usuarioId)
                 }
             }
     }

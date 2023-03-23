@@ -7,6 +7,7 @@ import com.example.orgs.data.database.dao.UsuariosDao
 import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.data.model.Usuario
 import io.mockk.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeInstanceOf
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class UsuariosRepositoryImplTest {
     private val usuariosDao = mockk<UsuariosDao>()
     private val sut = UsuariosRepositoryImpl(dao = usuariosDao)
@@ -43,17 +45,15 @@ class UsuariosRepositoryImplTest {
     }
 
     private fun mockFindAllWithProdutos() {
-        every {
+        coEvery {
             usuariosDao.findAllWithProdutos()
-        }.returns(flow {
-            emit(
-                mutableListOf(
-                    createUsuarioWithProdutosEntity(),
-                    createUsuarioWithProdutosEntity(),
-                    createUsuarioWithProdutosEntity(),
-                )
+        }.returns(
+            mutableListOf(
+                createUsuarioWithProdutosEntity(),
+                createUsuarioWithProdutosEntity(),
+                createUsuarioWithProdutosEntity(),
             )
-        })
+        )
     }
 
     @BeforeEach
@@ -124,12 +124,12 @@ class UsuariosRepositoryImplTest {
     @DisplayName("findAllWithProdutos")
     inner class FindAllWithProdutosTest {
         @Test
-        fun `Deve chamar o metodo findAllWithProdutos() do DAO quando executado`() {
+        fun `Deve chamar o metodo findAllWithProdutos() do DAO quando executado`() = runTest {
             mockFindAllWithProdutos()
 
             sut.findAllWithProdutos()
 
-            verify(exactly = 1) {
+            coVerify(exactly = 1) {
                 usuariosDao.findAllWithProdutos()
             }
         }
