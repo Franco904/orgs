@@ -14,11 +14,13 @@ import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
 import com.example.orgs.ui.helper.UsuarioBaseHelperImpl
 import com.example.orgs.ui.recyclerview.adapter.ProdutosConcatAdapter
 import com.example.orgs.ui.recyclerview.adapter.UsuarioConcatAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ProdutosUsuariosActivityImpl : AppCompatActivity(), ProdutosUsuariosActivity {
     private val viewModel: ProdutosUsuariosViewModelImpl by viewModels()
 
