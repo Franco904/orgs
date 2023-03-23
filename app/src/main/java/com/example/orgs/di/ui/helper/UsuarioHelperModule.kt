@@ -11,5 +11,5 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 abstract class UsuarioHelperModule {
     @Binds
-    abstract fun provideUsuarioHelper(usuarioBaseHelperImpl: UsuarioBaseHelperImpl): UsuarioBaseHelper
+    abstract fun bindUsuarioBaseHelper(usuarioBaseHelperImpl: UsuarioBaseHelperImpl): UsuarioBaseHelper
 }
