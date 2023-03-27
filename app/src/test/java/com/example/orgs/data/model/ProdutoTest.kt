@@ -1,4 +1,4 @@
-package com.example.orgs.model
+package com.example.orgs.data.model
 
 import com.example.orgs.data.model.Produto
 import org.amshove.kluent.*

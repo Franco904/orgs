@@ -1,16 +1,13 @@
-package com.example.orgs.database.repositories
+package com.example.orgs.data.database.repositories
 
 import ModelTestUtils.createProdutoEntity
 import com.example.orgs.contracts.data.database.repositories.ProdutosRepository
 import com.example.orgs.data.database.dao.ProdutosDao
-import com.example.orgs.data.database.repositories.ProdutosRepositoryImpl
 import com.example.orgs.data.enums.OrderingPattern
 import com.example.orgs.data.enums.ProdutoField
-import com.example.orgs.data.model.Produto
 import io.github.serpro69.kfaker.Faker
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.jupiter.api.BeforeEach
@@ -20,80 +17,10 @@ import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProdutosRepositoryImplTest {
-    private val produtosDao = mockk<ProdutosDao>()
+    private val produtosDao = mockk<ProdutosDao>(relaxed = true)
     private val sut = ProdutosRepositoryImpl(dao = produtosDao)
 
     private val faker by lazy { Faker() }
-
-    private fun mockCreate(produto: Produto) {
-        coEvery {
-            produtosDao.create(produto)
-        }.returns(Unit)
-    }
-
-    private fun mockDelete(produto: Produto) {
-        coEvery {
-            produtosDao.delete(produto)
-        }.returns(Unit)
-    }
-
-    private fun mockFindById(produtoId: Long) {
-        val produto = createProdutoEntity(id = produtoId)
-
-        coEvery {
-            produtosDao.findById(produtoId)
-        }.returns(produto)
-    }
-
-    private fun mockFindAllByUsuarioId(usuarioId: Long) {
-        every {
-            produtosDao.findAllByUsuarioId(usuarioId)
-        }.returns(flow {
-            emit(
-                mutableListOf(
-                    createProdutoEntity(),
-                    createProdutoEntity(),
-                    createProdutoEntity(),
-                )
-            )
-        })
-    }
-
-    private fun mockFindAllOrderedByTituloAsc(usuarioId: Long) {
-        coEvery {
-            produtosDao.findAllOrderedByTituloAsc(usuarioId)
-        }.returns(mutableListOf())
-    }
-
-    private fun mockFindAllOrderedByTituloDesc(usuarioId: Long) {
-        coEvery {
-            produtosDao.findAllOrderedByTituloDesc(usuarioId)
-        }.returns(mutableListOf())
-    }
-
-    private fun mockFindAllOrderedByDescricaoAsc(usuarioId: Long) {
-        coEvery {
-            produtosDao.findAllOrderedByDescricaoAsc(usuarioId)
-        }.returns(mutableListOf())
-    }
-
-    private fun mockFindAllOrderedByDescricaoDesc(usuarioId: Long) {
-        coEvery {
-            produtosDao.findAllOrderedByDescricaoDesc(usuarioId)
-        }.returns(mutableListOf())
-    }
-
-    private fun mockFindAllOrderedByValorAsc(usuarioId: Long) {
-        coEvery {
-            produtosDao.findAllOrderedByValorAsc(usuarioId)
-        }.returns(mutableListOf())
-    }
-
-    private fun mockFindAllOrderedByValorDesc(usuarioId: Long) {
-        coEvery {
-            produtosDao.findAllOrderedByValorDesc(usuarioId)
-        }.returns(mutableListOf())
-    }
 
     @BeforeEach
     fun setUp() {
@@ -111,7 +38,6 @@ class ProdutosRepositoryImplTest {
         @Test
         fun `Deve chamar o metodo create() do DAO quando executado`() = runTest {
             val produto = createProdutoEntity()
-            mockCreate(produto)
 
             sut.create(produto)
 
@@ -127,7 +53,6 @@ class ProdutosRepositoryImplTest {
         @Test
         fun `Deve chamar o metodo delete() do DAO quando executado`() = runTest {
             val produto = createProdutoEntity()
-            mockDelete(produto)
 
             sut.delete(produto)
 
@@ -143,7 +68,6 @@ class ProdutosRepositoryImplTest {
         @Test
         fun `Deve chamar o metodo findById() do DAO quando executado`() = runTest {
             val id = faker.random.nextLong(10L)
-            mockFindById(id)
 
             sut.findById(id)
 
@@ -159,7 +83,6 @@ class ProdutosRepositoryImplTest {
         @Test
         fun `Deve chamar o metodo findAllByUsuarioId() do DAO quando executado`() {
             val id = faker.random.nextLong(10L)
-            mockFindAllByUsuarioId(id)
 
             sut.findAllByUsuarioId(id)
 
@@ -176,7 +99,6 @@ class ProdutosRepositoryImplTest {
         fun `Deve chamar o metodo findAllOrderedByTituloAsc() do DAO quando o campo filtrado for titulo e a ordenacao for crescente`() =
             runTest {
                 val usuarioId = faker.random.nextLong(10L)
-                mockFindAllOrderedByTituloAsc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.TITULO,
@@ -193,7 +115,6 @@ class ProdutosRepositoryImplTest {
         fun `Deve chamar o metodo findAllOrderedByTituloDesc() do DAO quando o campo filtrado for titulo e a ordenacao for decrescente`() =
             runTest {
                 val usuarioId = faker.random.nextLong(10L)
-                mockFindAllOrderedByTituloDesc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.TITULO,
@@ -210,7 +131,6 @@ class ProdutosRepositoryImplTest {
         fun `Deve chamar o metodo findAllOrderedByDescricaoAsc() do DAO quando o campo filtrado for descricao e a ordenacao for crescente`() =
             runTest {
                 val usuarioId = faker.random.nextLong(10L)
-                mockFindAllOrderedByDescricaoAsc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.DESCRICAO,
@@ -227,7 +147,6 @@ class ProdutosRepositoryImplTest {
         fun `Deve chamar o metodo findAllOrderedByDescricaoDesc() do DAO quando campo filtrado for descricao e a ordenacao for decrescente`() =
             runTest {
                 val usuarioId = faker.random.nextLong(10L)
-                mockFindAllOrderedByDescricaoDesc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.DESCRICAO,
@@ -244,7 +163,6 @@ class ProdutosRepositoryImplTest {
         fun `Deve chamar o metodo findAllOrderedByValorAsc() do DAO quando o campo filtrado for valor e a ordenacao for crescente`() =
             runTest {
                 val usuarioId = faker.random.nextLong(10L)
-                mockFindAllOrderedByValorAsc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.VALOR,
@@ -261,7 +179,6 @@ class ProdutosRepositoryImplTest {
         fun `Deve chamar o metodo findAllOrderedByValorDesc() do DAO quando o campo filtrado for valor e a ordenacao for decrescente`() =
             runTest {
                 val usuarioId = faker.random.nextLong(10L)
-                mockFindAllOrderedByValorDesc(usuarioId)
 
                 sut.findAllOrderedByField(
                     field = ProdutoField.VALOR,
