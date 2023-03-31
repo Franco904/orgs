@@ -19,7 +19,7 @@ import org.junit.Test
 
 @HiltAndroidTest
 class ListaProdutosActivityTest {
-    lateinit var scenario: ActivityScenario<ListaProdutosActivityImpl>
+    private lateinit var scenario: ActivityScenario<ListaProdutosActivityImpl>
 
     @BindValue
     @JvmField
