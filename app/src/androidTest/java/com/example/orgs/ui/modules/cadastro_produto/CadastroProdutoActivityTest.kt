@@ -3,6 +3,8 @@ package com.example.orgs.ui.modules.cadastro_produto
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.*
 import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.action.ViewActions as va
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -62,5 +64,25 @@ class CadastroProdutoActivityTest {
         onView(withText("Salvar"))
             .check(matches(isDisplayed()))
             .check(matches(isEnabled()))
+    }
+
+    @Test
+    fun mustPerformProdutoDataSaving() {
+        onView(withId(R.id.cadastro_produto_field_titulo)).perform(
+            typeText("Noz moscada"),
+            va.pressBack(),
+        )
+
+        onView(withId(R.id.cadastro_produto_field_descricao)).perform(
+            typeText("Ideal para temperar o almoço"),
+            va.pressBack(),
+        )
+
+        onView(withId(R.id.cadastro_produto_field_valor)).perform(
+            typeText("5.99"),
+            va.pressBack(),
+        )
+
+        onView(withText("Salvar")).perform(click())
     }
 }
