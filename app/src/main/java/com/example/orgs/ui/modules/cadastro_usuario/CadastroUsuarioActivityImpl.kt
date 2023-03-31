@@ -15,8 +15,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CadastroUsuarioActivityImpl : AppCompatActivity(), CadastroUsuarioActivity {
-    private val TAG = "CadastroUsuarioActivity"
-
     private val viewModel: CadastroUsuarioViewModelImpl by viewModels()
 
     private val binding by lazy {
