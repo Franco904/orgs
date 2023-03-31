@@ -52,7 +52,8 @@ class ListaProdutosActivityTest {
 
     @Test
     fun mustDisplayCadastroProdutoFAB() {
-        onView(withId(R.id.lista_produtos_fab)).check(matches(isDisplayed()))
-        onView(withText("Novo produto")).check(matches(isDisplayed()))
+        onView(withId(R.id.lista_produtos_fab))
+            .check(matches(isDisplayed()))
+            .check(matches(withText("Novo produto")))
     }
 }
