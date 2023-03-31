@@ -5,6 +5,7 @@ import androidx.test.core.app.ActivityScenario.*
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.assertion.ViewAssertions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.example.orgs.R
 import com.example.orgs.contracts.ui.modules.lista_produtos.ListaProdutosViewModel
 import dagger.hilt.android.testing.BindValue
@@ -26,6 +27,9 @@ class ListaProdutosActivityTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule
+    var activityRule: ActivityScenarioRule<ListaProdutosActivityImpl> = ActivityScenarioRule(ListaProdutosActivityImpl::class.java)
 
     @Before
     fun setUp() {
