@@ -3,6 +3,8 @@ package com.example.orgs.ui.modules.login
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.*
 import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.action.ViewActions as va
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -59,5 +61,20 @@ class LoginActivityTest {
 
         onView(withText("Cadastrar usuário")).check(matches(isDisplayed()))
             .check(matches(isEnabled()))
+    }
+
+    @Test
+    fun mustPerformLogin() {
+        onView(withId(R.id.login_field_usuario)).perform(
+            typeText("francostavares2003@gmail.com"),
+            va.pressBack(),
+        )
+
+        onView(withId(R.id.login_field_senha)).perform(
+            typeText("123123as"),
+            va.pressBack(),
+        )
+
+        onView(withId(R.id.login_btn_entrar)).perform(click())
     }
 }
