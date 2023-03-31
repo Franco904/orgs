@@ -7,7 +7,9 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orgs.R
 import com.example.orgs.contracts.ui.modules.lista_produtos.ListaProdutosActivity
@@ -50,8 +52,10 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
         title = getString(R.string.lista_produtos_title)
 
         lifecycleScope.launch {
-            viewModel.produtos.collect { produtos ->
-                updateProdutosList(produtos)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.produtos.collect { produtos ->
+                    updateProdutosList(produtos)
+                }
             }
         }
 
