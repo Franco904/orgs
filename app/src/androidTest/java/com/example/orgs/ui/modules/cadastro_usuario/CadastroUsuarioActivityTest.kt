@@ -8,7 +8,6 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.example.orgs.R
 import com.example.orgs.contracts.ui.modules.cadastro_usuario.CadastroUsuarioViewModel
-import com.example.orgs.ui.modules.lista_produtos.ListaProdutosActivityImpl
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

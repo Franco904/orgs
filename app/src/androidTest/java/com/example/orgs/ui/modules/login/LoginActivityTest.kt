@@ -11,7 +11,6 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import com.example.orgs.R
-import com.example.orgs.ui.modules.lista_produtos.ListaProdutosActivityImpl
 import io.mockk.mockk
 import org.junit.After
 import org.junit.Before
