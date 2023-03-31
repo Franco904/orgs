@@ -3,6 +3,7 @@ package com.example.orgs.ui.modules.cadastro_usuario
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.*
 import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -62,5 +63,25 @@ class CadastroUsuarioActivityTest {
         onView(withText("Cadastrar"))
             .check(matches(isDisplayed()))
             .check(matches(isEnabled()))
+    }
+
+    @Test
+    fun mustPerformUsuarioRegister() {
+        onView(withId(R.id.cadastro_usuario_field_usuario)).perform(
+            ViewActions.typeText("francostavares2003@gmail.com"),
+            ViewActions.closeSoftKeyboard(),
+        )
+
+        onView(withId(R.id.cadastro_usuario_field_nome)).perform(
+            ViewActions.typeText("Franco Tavares"),
+            ViewActions.closeSoftKeyboard(),
+        )
+
+        onView(withId(R.id.cadastro_usuario_field_senha)).perform(
+            ViewActions.typeText("123123as"),
+            ViewActions.closeSoftKeyboard(),
+        )
+
+        onView(withId(R.id.cadastro_usuario_btn_cadastrar)).perform(ViewActions.click())
     }
 }
