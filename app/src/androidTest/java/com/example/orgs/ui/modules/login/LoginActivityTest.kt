@@ -67,12 +67,12 @@ class LoginActivityTest {
     fun mustPerformLogin() {
         onView(withId(R.id.login_field_usuario)).perform(
             typeText("francostavares2003@gmail.com"),
-            va.pressBack(),
+            va.closeSoftKeyboard(),
         )
 
         onView(withId(R.id.login_field_senha)).perform(
             typeText("123123as"),
-            va.pressBack(),
+            va.closeSoftKeyboard(),
         )
 
         onView(withId(R.id.login_btn_entrar)).perform(click())

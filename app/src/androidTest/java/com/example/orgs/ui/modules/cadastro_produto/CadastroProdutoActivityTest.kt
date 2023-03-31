@@ -70,17 +70,17 @@ class CadastroProdutoActivityTest {
     fun mustPerformProdutoDataSaving() {
         onView(withId(R.id.cadastro_produto_field_titulo)).perform(
             typeText("Noz moscada"),
-            va.pressBack(),
+            va.closeSoftKeyboard(),
         )
 
         onView(withId(R.id.cadastro_produto_field_descricao)).perform(
             typeText("Ideal para temperar o almoço"),
-            va.pressBack(),
+            va.closeSoftKeyboard(),
         )
 
         onView(withId(R.id.cadastro_produto_field_valor)).perform(
             typeText("5.99"),
-            va.pressBack(),
+            va.closeSoftKeyboard(),
         )
 
         onView(withText("Salvar")).perform(click())
