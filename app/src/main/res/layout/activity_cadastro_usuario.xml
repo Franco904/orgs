@@ -84,7 +84,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/cadastro_produto_btn_cadastrar"
+            android:id="@+id/cadastro_usuario_btn_cadastrar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

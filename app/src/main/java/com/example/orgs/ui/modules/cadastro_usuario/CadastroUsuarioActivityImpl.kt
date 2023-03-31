@@ -3,15 +3,11 @@ package com.example.orgs.ui.modules.cadastro_usuario
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.orgs.contracts.ui.modules.cadastro_usuario.CadastroUsuarioActivity
 import com.example.orgs.databinding.ActivityCadastroUsuarioBinding
-import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.toHash
 import com.example.orgs.data.model.Usuario
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CadastroUsuarioActivityImpl : AppCompatActivity(), CadastroUsuarioActivity {
@@ -30,7 +26,7 @@ class CadastroUsuarioActivityImpl : AppCompatActivity(), CadastroUsuarioActivity
     }
 
     override fun setUpSignUpButtonListener() {
-        binding.cadastroProdutoBtnCadastrar.setOnClickListener {
+        binding.cadastroUsuarioBtnCadastrar.setOnClickListener {
             signUp()
         }
     }
