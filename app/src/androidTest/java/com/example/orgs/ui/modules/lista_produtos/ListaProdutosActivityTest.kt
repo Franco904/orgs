@@ -23,13 +23,15 @@ class ListaProdutosActivityTest {
 
     @BindValue
     @JvmField
-    val viewModel: ListaProdutosViewModel = mockk<ListaProdutosViewModelImpl>(relaxed = true) // Precisa especificar tipo da interface
+    val viewModel: ListaProdutosViewModel =
+        mockk<ListaProdutosViewModelImpl>(relaxed = true) // Precisa especificar tipo da interface
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     @get:Rule
-    var activityRule: ActivityScenarioRule<ListaProdutosActivityImpl> = ActivityScenarioRule(ListaProdutosActivityImpl::class.java)
+    var activityRule: ActivityScenarioRule<ListaProdutosActivityImpl> =
+        ActivityScenarioRule(ListaProdutosActivityImpl::class.java)
 
     @Before
     fun setUp() {
