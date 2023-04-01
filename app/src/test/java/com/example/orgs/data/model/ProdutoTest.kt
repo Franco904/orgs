@@ -1,6 +1,5 @@
 package com.example.orgs.data.model
 
-import com.example.orgs.data.model.Produto
 import org.amshove.kluent.*
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

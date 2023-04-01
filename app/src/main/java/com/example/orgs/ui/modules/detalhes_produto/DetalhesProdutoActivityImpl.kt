@@ -5,13 +5,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.contracts.ui.modules.detalhes_produto.DetalhesProdutoActivity
-import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
-import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
-import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
+import com.example.orgs.databinding.ActivityDetalhesProdutoBinding
 import com.example.orgs.ui.modules.cadastro_produto.CadastroProdutoActivityImpl
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
+import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import com.example.orgs.util.extensions.navigateTo
+import com.example.orgs.util.extensions.tryLoadImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch

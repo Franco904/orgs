@@ -3,7 +3,6 @@ package com.example.orgs.ui.modules.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.orgs.contracts.data.database.repositories.UsuariosRepository
-import com.example.orgs.contracts.infra.preferences.UsuariosPreferences
 import com.example.orgs.contracts.ui.modules.login.LoginViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

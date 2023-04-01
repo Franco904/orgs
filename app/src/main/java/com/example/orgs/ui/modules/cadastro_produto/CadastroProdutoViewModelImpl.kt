@@ -5,14 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.orgs.contracts.data.database.repositories.ProdutosRepository
 import com.example.orgs.contracts.data.database.repositories.UsuariosRepository
-import com.example.orgs.contracts.ui.helper.UsuarioBaseHelper
 import com.example.orgs.contracts.ui.modules.cadastro_produto.CadastroProdutoViewModel
 import com.example.orgs.data.model.Produto
 import com.example.orgs.data.model.Usuario
 import com.example.orgs.util.constants.ID_DEFAULT
 import com.example.orgs.util.constants.PRODUTO_ID_EXTRA
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull

@@ -4,14 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.orgs.contracts.data.database.repositories.ProdutosRepository
 import com.example.orgs.contracts.data.database.repositories.UsuariosRepository
-import com.example.orgs.contracts.ui.helper.UsuarioBaseHelper
 import com.example.orgs.contracts.ui.modules.lista_produtos.ListaProdutosViewModel
 import com.example.orgs.data.enums.OrderingPattern
 import com.example.orgs.data.enums.ProdutoField
 import com.example.orgs.data.model.Produto
 import com.example.orgs.data.model.Usuario
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

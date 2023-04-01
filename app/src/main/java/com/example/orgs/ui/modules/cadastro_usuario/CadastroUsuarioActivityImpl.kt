@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orgs.contracts.ui.modules.cadastro_usuario.CadastroUsuarioActivity
+import com.example.orgs.data.model.Usuario
 import com.example.orgs.databinding.ActivityCadastroUsuarioBinding
 import com.example.orgs.util.extensions.toHash
-import com.example.orgs.data.model.Usuario
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

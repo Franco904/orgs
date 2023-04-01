@@ -3,7 +3,6 @@ package com.example.orgs.contracts.ui.modules.lista_produtos
 import com.example.orgs.data.enums.OrderingPattern
 import com.example.orgs.data.enums.ProdutoField
 import com.example.orgs.data.model.Produto
-import com.example.orgs.data.model.Usuario
 import kotlinx.coroutines.flow.StateFlow
 
 interface ListaProdutosViewModel {

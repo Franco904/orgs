@@ -9,13 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.orgs.R
 import com.example.orgs.contracts.ui.modules.cadastro_produto.CadastroProdutoActivity
-import com.example.orgs.databinding.ActivityCadastroProdutoBinding
-import com.example.orgs.util.extensions.setCoroutineExceptionHandler
-import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
+import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.ui.modules.login.LoginActivityImpl
 import com.example.orgs.ui.widget.CadastroProdutoImageDialog
 import com.example.orgs.util.extensions.navigateTo
+import com.example.orgs.util.extensions.tryLoadImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull

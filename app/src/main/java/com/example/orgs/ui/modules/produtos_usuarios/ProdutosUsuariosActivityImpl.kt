@@ -9,8 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
 import com.example.orgs.contracts.ui.modules.produtos_usuarios.ProdutosUsuariosActivity
-import com.example.orgs.databinding.ActivityProdutosUsuariosBinding
 import com.example.orgs.data.model.UsuarioWithProdutos
+import com.example.orgs.databinding.ActivityProdutosUsuariosBinding
 import com.example.orgs.ui.modules.login.LoginActivityImpl
 import com.example.orgs.ui.recyclerview.adapter.ProdutosConcatAdapter
 import com.example.orgs.ui.recyclerview.adapter.UsuarioConcatAdapter

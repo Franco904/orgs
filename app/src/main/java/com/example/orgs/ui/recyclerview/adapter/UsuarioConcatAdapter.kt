@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.orgs.databinding.UsuarioNameItemBinding
 import com.example.orgs.data.model.Usuario
+import com.example.orgs.databinding.UsuarioNameItemBinding
 
 class UsuarioConcatAdapter
     : ListAdapter<Usuario, UsuarioConcatAdapter.UsuariosViewHolder>(DIFF_CALBACK) {

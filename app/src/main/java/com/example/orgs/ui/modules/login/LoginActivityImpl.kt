@@ -5,18 +5,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.contracts.ui.modules.login.LoginActivity
-import com.example.orgs.data.database.AppDatabase
-import com.example.orgs.data.database.repositories.UsuariosRepositoryImpl
 import com.example.orgs.databinding.ActivityLoginBinding
-import com.example.orgs.util.extensions.navigateTo
-import com.example.orgs.util.extensions.setCoroutineExceptionHandler
-import com.example.orgs.util.extensions.showToast
-import com.example.orgs.util.extensions.toHash
-import com.example.orgs.infra.preferences.UsuariosPreferencesImpl
 import com.example.orgs.ui.modules.cadastro_usuario.CadastroUsuarioActivityImpl
 import com.example.orgs.ui.modules.lista_produtos.ListaProdutosActivityImpl
+import com.example.orgs.util.extensions.navigateTo
+import com.example.orgs.util.extensions.showToast
+import com.example.orgs.util.extensions.toHash
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
