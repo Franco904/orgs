@@ -1,5 +1,6 @@
 package com.example.orgs.ui.modules.lista_produtos
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -24,6 +25,7 @@ import com.example.orgs.ui.modules.perfil.PerfilUsuarioActivityImpl
 import com.example.orgs.ui.modules.produtos_usuarios.ProdutosUsuariosActivityImpl
 import com.example.orgs.ui.modules.cadastro_produto.CadastroProdutoActivityImpl
 import com.example.orgs.ui.modules.detalhes_produto.DetalhesProdutoActivityImpl
+import com.example.orgs.ui.modules.login.LoginActivityImpl
 import com.example.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import com.example.orgs.ui.widget.ExcluirProdutoConfirmacaoDialog
 import com.example.orgs.ui.widget.ProdutoCardPopupMenu
@@ -51,6 +53,22 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
         // Configura componentes da tela
         title = getString(R.string.lista_produtos_title)
 
+        setUpStateFlowListeners()
+
+        setUpRecyclerView()
+        setUpFloatingActionButtonListener()
+        setUpOrderingDropdowns()
+    }
+
+    private fun setUpStateFlowListeners() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.hasSessionExpired.filter { it }.collect {
+                    navigateToLogin()
+                }
+            }
+        }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.produtos.collect { produtos ->
@@ -64,10 +82,6 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
                 setUpProdutoCardListeners()
             }
         }
-
-        setUpRecyclerView()
-        setUpFloatingActionButtonListener()
-        setUpOrderingDropdowns()
     }
 
     override fun setUpRecyclerView() {
@@ -167,6 +181,12 @@ class ListaProdutosActivityImpl : AppCompatActivity(), ListaProdutosActivity {
     private fun navigateToDetalhesProduto(produtoId: Long? = null) {
         navigateTo(DetalhesProdutoActivityImpl::class.java) {
             putExtra(PRODUTO_ID_EXTRA, produtoId)
+        }
+    }
+
+    private fun navigateToLogin() {
+        navigateTo(LoginActivityImpl::class.java) {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
     }
 }

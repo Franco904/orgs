@@ -1,17 +1,23 @@
 package com.example.orgs.ui.modules.cadastro_produto
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.orgs.R
 import com.example.orgs.contracts.ui.modules.cadastro_produto.CadastroProdutoActivity
 import com.example.orgs.databinding.ActivityCadastroProdutoBinding
 import com.example.orgs.util.extensions.setCoroutineExceptionHandler
 import com.example.orgs.util.extensions.tryLoadImage
 import com.example.orgs.data.model.Produto
+import com.example.orgs.ui.modules.login.LoginActivityImpl
 import com.example.orgs.ui.widget.CadastroProdutoImageDialog
+import com.example.orgs.util.extensions.navigateTo
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
@@ -33,11 +39,7 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
         setContentView(binding.root)
         title = getString(R.string.cadastrar_produto_title)
 
-        lifecycleScope.launch {
-            viewModel.produtoToEdit.filterNotNull().take(1).collect { produto ->
-                bindEditProdutoDataIfNeeded(produto)
-            }
-        }
+        setUpStateFlowListeners()
     }
 
     override fun onResume() {
@@ -47,6 +49,22 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
 
         setUpOnSaveListener()
         setUpOnImageTappedListener()
+    }
+
+    private fun setUpStateFlowListeners() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.hasSessionExpired.filter { it }.collect {
+                    navigateToLogin()
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.produtoToEdit.filterNotNull().take(1).collect { produto ->
+                bindEditProdutoDataIfNeeded(produto)
+            }
+        }
     }
 
     override fun bindEditProdutoDataIfNeeded(produto: Produto) {
@@ -74,7 +92,7 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
                     binding.cadastroProdutoBtnSalvar.isEnabled = false
                     finish()
                 }
-            }
+            } ?: navigateToLogin()
         }
     }
 
@@ -112,5 +130,11 @@ class CadastroProdutoActivityImpl : AppCompatActivity(), CadastroProdutoActivity
             imagemUrl = imageUrl,
             usuarioId = usuarioId,
         )
+    }
+
+    private fun navigateToLogin() {
+        navigateTo(LoginActivityImpl::class.java) {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
     }
 }

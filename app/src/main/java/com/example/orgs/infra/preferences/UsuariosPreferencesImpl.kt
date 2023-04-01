@@ -6,11 +6,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.orgs.contracts.infra.preferences.UsuariosPreferences
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 data class UsuariosPreferencesImpl @Inject constructor(
+    @ApplicationContext
     val context: Context,
 ): UsuariosPreferences {
     companion object {

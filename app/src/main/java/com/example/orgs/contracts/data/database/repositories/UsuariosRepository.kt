@@ -12,4 +12,10 @@ interface UsuariosRepository {
     fun findByNameId(nameId: String): Flow<Usuario>
 
     suspend fun findAllWithProdutos(): List<UsuarioWithProdutos>
+
+    fun watchLogged(): Flow<String?>
+
+    suspend fun writeUsuario(usuarioName: String)
+
+    suspend fun logout()
 }

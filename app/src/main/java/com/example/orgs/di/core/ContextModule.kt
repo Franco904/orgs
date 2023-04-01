@@ -1,4 +1,4 @@
-package com.example.orgs.di.util
+package com.example.orgs.di.core
 
 import android.content.Context
 import dagger.Module

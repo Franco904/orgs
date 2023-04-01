@@ -16,14 +16,36 @@ import javax.inject.Inject
 @HiltViewModel
 class ProdutosUsuariosViewModelImpl @Inject constructor(
     private val usuariosRepository: UsuariosRepository,
-    private val usuarioHelper: UsuarioBaseHelper,
 ) : ViewModel(), ProdutosUsuariosViewModel {
+    private val _hasSessionExpired = MutableStateFlow(false)
+    override val hasSessionExpired: StateFlow<Boolean> = _hasSessionExpired
+
     private val _usuariosWithProdutos = MutableStateFlow<List<UsuarioWithProdutos>?>(null)
     override val usuariosWithProdutos: StateFlow<List<UsuarioWithProdutos>?> = _usuariosWithProdutos
 
     init {
         viewModelScope.launch {
-            usuarioHelper.verifyUsuarioLogged()
+            setUpUsuarioLoggedListener()
         }
+
+        viewModelScope.launch {
+            setUpUsuarioWithProdutosData()
+        }
+    }
+
+    private suspend fun setUpUsuarioLoggedListener() {
+        usuariosRepository.watchLogged().collect { usuarioName ->
+            if (usuarioName.isNullOrEmpty()) {
+                setSessionHasExpired()
+            }
+        }
+    }
+
+    private fun setSessionHasExpired() {
+        _hasSessionExpired.value = true
+    }
+
+    private suspend fun setUpUsuarioWithProdutosData() {
+        _usuariosWithProdutos.value = usuariosRepository.findAllWithProdutos()
     }
 }

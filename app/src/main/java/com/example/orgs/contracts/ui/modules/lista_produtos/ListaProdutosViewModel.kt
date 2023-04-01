@@ -7,7 +7,7 @@ import com.example.orgs.data.model.Usuario
 import kotlinx.coroutines.flow.StateFlow
 
 interface ListaProdutosViewModel {
-    val usuario: StateFlow<Usuario?>
+    val hasSessionExpired: StateFlow<Boolean>
     val produtos: StateFlow<List<Produto>>
 
     fun findProdutosOrderedByField(

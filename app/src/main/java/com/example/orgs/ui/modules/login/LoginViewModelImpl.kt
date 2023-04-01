@@ -14,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModelImpl @Inject constructor(
     private val usuariosRepository: UsuariosRepository,
-    private val usuariosPreferences: UsuariosPreferences,
 ) : ViewModel(), LoginViewModel {
     private val _isUsuarioLoggedIn = MutableStateFlow(false)
     override val isUsuarioLoggedIn: StateFlow<Boolean> = _isUsuarioLoggedIn
@@ -24,8 +23,8 @@ class LoginViewModelImpl @Inject constructor(
 
     override fun login(usuarioName: String, senha: String) {
         viewModelScope.launch {
-            usuariosRepository.findByUserAndPassword(usuarioName, senha)?.let { usuario ->
-                usuariosPreferences.writeUsuarioName(usuarioName = usuario.usuario)
+            usuariosRepository.findByUserAndPassword(usuarioName, senha)?.let {
+                usuariosRepository.writeUsuario(it.usuario)
 
                 _isUsuarioLoggedIn.value = true
             } ?: setUsuarioNotFound()
